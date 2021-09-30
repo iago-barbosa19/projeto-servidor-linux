@@ -1,14 +1,14 @@
 import sys, os
 
 
-class installServices():
+def installServices():
     """Classe que vai executar a instalação dos serviços desejados.
     Os serviços que são abraangidos são:
     IP, DHCP e DNS (talvez o SAMBA)"""
     print('Esse serviço ainda não está disponível.\nEntre em contato com o suporte.')
 
 
-class confServer():
+def confServer():
     """Classe que vai executar a Configuração dos serviços desejados.
     Os serviços que são abraangidos são:
     IP, DHCP e DNS (talvez SAMBA)"""
@@ -26,7 +26,7 @@ class confServer():
             dns = f'{dns1} {dns2}'
         else:
             dns = '8.8.8.8 8.8.4.4'
-        network = f'{ip.split()[0]}.{ip.split()[1]}.{ip.split()[2]}.0'
+        network = f'{ip.split(".")[0]}.{ip.split(".")[1]}.{ip.split(".")[2]}.0'
         with open('interfaces', 'r+') as arq:
             arq.write('source /etc/network/interfaces.d/*\n'\
                 'auto lo\n\niface auto lo inet loopback\n'\
