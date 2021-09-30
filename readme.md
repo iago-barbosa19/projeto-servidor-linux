@@ -7,3 +7,6 @@
 
 ### Damos suporte até então à os Linux:
 ![Debian image](https://img.shields.io/badge/Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
+
+### O programa está usando as linguagens:
+![Python image](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
