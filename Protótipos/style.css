@@ -1,0 +1,72 @@
+@import url('https://fonts.google.com/specimen/Montserrat')
+* {
+	box-sizing: border-box;
+}
+body{
+	margin: 0;
+}
+.cabecalho {
+	height: 80px;
+	width: 100%;
+	font-family: 'Montserrat', sans-serif;
+	border-bottom: solid 5px #595959;
+	background: #333;
+	box-sizing: content-box;
+}
+.logo {
+	display: inline-block;
+	height: 75px;
+}
+.logo img {
+	height: 100%;
+}
+.menu {
+	vertical-align: top;
+	height: 80px;
+	padding: 25px;
+	display: inline-block;	
+}
+.menu ul {
+	padding: 0px;
+	margin: 0px 0px 0px 200px;
+}
+.menu li {
+	display: inline-block;
+}
+.cabecalho a{
+	font-size: 1.4em;
+	font-weight: 500px;
+	text-decoration: none;
+	color:  #eee;
+}
+.menu a {
+	display: inline-block;
+	padding: 10px;
+	padding-right: 25px;
+}
+.menu a:hover {
+	height: 100%;
+	background: #77859220;
+}
+.autenticacao {
+	float: right;
+	height: 80px;
+	margin-right: 0;
+	padding: 30px;
+}
+#suporte {background: #3333cc;}
+#suporte:hover {background: #ec3e13; color: #fff; box-shadow: 2px 2px 1px 1px #0099ff;}
+.botao {
+	border-radius: 30px;
+	padding: 10px 20px;
+	margin: 10px;
+}
+.destaque {
+	background: #ec3e13;
+}
+.destaque:hover {
+	background: #3333cc;
+	color: #fff;
+	box-shadow: 2px 2px 1px 1px #f2785a;
+}
+
