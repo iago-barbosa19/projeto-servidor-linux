@@ -19,6 +19,7 @@ body{
 }
 .logo img {
 	height: 100%;
+	margin-left: 15px;
 }
 .menu {
 	vertical-align: top;
@@ -54,19 +55,36 @@ body{
 	margin-right: 0;
 	padding: 30px;
 }
-#suporte {background: #3333cc;}
-#suporte:hover {background: #ec3e13; color: #fff; box-shadow: 2px 2px 1px 1px #0099ff;}
 .botao {
 	border-radius: 30px;
 	padding: 10px 20px;
 	margin: 10px;
 }
 .destaque {
-	background: #ec3e13;
+	background: #e60000;
 }
 .destaque:hover {
-	background: #3333cc;
+	background: #ff5e1a;
 	color: #fff;
-	box-shadow: 2px 2px 1px 1px #f2785a;
+	box-shadow: 2px 2px 1px 1px #ff5e1a50;
 }
 
+.rodape {
+	position: absolute;
+	height: 80px;
+	width: 100%;
+	background: #333;
+	border-top: solid 5px #595959;
+	top: 890px;
+	font-family: 'Montserrat', sans-serif;
+	box-sizing: content-box;
+}
+.rodape a {
+	display: inline-block;
+	color: #fff;
+	font-style: italic;
+	font-size: 1.2em;
+	padding: 10px;
+	margin-top: 15px;
+	margin-left: 800px;
+}
