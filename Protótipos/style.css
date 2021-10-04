@@ -83,6 +83,7 @@ body{
 	text-decoration: none;
 	color: #fff;
 	margin-right: 40px;	
+	border-radius: 10px 20px;
 	box-shadow: 0 8px 40px 0 #ffd633;
 }
 .btn:nth-child(1){
