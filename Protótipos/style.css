@@ -1,4 +1,4 @@
-@import url('https://fonts.google.com/specimen/Montserrat')
+@import url('https://fonts.google.com/specimen/Montserrat') /* Uma forma de importar fontes diretamente de um arquivo CSS */
 * {
 	box-sizing: border-box;
 }
@@ -61,14 +61,34 @@ body{
 	margin: 10px;
 }
 .destaque {
-	background: #e60000;
+	background: #ff5e1a; 
 }
 .destaque:hover {
-	background: #ff5e1a;
+	background: #e60000;
 	color: #fff;
 	box-shadow: 2px 2px 1px 1px #ff5e1a50;
 }
-
+#config{
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+}
+.btn {
+	display: inline-block;
+	font-size: 1.5em;
+	width: 120px;
+	text-align: center;
+	padding: 25px;
+	background: #262626;
+	text-decoration: none;
+	color: #fff;
+	margin-right: 40px;	
+	box-shadow: 0 8px 40px 0 #ffd633;
+}
+.btn:nth-child(1){
+	margin-top: 50px;
+	margin-left: 620px;
+}
 .rodape {
 	position: absolute;
 	height: 80px;
