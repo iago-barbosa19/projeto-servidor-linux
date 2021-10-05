@@ -121,7 +121,46 @@ body{
 	margin-top: 15px;
 	margin-left: 800px;
 }
-
+.login {
+	font-family: 'Monteserrat', sans-serif;
+	color: #fff;
+	font-size: 2em;
+	height: 100%;
+	background: #333;
+}
+.login > p {
+	font-size: 3.5rem;
+	padding: 80px 0px 15px 860px;
+	text-shadow: 2px 2px #80ffff50;
+}
+.container {
+	display: inline-block;
+	width: 100%;
+	/* border: solid 10px #fff; */
+	box-sizing: border-box;
+}
+.container > p {
+	margin-top: 25px;
+	margin-left: 750px;
+}
+.container > input{
+	height: 50px;
+	font-size: 0.7em;
+	margin-left: 700;
+	width: 500px;
+	border-radius: 10px 20px;
+}
+.login-btn {
+	padding: 5px 60px;
+	font-size: 1em;
+	background: linear-gradient(220deg, #9933ff, #80ffff);
+	margin: 90px 840px;
+	color: #fff;
+	display: inline-block;
+	font-weight: bold;
+	border-radius: 20px 20px;
+	
+}
 @keyframes color-change-2x {
   0% {
     background: #fff;
