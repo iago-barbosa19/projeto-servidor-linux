@@ -3,6 +3,7 @@
 	box-sizing: border-box;
 }
 body{
+	font-family: 'Montserrat', sans-serif;
 	margin: 0;
 }
 .cabecalho {
@@ -72,23 +73,34 @@ body{
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box;
+	background: #a9a9bc;
+	animation: color-change-2x 1s linear alternate both;
 }
+
 .btn {
 	display: inline-block;
 	font-size: 1.5em;
 	width: 120px;
 	text-align: center;
-	padding: 25px;
-	background: #262626;
+	padding: 20px;
+	background: #333;
 	text-decoration: none;
 	color: #fff;
 	margin-right: 40px;	
 	border-radius: 10px 20px;
 	box-shadow: 0 8px 40px 0 #ffd633;
+	animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	transition: 1s;
 }
+
 .btn:nth-child(1){
-	margin-top: 50px;
-	margin-left: 620px;
+	margin-top: 22px;
+	margin-left: 660px;
+}
+.btn:hover, .btn:focus{
+	background: #ffd633;
+	box-shadow: 0 8px 40px 0 #333;
+	color: #fff;
 }
 .rodape {
 	position: absolute;
@@ -108,4 +120,23 @@ body{
 	padding: 10px;
 	margin-top: 15px;
 	margin-left: 800px;
+}
+
+@keyframes color-change-2x {
+  0% {
+    background: #fff;
+  }
+  100% {
+    background: #3399ff80;
+  }
+}
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
