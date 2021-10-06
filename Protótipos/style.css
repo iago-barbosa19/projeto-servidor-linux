@@ -90,7 +90,7 @@ body{
 	border-radius: 10px 20px;
 	box-shadow: 0 8px 40px 0 #ffd633;
 	animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	transition: 1s;
+	transition: linear width 0s, height 0.1s;
 }
 
 .btn:nth-child(1){
@@ -126,18 +126,27 @@ body{
 	color: #fff;
 	font-size: 2em;
 	height: 100%;
-	background: #333;
+	background: linear-gradient(220deg, #9933ff, #80ffff);
+	background-size: 400% 400%;
+    animation: css-change 11s ease infinite;
 }
 .login > p {
 	font-size: 3.5rem;
-	padding: 80px 0px 15px 860px;
+	padding: 30px 0px 15px 860px;
 	text-shadow: 2px 2px #80ffff50;
 }
 .container {
 	display: inline-block;
-	width: 100%;
-	/* border: solid 10px #fff; */
+	/* padding: 10px; */
 	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid #fff0;
+	background-color: #333;
+}
+.container > p:nth-child(1) {
+	font-size: 3.5rem;
+	padding: 40px 0px 0px 120px;
+	text-shadow: 2px 2px #80ffff50;
 }
 .container > p {
 	margin-top: 25px;
@@ -147,28 +156,47 @@ body{
 	height: 50px;
 	font-size: 0.7em;
 	margin-left: 700;
-	width: 500px;
+	/* width: 500px; */
+	padding-right: 280px;
 	border-radius: 10px 20px;
+	/* text-align: center; */
+}
+.container > input[type="password"] {
+	padding-right: 40px;
+	margin-left: 795px;
+	margin-bottom: 20px;
+	text-align: center;
 }
 .login-btn {
-	padding: 5px 60px;
+	padding: 10px 60px;
 	font-size: 1em;
-	background: linear-gradient(220deg, #9933ff, #80ffff);
-	margin: 90px 840px;
+	background: linear-gradient(220deg, #80ffff, #9933ff);
+	margin: 50px 840px 40px 850px;
 	color: #fff;
+	background-size: 400% 400%;
+    animation: css-change 11s ease infinite;
 	display: inline-block;
 	font-weight: bold;
 	border-radius: 20px 20px;
-	
+}
+.login-btn:hover {
+    background: #80ffff;
+	cursor: pointer;
+	transition: 3s;
+}
+@keyframes css-change {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
 @keyframes color-change-2x {
-  0% {
-    background: #fff;
+	0% {
+	  background: #fff;
+	}
+	100% {
+	  background: #3399ff80;
+	}
   }
-  100% {
-    background: #3399ff80;
-  }
-}
 @keyframes slide-in-top {
   0% {
     transform: translateY(-100px);
