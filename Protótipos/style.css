@@ -6,112 +6,18 @@ body{
 	font-family: 'Montserrat', sans-serif;
 	margin: 0;
 }
-.cabecalho {
-	height: 80px;
-	width: 100%;
-	font-family: 'Montserrat', sans-serif;
-	border-bottom: solid 5px #595959;
-	background: #333;
-	box-sizing: content-box;
-}
-.logo {
-	display: inline-block;
-	height: 75px;
-}
-.logo img {
-	height: 100%;
-	margin-left: 15px;
-}
-.menu {
-	vertical-align: top;
-	height: 80px;
-	padding: 25px;
-	display: inline-block;	
-}
-.menu ul {
-	padding: 0px;
-	margin: 0px 0px 0px 200px;
-}
-.menu li {
-	display: inline-block;
-}
-.cabecalho a{
-	font-size: 1.4em;
-	font-weight: 500px;
-	text-decoration: none;
-	color:  #eee;
-}
-.menu a {
-	display: inline-block;
-	padding: 10px;
-	padding-right: 25px;
-}
-.menu a:hover {
-	height: 100%;
-	background: #77859220;
-}
-.autenticacao {
-	float: right;
-	height: 80px;
-	margin-right: 0;
-	padding: 30px;
-}
-.botao {
-	border-radius: 30px;
-	padding: 10px 20px;
-	margin: 10px;
-}
-.destaque {
-	background: #ff5e1a; 
-}
-.destaque:hover {
-	background: #e60000;
-	color: #fff;
-	box-shadow: 2px 2px 1px 1px #ff5e1a50;
-}
-#config{
-	height: 100%;
-	width: 100%;
-	box-sizing: border-box;
-	background: #a9a9bc;
-	animation: color-change-2x 1s linear alternate both;
-}
-
-.btn {
-	display: inline-block;
-	font-size: 1.5em;
-	width: 120px;
-	text-align: center;
-	padding: 20px;
-	background: #333;
-	text-decoration: none;
-	color: #fff;
-	margin-right: 40px;	
-	border-radius: 10px 20px;
-	box-shadow: 0 8px 40px 0 #ffd633;
-	animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	transition: linear width 0s, height 0.1s;
-}
-
-.btn:nth-child(1){
-	margin-top: 22px;
-	margin-left: 660px;
-}
-.btn:hover, .btn:focus{
-	background: #ffd633;
-	box-shadow: 0 8px 40px 0 #333;
-	color: #fff;
-}
+/* Rodapé da página, uma caixa no fim da página, onde está posicionada algumas coisas nela.*/
 .rodape {
-	position: absolute;
+	position: fixed;
 	height: 80px;
 	width: 100%;
 	background: #333;
 	border-top: solid 5px #595959;
-	top: 890px;
+	bottom: 0px;
 	font-family: 'Montserrat', sans-serif;
 	box-sizing: content-box;
 }
+/* Rodapé da página principal. Parte do Link de contato com o suporte */
 .rodape a {
 	display: inline-block;
 	color: #fff;
@@ -121,6 +27,7 @@ body{
 	margin-top: 15px;
 	margin-left: 800px;
 }
+/* Área geral da página, onde fica o background secundário*/
 .login {
 	font-family: 'Monteserrat', sans-serif;
 	color: #fff;
@@ -130,60 +37,245 @@ body{
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;
 }
+/* Ajuste de tamanho */
 .login > p {
-	font-size: 3.5rem;
-	padding: 30px 0px 15px 860px;
-	text-shadow: 2px 2px #80ffff50;
+	padding: 70px 0px 15px 860px;
 }
+/* Na página de Login, background primário da página */
 .container {
 	display: inline-block;
-	/* padding: 10px; */
 	box-sizing: border-box;
 	width: 100%;
 	border: 1px solid #fff0;
 	background-color: #333;
 }
-.container > p:nth-child(1) {
-	font-size: 3.5rem;
-	padding: 40px 0px 0px 120px;
-	text-shadow: 2px 2px #80ffff50;
+#textoLogin {
+	margin-top: 25px;
+	margin-left: 880px;
+	font-size: 1.4em
 }
+/* Área onde ficam as caixas de inserção de dados*/
 .container > p {
 	margin-top: 25px;
 	margin-left: 750px;
 }
+/* Inputs gerais */
 .container > input{
 	height: 50px;
 	font-size: 0.7em;
 	margin-left: 700;
-	/* width: 500px; */
 	padding-right: 280px;
 	border-radius: 10px 20px;
-	/* text-align: center; */
 }
+/* Input de senha */
 .container > input[type="password"] {
-	padding-right: 40px;
-	margin-left: 795px;
+	position: absolute;
+	padding-right: 280px;
+	margin-left: 700px;
 	margin-bottom: 20px;
-	text-align: center;
 }
+/* Área de "Esqueci minha senha" */
+#forgotPass {
+	position: absolute;
+	font-size: 0.4em;
+	display: inline-block;
+	box-sizing: content-box;
+	margin: 60px 0px 0px 1120px;
+	cursor: pointer;
+	color: skyblue;
+	text-decoration: underline;
+}
+/* Botão Login */
 .login-btn {
-	padding: 10px 60px;
+	position: relative;
+	padding: 20px 70px;
 	font-size: 1em;
 	background: linear-gradient(220deg, #80ffff, #9933ff);
-	margin: 50px 840px 40px 850px;
+	margin: 70px 840px 80px 850px;
 	color: #fff;
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;
 	display: inline-block;
 	font-weight: bold;
 	border-radius: 20px 20px;
+	transition: all 1s ease;
 }
-.login-btn:hover {
-    background: #80ffff;
+/* Botão Login */
+.login-btn:hover, .login-btn:focus {
 	cursor: pointer;
-	transition: 3s;
+	color: #333
 }
+/* Botão de Login */
+.login > a:after {    
+	background: none repeat scroll 0 0 transparent;
+	bottom: 5px;
+	content: "";
+	display: block;
+	height: 2px;
+	left: 50%;
+	margin-bottom: 10px;
+	margin-left: 35px;
+	position: absolute;
+	background: #fff;
+	transition: width 0.3s ease 0s, left 0.3s ease 0s;
+	width: 0;
+  }
+  /* Botão de Login */
+ .login > a:hover:after { 
+	width: 65px; 
+	left: 0; 
+  }
+  /* Botão para voltar */
+.voltar {
+	position:absolute;
+	top: 140px;
+	left: 20px;
+	display: inline-block;
+	font-size: 1.3rem;
+	border-radius: 40px 40px;
+	padding: 20px 40px;
+	color: #fff;	
+	background: #2073c5;
+	transition: all 1s ease;
+	cursor: pointer;
+	text-decoration: none;
+}
+.secao{
+	display: inline-block;
+	background-color: #fff;
+	border-radius: 20px 30px;
+	margin: 20px 20px 0px 560px;
+	box-sizing: border-box;
+	width: 800px;
+	font-size: 1.3em;
+	font: 'Montserrat', Arial, sans-serif;
+}
+.secao input {
+	margin-left: 120px;
+}
+.secao  p{
+	margin-left: 100px;
+}
+
+/* NavBar / Barra de navegação onde está o indíce*/
+#trapezoid {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+  background: #9933ff80;
+  border: 80px solid rgba(0,0,0,0);
+  border-top: 0 solid;
+  border-bottom: 100px solid rgba(1, 1, 1, .4);
+  -webkit-border-radius: 20px 20px 0 0;
+  border-radius: 20px 20px 0 0;
+  font: normal 100%/normal 'Montserrat', Arial;
+  color: rgba(0,0,0,0.7);
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  -webkit-transform: rotateX(180deg);
+  transform: rotateX(180deg);
+  margin-top:-53px;
+  width: 700px;
+  position: sticky;
+  transition: all 0.7s ease;
+  padding-left:7%;
+}
+
+#trapezoid a, .subnavbtn {
+ -webkit-transform: rotateX(180deg);
+  transform: rotateX(180deg);
+}
+
+.sub-home {
+  display: none;
+  position: absolute;
+  right: 0;
+  left: 0; 
+
+  z-index: 1;   
+  transform: perspective(-10px);
+}
+
+#trapezoid:hover .sub-home {
+  justify-content: center;
+  margin-top: 53px;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  display:flex;
+  overflow:hidden;
+  justify-content: center;
+  height: 100px;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 25px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.5s ease;
+}
+
+.subnav {
+  float: left;
+  overflow: hidden;
+}
+
+.subnav .subnavbtn {
+  font-size: 16px; 
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 25px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.5s ease;
+}
+
+.navbar a:hover, .subnav:hover .subnavbtn {
+  background:#80ffff;
+  color: black;
+  border-radius:5px;
+}
+
+.subnav-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 1;   
+  padding: 10px;
+  transform: perspective(-10px);
+}
+
+.subnav-content a {
+  float: left;
+  color: white;
+  text-decoration: none; 
+}
+
+.subnav-content a:hover {
+  background:#80ffff;
+  color: black;
+}
+
+.subnav:hover .subnav-content {
+  display: flex;
+  justify-content: center;
+}
+/* Fim da navbar */
+
+/* Animação de mudança de cor gradiente.*/
 @keyframes css-change {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}

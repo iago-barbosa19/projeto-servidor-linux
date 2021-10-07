@@ -4,34 +4,74 @@
 	<meta charset="utf-8">
 	<title>Teste</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function(){
+				
+			$('.expandHome').mouseover(function() {
+			$('.sub-home').css({
+				'display': 'block'
+				}); 
+			});
+			$('.subnavbtn').mouseover(function() {
+			$('.sub-home').css({
+					'display': 'none'
+				}); 
+			});
+
+			$('#trapezoid').mouseleave(function() {
+			$('#trapezoid').css({
+					'margin-top': '-53px'
+				}); 
+				$('.sub-home').css({
+					'display': 'none'
+				}); 
+			}).mouseenter(function() {
+			$('#trapezoid').css({
+				'margin-top': '0px'
+				}); 
+			});
+			});
+	</script>
+	<style>
+		body {
+			background: #333;
+		}
+	</style>
 </head>
 <body>
-	<header class='cabecalho'>
-		<div class='logo'>
-			<a href="#inicio">
-			<img src="Python-Logo-2.png">
-			</a>
+	<!-- Barra de navegação. -->
+	<nav class="navbar">
+		<div id="trapezoid">
+		  <a class="sub-home" href="./index.html">Página Inicial</a>
+		  <a href="./pages/login.html" class="expandHome">Login</a>
+		   <div class="subnav">
+		   <button class="subnavbtn">Conf de Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div id="subnav-trapezoid">
+				<a  style="cursor:pointer" nav='./pages/dhcp.html'>DHCP</a>
+				<a style="cursor:pointer" nav='./pages/ip.html'>IP</a>
+				<a style="cursor:pointer" nav='./pages/dns.html'>DNS</a>
+			  </div>
+			 </div>
+		  </div>
+		   <div class="subnav">
+		   <button class="subnavbtn">Instalar Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div class="subnav-trapezoid">
+				<a href nav='dhcp.html'>DHCP</a>
+				<a href nav='dhcp.html'>DNS</a>
+			   </div>
+			 </div>
+			</div>
 		</div>
-		<nav class="menu">
-			<ul class="Itens">
-				<li>
-					<a href='index.html'>Início</a>
-
-				</li><li>
-					<a href nav='pages\conf.html'>Configurar Serviços</a>
-				</li><li>
-					<a href nav='pages\install.html'>Instalar Serviços</a>
-				</li><li>
-					<a href nav='pages\verif.html'>Verificar Status</a>
-				</li>
-			</ul>
-		</nav>
-		<aside class="autenticacao">
-				<a href="#login" class="botao destaque">Login</a>
-		</aside>
-	</header>
-	<section id='conteudo'></section>
+	  </nav>
+	  <!-- Fim da Barra de navegação.  -->
+	
+	<section id='conteudo' style='margin-top:20px'></section>
+	<!-- Área de contato com o suporte ou sugestões -->
 	<footer class="rodape"><a href='mailto:iagofbarbosa23@gmail.com'>Entre em contato com o suporte</a></footer>
-	<script src='script.js'></script>
+	
 </body>
+<script src='./script.js'></script>
 </html>
