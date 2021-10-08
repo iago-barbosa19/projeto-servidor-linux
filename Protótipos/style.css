@@ -7,31 +7,69 @@ body{
 	margin: 0;
 }
 /* Rodapé da página, uma caixa no fim da página, onde está posicionada algumas coisas nela.*/
+#btn-suporte{
+	display: inline-block;
+	position: absolute;
+	border-radius: 0px 0px 200px 200px;
+	transform: rotatey(60deg);
+	left: 160px;
+	transform: rotateX(180deg);
+	padding: 10px 40px;
+	background-color: #80ffff;
+	bottom: 0px;
+	overflow: hidden;
+	cursor: pointer;
+
+	left: 880px;
+	height: 20px;
+}
+#btn-suporte2{
+	display: inline-block;
+	position: absolute;
+	border-radius: 0px 0px 200px 200px;
+	transform: rotatey(60deg);
+	transform: rotateX(180deg);
+	padding: 10px 40px;
+	background-color: #80ffff;
+	bottom: 80px;
+	cursor: pointer;
+	left: 200px;
+	height: 20px;
+}
 .rodape {
+	display: none;
 	position: fixed;
 	height: 80px;
 	width: 100%;
-	background: #333;
-	border-top: solid 5px #595959;
+	background: #80ffff;
+	border-top: solid 2px #80ffff;
 	bottom: 0px;
 	font-family: 'Montserrat', sans-serif;
 	box-sizing: content-box;
 }
+.rodape ul {list-style-type: none;}
 /* Rodapé da página principal. Parte do Link de contato com o suporte */
 .rodape a {
 	display: inline-block;
-	color: #fff;
+	color: #333;
 	font-style: italic;
-	font-size: 1.2em;
+	vertical-align: center;
+	text-align: center;
+	font-size: 1.5em;
 	padding: 10px;
-	margin-top: 15px;
-	margin-left: 800px;
+	margin-top: 5px;
+	bottom: 20px;
+	text-decoration: none;
+	margin-left: 680px;
 }
 /* Área geral da página, onde fica o background secundário*/
 .login {
+	box-sizing: border-box;
 	font-family: 'Monteserrat', sans-serif;
 	color: #fff;
 	font-size: 2em;
+	margin: 0;
+	width: 100%;
 	height: 100%;
 	background: linear-gradient(220deg, #9933ff, #80ffff);
 	background-size: 400% 400%;
@@ -39,7 +77,7 @@ body{
 }
 /* Ajuste de tamanho */
 .login > p {
-	padding: 70px 0px 15px 860px;
+	padding: 70px 0px 15px 820px;
 }
 /* Na página de Login, background primário da página */
 .container {
@@ -147,16 +185,55 @@ body{
 	margin: 20px 20px 0px 560px;
 	box-sizing: border-box;
 	width: 800px;
+	height: 440px;
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
 }
-.secao input {
-	margin-left: 120px;
+#ip > p {
+	margin-left: 80px;
 }
-.secao  p{
-	margin-left: 100px;
+#ip > input {
+	border-radius: 20px 20px;
+	background-color: #333;
+	margin-left: 80px;
+	font-size: 1.1em;
+	padding: 5px
 }
-
+#ip > input::placeholder {color: #fff;}
+#dns {
+	position:absolute;
+	top: 140px;
+	right: 650px;
+}
+#dns > p {
+	padding: 5px;
+}
+#dns > input {
+	font-size: 1.1em;
+	border-radius: 20px 20px;
+	background-color: #333;
+	padding: 5px
+}
+#dns > input::placeholder{color: #fff;}
+#dns > input[type='radio'] {
+	display: inline;
+	margin-left: 20px;
+}
+.btn-confirm {
+	display: block;
+	position: absolute;
+	top: 495px;
+	left: 830px;
+	cursor: pointer;
+	border-radius: 20px 20px;
+	padding: 20px 40px;
+	background-color: #80ffff;
+	font-size: 1.3em;
+}
+.btn-confirm:hover {
+	background:#9933ff;
+	animation: all 11s ease;
+}
 /* NavBar / Barra de navegação onde está o indíce*/
 #trapezoid {
   -webkit-box-sizing: content-box;
@@ -192,7 +269,6 @@ body{
   position: absolute;
   right: 0;
   left: 0; 
-
   z-index: 1;   
   transform: perspective(-10px);
 }
@@ -286,16 +362,23 @@ body{
 	  background: #fff;
 	}
 	100% {
+	  background: #9933ff;
+	}
+  }
+@keyframes color-changes2 {
+	0% {
+	  background: #80ffff;
+	}
+	100% {
 	  background: #3399ff80;
 	}
   }
 @keyframes slide-in-top {
   0% {
-    transform: translateY(-100px);
-    opacity: 0;
+    transform: translateY(0px);
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(100px);
     opacity: 1;
   }
 }

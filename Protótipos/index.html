@@ -32,6 +32,30 @@
 				}); 
 			});
 			});
+			$(document).ready(function(){
+				// Menu subir
+				$("#btn-suporte").click(function(){ // selecionar o botão ou tag que ira fazer a função
+				$(".rodape").slideToggle(1000);// selecionar o elemento que vai receber a função
+				$("#btn-suporte").hide(0);
+				  });
+				  // Menu descer
+				$("#btn-suporte2").click(function(){
+					$("#btn-suporte2").slideDown(0);
+					$(".rodape").slideToggle(1000);// selecionar o elemento que vai receber a função
+					$("#btn-suporte").fadeToggle();
+					$("#btn-suporte").show();
+				  });
+			});
+			document.querySelectorAll('[nav]').forEach(link =>{
+			const conteudo = document.getElementById('conteudo')
+			link.onclick = function(e) {
+				e.preventDefault()
+				/* Vai pegar o site do atributo wm-nav*/
+				fetch(link.getAttribute('nav'))
+					.then(resp => resp.text())
+					.then(html => conteudo.innerHTML = html)
+			}
+		})
 	</script>
 	<style>
 		body {
@@ -67,10 +91,19 @@
 		</div>
 	  </nav>
 	  <!-- Fim da Barra de navegação.  -->
-	
+	  <a id='btn-suporte'></a>
+	<!-- Área de Conteúdo. -->
 	<section id='conteudo' style='margin-top:20px'></section>
+	<!-- Fim da área de Conteúdo-->
 	<!-- Área de contato com o suporte ou sugestões -->
-	<footer class="rodape"><a href='mailto:iagofbarbosa23@gmail.com'>Entre em contato com o suporte</a></footer>
+	<footer class="rodape">
+		<a id='btn-suporte2'></a>
+		<ul>
+			<li>
+				<a href='mailto:iagofbarbosa23@gmail.com'>Entre em contato com o suporte</a></footer>
+			</li>
+		</ul>
+		
 	
 </body>
 <script src='./script.js'></script>

@@ -8,20 +8,25 @@
     <body > 
             <form action="../server2020/server2020.html" method="post">
             <section class="secao">
-                <p >IPv4</p>
-                <input type="text" placeholder="192.168.1.15">
-                <p>Máscara de Sub-Rede</p>
-                <input type='text' placeholder="255.255.255.0">
-                <p>Gateway da rede</p>
-                <input type='text' placeholder='192.168.1.1'>
-                <p>Tipos de DNS</p>
-                <input type="radio" value='dnsGoogle'>DNS Padrão
-                <input type='radio'value='dnsProprio'>DNS Próprio
-                <p>DNS 1</p>
-                <input type=text placeholder='8.8.8.8'>
-                <p>DNS 2</p>
-                <input type=text placeholder='8.8.4.4'>
+                <section id="ip">
+                    <p >IPv4</p>
+                    <input type="text" placeholder="192.168.1.15">
+                    <p>Máscara de Sub-Rede</p>
+                    <input type='text' placeholder="255.255.255.0">
+                    <p>Gateway da rede</p>
+                    <input type='text' placeholder='192.168.1.1'>
+                </section>
+                <section id='dns'>
+                    <p>Tipos de DNS</p>
+                    <input type="radio" value='dnsGoogle'>DNS Padrão</input>
+                    <input type='radio'value='dnsProprio'>DNS Próprio</input>
+                    <p>DNS 1</p>
+                    <input type=text placeholder='8.8.8.8'>
+                    <p>DNS 2</p>
+                    <input type=text placeholder='8.8.4.4'>
+                </section>
             </section>
+            <button class='btn-confirm'>Confirmar</button>
             </form>
     </body>
 </html>
