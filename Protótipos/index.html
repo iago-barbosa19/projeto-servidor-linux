@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
+		// Início do Script da NavBar
 		$(document).ready(function(){
 				
 			$('.expandHome').mouseover(function() {
@@ -32,20 +33,25 @@
 				}); 
 			});
 			});
+			// Fim do Script da NavBar
+			// Início do menu de rodapé.
 			$(document).ready(function(){
-				// Menu subir
-				$("#btn-suporte").click(function(){ // selecionar o botão ou tag que ira fazer a função
-				$(".rodape").slideToggle(1000);// selecionar o elemento que vai receber a função
-				$("#btn-suporte").hide(0);
-				  });
-				  // Menu descer
-				$("#btn-suporte2").click(function(){
-					$("#btn-suporte2").slideDown(0);
-					$(".rodape").slideToggle(1000);// selecionar o elemento que vai receber a função
-					$("#btn-suporte").fadeToggle();
-					$("#btn-suporte").show();
+				// Parte que o menu sobe
+			$("#btn-suporte").click(function(){
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);
+				$("#btn-suporte").hide();
 				  });
 			});
+			// Parte que o menu desce.
+			$(document).ready(function(){
+			$("#btn-suporte2").click(function(){ 
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);// selecionar o elemento que vai receber a função
+				$("#btn-suporte").slideDown(200);
+				  });
+			});
+			// Script que pega o conteúdo de uma página HTML e joga dentro da tag de conteúdo.
 			document.querySelectorAll('[nav]').forEach(link =>{
 			const conteudo = document.getElementById('conteudo')
 			link.onclick = function(e) {
@@ -93,18 +99,17 @@
 	  <!-- Fim da Barra de navegação.  -->
 	  <a id='btn-suporte'></a>
 	<!-- Área de Conteúdo. -->
-	<section id='conteudo' style='margin-top:20px'></section>
+	<section id='conteudo' style='margin-top:20px;padding-bottom: 25px;'></section>
 	<!-- Fim da área de Conteúdo-->
 	<!-- Área de contato com o suporte ou sugestões -->
 	<footer class="rodape">
-		<a id='btn-suporte2'></a>
+		<a id='btn-suporte2' style='display:none;'></a>
 		<ul>
 			<li>
 				<a href='mailto:iagofbarbosa23@gmail.com'>Entre em contato com o suporte</a></footer>
 			</li>
 		</ul>
-		
-	
+	<!-- Fim da área de suporte -->
 </body>
 <script src='./script.js'></script>
 </html>

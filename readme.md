@@ -9,3 +9,22 @@
 
 ### O programa está usando as linguagens:
 ![Python image](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
+### Já o site utiliza:
+<div>
+    <img src="https://">
+    <img src="https://">
+    <img src="https://">
+    <img src="https://">
+    <img src="https://">
+</div>
+
+<style>
+    .container {
+        display: inline;
+    }
+    .container img {
+        height: 320px;
+        width: 320px
+    }
+</style>

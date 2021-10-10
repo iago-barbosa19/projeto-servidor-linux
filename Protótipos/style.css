@@ -6,7 +6,11 @@ body{
 	font-family: 'Montserrat', sans-serif;
 	margin: 0;
 }
-/* Rodapé da página, uma caixa no fim da página, onde está posicionada algumas coisas nela.*/
+
+/* Início do Estilo da página Index.html */
+
+/* Rodapé da página, uma caixa no fim da página, onde estão posicionadas algumas coisas nela.*/
+/* Botão que abre a caixa das informações de suporte */
 #btn-suporte{
 	display: inline-block;
 	position: absolute;
@@ -23,6 +27,7 @@ body{
 	left: 880px;
 	height: 20px;
 }
+/* Segundo botão da área de suporte, mas esse fecha a área de suporte */
 #btn-suporte2{
 	display: inline-block;
 	position: absolute;
@@ -62,7 +67,128 @@ body{
 	text-decoration: none;
 	margin-left: 680px;
 }
-/* Área geral da página, onde fica o background secundário*/
+/* NavBar. Barra de navegação onde está o indíce*/
+#trapezoid {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	height: 0;
+	background: #9933ff80;
+	border: 80px solid rgba(0,0,0,0);
+	border-top: 0 solid;
+	border-bottom: 100px solid rgba(1, 1, 1, .4);
+	-webkit-border-radius: 20px 20px 0 0;
+	border-radius: 20px 20px 0 0;
+	font: normal 100%/normal 'Montserrat', Arial;
+	color: rgba(0,0,0,0.7);
+	-o-text-overflow: clip;
+	text-overflow: clip;
+	-webkit-transform: rotateX(180deg);
+	transform: rotateX(180deg);
+	margin-top:-53px;
+	width: 700px;
+	position: sticky;
+	transition: all 0.7s ease;
+	padding-left:7%;
+  }
+  
+  #trapezoid a, .subnavbtn {
+   -webkit-transform: rotateX(180deg);
+	transform: rotateX(180deg);
+  }
+  
+  .sub-home {
+	display: none;
+	position: absolute;
+	right: 0;
+	left: 0; 
+	z-index: 1;   
+	transform: perspective(-10px);
+  }
+  
+  #trapezoid:hover .sub-home {
+	justify-content: center;
+	margin-top: 53px;
+  }
+  
+  .navbar {
+	position: sticky;
+	top: 0;
+	display:flex;
+	overflow:hidden;
+	justify-content: center;
+	height: 100px;
+  }
+  
+  .navbar a {
+	float: left;
+	font-size: 16px;
+	color: white;
+	text-align: center;
+	padding: 14px 25px;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	transition: all 0.5s ease;
+  }
+  
+  .subnav {
+	float: left;
+	overflow: hidden;
+  }
+  
+  .subnav .subnavbtn {
+	font-size: 16px; 
+	border: none;
+	outline: none;
+	color: white;
+	padding: 14px 25px;
+	background-color: inherit;
+	font-family: inherit;
+	margin: 0;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	transition: all 0.5s ease;
+  }
+  
+  .navbar a:hover, .subnav:hover .subnavbtn {
+	background:#80ffff;
+	color: black;
+	border-radius:5px;
+  }
+  
+  .subnav-content {
+	display: none;
+	position: absolute;
+	left: 0;
+	width: 100%;
+	z-index: 1;   
+	padding: 10px;
+	transform: perspective(-10px);
+  }
+  
+  .subnav-content a {
+	float: left;
+	color: white;
+	text-decoration: none; 
+  }
+  
+  .subnav-content a:hover {
+	background:#80ffff;
+	color: black;
+  }
+  
+  .subnav:hover .subnav-content {
+	display: flex;
+	justify-content: center;
+  }
+  /* Fim da navbar */
+
+  /* Fim do Estilo da página Index.html */
+
+  /* Início da página de login. Arquivo: login.html*/
+
+  /* Área geral da página, onde fica o background secundário*/
 .login {
 	box-sizing: border-box;
 	font-family: 'Monteserrat', sans-serif;
@@ -75,7 +201,7 @@ body{
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;
 }
-/* Ajuste de tamanho */
+/* Ajuste de tamanho da área de login */
 .login > p {
 	padding: 70px 0px 15px 820px;
 }
@@ -87,6 +213,7 @@ body{
 	border: 1px solid #fff0;
 	background-color: #333;
 }
+/* Ajuste do texto que marca o Login */
 #textoLogin {
 	margin-top: 25px;
 	margin-left: 880px;
@@ -135,15 +262,16 @@ body{
     animation: css-change 11s ease infinite;
 	display: inline-block;
 	font-weight: bold;
+	border-color: transparent;
 	border-radius: 20px 20px;
 	transition: all 1s ease;
 }
-/* Botão Login */
-.login-btn:hover, .login-btn:focus {
+/* Botão de login quando é clicado, focado nele ou mantido o clique */
+.login-btn:hover, .login-btn:focus, .login-btn:active {
 	cursor: pointer;
 	color: #333
 }
-/* Botão de Login */
+/* Animação para o texto ficar com outra cor no botão de login */
 .login > a:after {    
 	background: none repeat scroll 0 0 transparent;
 	bottom: 5px;
@@ -178,16 +306,34 @@ body{
 	cursor: pointer;
 	text-decoration: none;
 }
+/* Fim da página de login. Arquivo: login.html*/
+
+/* Início da página de Configurações de IP e etc */
 .secao{
 	display: inline-block;
 	background-color: #fff;
+	padding-top: 20px;
 	border-radius: 20px 30px;
 	margin: 20px 20px 0px 560px;
 	box-sizing: border-box;
 	width: 800px;
-	height: 440px;
+	box-shadow: 1px 1px 2px 2px #fff8;
+	height: 520px;
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
+}
+.inicio{
+	display: inline-block;
+	margin: 10px 20px 0px 280px;
+	color: #fff;
+	padding: 10px;
+	border-radius: 20px;
+	background: #0059b3;
+	border:#000;
+}
+#ip {
+	position:absolute;
+	top:200px;
 }
 #ip > p {
 	margin-left: 80px;
@@ -197,188 +343,82 @@ body{
 	background-color: #333;
 	margin-left: 80px;
 	font-size: 1.1em;
+	color: #fff;
 	padding: 5px
 }
-#ip > input::placeholder {color: #fff;}
+#ip input:hover, #dns input:hover {
+	color: #fff;
+}
+/* Customização do Input Radio */
+#dns label {transition: all 1s; cursor: pointer;}
+/* Customização do Input Radio */
+#dns label:hover {
+	border-radius: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background:#9933ff50;
+}
+/* Customização do Input Radio */
+#dns input[type='radio']:after {
+	border-radius: 15px;
+	top: -3px;
+	left: -3px;
+	content: "";
+	position: relative;
+	display: inline-block;
+	height: 15px;
+	visibility: visible;
+	width: 15px;
+	border: 1px solid #9933ff80;
+	background:#fff;
+}
+/* Customização do Input Radio */
+#dns input[type='radio']:checked:after{
+	background-color: #b366ff;
+	box-shadow: 1px 1px 0.8px 0.8px #9933ff50;
+	transition: 500ms;
+}
+span {margin-right: 5px;}
+/* Customização da Section de DNS */
 #dns {
 	position:absolute;
-	top: 140px;
+	top: 220px;
 	right: 650px;
 }
 #dns > p {
 	padding: 5px;
+	margin-left: 15px;
 }
 #dns > input {
 	font-size: 1.1em;
 	border-radius: 20px 20px;
 	background-color: #333;
-	padding: 5px
+	color: #fff;
+	padding: 5px;
+	margin-left: 15px;
 }
-#dns > input::placeholder{color: #fff;}
-#dns > input[type='radio'] {
-	display: inline;
-	margin-left: 20px;
-}
+#dns input::placeholder, #ip input::placeholder {color: #fff; text-align: center;}
+#dns > input[type='radio'] {display: inline; margin-left: 20px;}
 .btn-confirm {
 	display: block;
 	position: absolute;
-	top: 495px;
-	left: 830px;
+	top: 580px;
+	left: 870px;
 	cursor: pointer;
 	border-radius: 20px 20px;
 	padding: 20px 40px;
-	background-color: #80ffff;
+	color: #000;
+	background-color: #9966ff;
 	font-size: 1.3em;
+	transition: all 500ms ease;
 }
-.btn-confirm:hover {
-	background:#9933ff;
-	animation: all 11s ease;
-}
-/* NavBar / Barra de navegação onde está o indíce*/
-#trapezoid {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  height: 0;
-  background: #9933ff80;
-  border: 80px solid rgba(0,0,0,0);
-  border-top: 0 solid;
-  border-bottom: 100px solid rgba(1, 1, 1, .4);
-  -webkit-border-radius: 20px 20px 0 0;
-  border-radius: 20px 20px 0 0;
-  font: normal 100%/normal 'Montserrat', Arial;
-  color: rgba(0,0,0,0.7);
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  -webkit-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-  margin-top:-53px;
-  width: 700px;
-  position: sticky;
-  transition: all 0.7s ease;
-  padding-left:7%;
-}
-
-#trapezoid a, .subnavbtn {
- -webkit-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-}
-
-.sub-home {
-  display: none;
-  position: absolute;
-  right: 0;
-  left: 0; 
-  z-index: 1;   
-  transform: perspective(-10px);
-}
-
-#trapezoid:hover .sub-home {
-  justify-content: center;
-  margin-top: 53px;
-}
-
-.navbar {
-  position: sticky;
-  top: 0;
-  display:flex;
-  overflow:hidden;
-  justify-content: center;
-  height: 100px;
-}
-
-.navbar a {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 14px 25px;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  transition: all 0.5s ease;
-}
-
-.subnav {
-  float: left;
-  overflow: hidden;
-}
-
-.subnav .subnavbtn {
-  font-size: 16px; 
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 25px;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  transition: all 0.5s ease;
-}
-
-.navbar a:hover, .subnav:hover .subnavbtn {
-  background:#80ffff;
-  color: black;
-  border-radius:5px;
-}
-
-.subnav-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  z-index: 1;   
-  padding: 10px;
-  transform: perspective(-10px);
-}
-
-.subnav-content a {
-  float: left;
-  color: white;
-  text-decoration: none; 
-}
-
-.subnav-content a:hover {
-  background:#80ffff;
-  color: black;
-}
-
-.subnav:hover .subnav-content {
-  display: flex;
-  justify-content: center;
-}
-/* Fim da navbar */
+.btn-confirm:hover {background:#7300e6; color: #fff;}
+/* Fim da página de configuraçõesd e Ip e Etc. */
 
 /* Animação de mudança de cor gradiente.*/
 @keyframes css-change {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
-}
-@keyframes color-change-2x {
-	0% {
-	  background: #fff;
-	}
-	100% {
-	  background: #9933ff;
-	}
-  }
-@keyframes color-changes2 {
-	0% {
-	  background: #80ffff;
-	}
-	100% {
-	  background: #3399ff80;
-	}
-  }
-@keyframes slide-in-top {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(100px);
-    opacity: 1;
-  }
 }
