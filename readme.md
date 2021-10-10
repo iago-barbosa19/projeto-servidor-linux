@@ -8,23 +8,9 @@
 ![Debian image](https://img.shields.io/badge/Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
 
 ### O programa está usando as linguagens:
-![Python image](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-
-### Já o site utiliza:
 <div>
-    <img src="https://">
-    <img src="https://">
-    <img src="https://">
-    <img src="https://">
-    <img src="https://">
+    <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" height="30px" width="120px">
+    <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" height="30px" width="100px">
+    <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" height="30px" width="100px">
+    <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" height="30px" width="100px">
 </div>
-
-<style>
-    .container {
-        display: inline;
-    }
-    .container img {
-        height: 320px;
-        width: 320px
-    }
-</style>
