@@ -67,6 +67,10 @@ body{
 	text-decoration: none;
 	margin-left: 680px;
 }
+.support {transition: all 0.5s ease-in-out;}
+.support:hover {
+	text-decoration: underline;
+}
 /* NavBar. Barra de navegação onde está o indíce*/
 #trapezoid {
 	-webkit-box-sizing: content-box;
@@ -349,6 +353,23 @@ body{
 #ip input:hover, #dns input:hover {
 	color: #fff;
 }
+#dns {
+	position:absolute;
+	top: 220px;
+	right: 650px;
+}
+#dns > p {
+	padding: 5px;
+	margin-left: 15px;
+}
+#dns > input {
+	font-size: 1.1em;
+	border-radius: 20px 20px;
+	background-color: #333;
+	color: #fff;
+	padding: 5px;
+	margin-left: 15px;
+}
 /* Customização do Input Radio */
 #dns label {transition: all 1s; cursor: pointer;}
 /* Customização do Input Radio */
@@ -381,23 +402,6 @@ body{
 }
 span {margin-right: 5px;}
 /* Customização da Section de DNS */
-#dns {
-	position:absolute;
-	top: 220px;
-	right: 650px;
-}
-#dns > p {
-	padding: 5px;
-	margin-left: 15px;
-}
-#dns > input {
-	font-size: 1.1em;
-	border-radius: 20px 20px;
-	background-color: #333;
-	color: #fff;
-	padding: 5px;
-	margin-left: 15px;
-}
 #dns input::placeholder, #ip input::placeholder {color: #fff; text-align: center;}
 #dns > input[type='radio'] {display: inline; margin-left: 20px;}
 .btn-confirm {
