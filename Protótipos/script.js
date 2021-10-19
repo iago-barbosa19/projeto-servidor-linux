@@ -9,3 +9,4 @@ document.querySelectorAll('[nav]').forEach(link =>{
 					.then(html => conteudo.innerHTML = html)
 			}
 		})
+
