@@ -1,12 +1,12 @@
 import os, sys
-from ip import Ip
 
-class Dns(Ip):
+
+class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, networkIp:str, domain:str, prefix:str, serverAlias:str) -> None:
-        super().__init__(ipv4, subNetMask, networkIp)
+    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverAlias:str) -> None:
+        self.__ipv4: str = ipv4
+        self.__subNetMask: str = subNetMask
         self.__domain:str = domain
-        self.__prefix:str = prefix
         self.__serverAlias:str = serverAlias
 
     def changeDnsBind9(self:object) -> None:
@@ -19,7 +19,7 @@ class Dns(Ip):
         except FileExistsError:
             os.system(f'rm db.{arquivo[0]}')
             os.mknod(f'db.{arquivo[0]}')
-        with open(f'db.{arquivo[0]}', 'r') as dbAdminFile:
+        with open(f'db.{arquivo[0]}', 'w+') as dbAdminFile:
             dbAdminFile.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
                             f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
                             f'                             2         ; Serial\n'\
@@ -28,15 +28,15 @@ class Dns(Ip):
                             f'                       2419200         ; Expire\n'\
                             f'                        604800 )       ; Negative Cache TTL\n;\n'\
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
-                            f'www     IN      A      {self.ipv4}\n'\
-                            f'ftp     IN      A      {self.ipv4}')
+                            f'www     IN      A       {self.ipv4}\n'\
+                            f'ftp     IN      A       {self.ipv4}')
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
         try:                              
             os.mknod('named.conf.default-zones')
         except FileExistsError:
             os.system('rm named.conf.default-zones')
             os.mknod('named.conf.default-zones')
-        with open('named.conf.default-zones', 'r+') as defaultZones:
+        with open('named.conf.default-zones', 'w+') as defaultZones:
             defaultZones.write('zone "." {\n        type master;\n        file "usr/share/dns/root.hints";\n};\n'\
                             'zone "localhost\n        typemaster;\n        file "etc/bind/db.local;\n};\n'\
                             'zone "127.inaddr.arpa" {\n        type master;\n        file "/etc/bind/db/127";\n};\n'\
@@ -58,7 +58,7 @@ class Dns(Ip):
         except FileExistsError:
             os.system(f'rm {os.getlogin()}.conf')
             os.mknod(f'{os.getlogin()}.conf')
-        with open(f'{os.getlogin()}.conf', 'r+') as apacheArquivo:
+        with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
             apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{arquivo[0]}\n\n        ServerAlias www.{self.__domain}\n        "\
                                 f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/html\n        ErrorLog"\
                                 " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost")
