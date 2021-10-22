@@ -3,11 +3,11 @@ import os, sys
 
 class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverAlias:str) -> None:
+    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nomeServer: str) -> None:
         self.__ipv4: str = ipv4
         self.__subNetMask: str = subNetMask
         self.__domain:str = domain
-        self.__serverAlias:str = serverAlias
+        self.__nomeServer = nomeServer
 
     def changeDnsBind9(self:object) -> None:
         """
@@ -29,8 +29,8 @@ class Dns():
                             f'                       2419200         ; Expire\n'\
                             f'                        604800 )       ; Negative Cache TTL\n;\n'\
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
-                            f'www     IN      A       {self.ipv4}\n'\
-                            f'ftp     IN      A       {self.ipv4}')
+                            f'www     IN      A       {self.__ipv4}\n'\
+                            f'ftp     IN      A       {self.__ipv4}')
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
         os.system(f'rm db.{arquivo[0]}')
         try:                              
@@ -67,11 +67,12 @@ class Dns():
         except FileExistsError:
             pass
         with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
-            apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{arquivo[0]}\n\n        ServerAlias www.{self.__domain}\n        "\
+            apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nomeServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                 f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
-                                " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost")
+                                " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
             os.system(f'cp -p {os.getlogin()}.conf /etc/apache2/sites-available')
             os.system(f'rm {os.getlogin()}.conf')
+            os.system('su -')
             os.chdir('/etc/apache2/sites-available')
             os.system(f'a2ensite {os.getlogin()}.conf')
             
@@ -91,8 +92,8 @@ class Dns():
         except FileExistsError:
             os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
         with open('saveDNS.txt', 'x+') as save:
-            save.write(f'IPV4:{self.ipv4}| Máscara de Sub-Rede:{self.subNetMask}| NetworkIp:{self.networkIp}|\n'\
-                       f'Domínio:{self.__domain}| Prefixo:{self.__prefix}| ServerAlias:{self.__serverAlias}|')
+            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
+                       f'Domínio:{self.__domain}| Prefixo:{self.__prefix}|')
         os.system('echo A configuração foi salva com sucesso')
 
 if __name__ == '__main__':
