@@ -20,16 +20,16 @@ class Dns(Ip):
             os.system(f'rm db.{arquivo[0]}')
             os.mknod(f'db.{arquivo[0]}')
         with open(f'db.{arquivo[0]}', 'r') as dbAdminFile:
-            dbAdminFile.write(f'\n;\n\n; BIND data file for local loopback interface\n;\n$TTL     604800\n'\
-                            f'@      IN     SOA      {self.__domain}. root.{self.__domain}. (\n'\
-                            f'                              2         ; Serial\n'\
-                            f'                         604800         ; Refresh\n'\
-                            f'                          86400         ; Retry\n'\
-                            f'                        2419200         ; Expire\n'\
-                            f'                         604800 )       ; Negative Cache TTL\n;\n'\
+            dbAdminFile.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
+                            f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
+                            f'                             2         ; Serial\n'\
+                            f'                        604800         ; Refresh\n'\
+                            f'                         86400         ; Retry\n'\
+                            f'                       2419200         ; Expire\n'\
+                            f'                        604800 )       ; Negative Cache TTL\n;\n'\
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
-                            f'www     IN       A      {self.ipv4}\n'\
-                            f'ftp     IN       A      {self.ipv4}')
+                            f'www     IN      A      {self.ipv4}\n'\
+                            f'ftp     IN      A      {self.ipv4}')
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
         try:                              
             os.mknod('named.conf.default-zones')
@@ -41,9 +41,9 @@ class Dns(Ip):
                             'zone "localhost\n        typemaster;\n        file "etc/bind/db.local;\n};\n'\
                             'zone "127.inaddr.arpa" {\n        type master;\n        file "/etc/bind/db/127";\n};\n'\
                             'zone  "0.in-addr.arpa" {\n        type master;\n        file "/etc/bind/db.0";\n};\n'\
-                            'zone "255.in-addr.arpa {\n        type master;\n        file "/etc/bind/db.255";\n};\n'\
-                            f'zone "{self.__domain}'\
-                            ' {        type master;\n        '\
+                            'zone "255.in-addr.arpa" {\n        type master;\n        file "/etc/bind/db.255";\n};\n'\
+                            f'zone "{self.__domain}"'\
+                            ' {\n        type master;\n        '\
                             f'file "/etc/bind/db.{arquivo[0]}";\n'\
                             '};')
         os.system('cp -p named.conf.default-zones /etc/bind')

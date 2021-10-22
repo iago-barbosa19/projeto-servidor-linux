@@ -1,5 +1,4 @@
-import os, sys
-from typing import final
+import os, sys, time
 
 
 class Ip:
@@ -31,6 +30,10 @@ class Ip:
     @property
     def networkIp(self:object) -> str:
         return self.__networkIp
+
+    @property
+    def subNetMask(self:object) -> str:
+        return self.__subNetMask
 
     @ipv4.setter
     def ipv4(self:object, ipv4:str) -> None:
@@ -78,9 +81,8 @@ class Ip:
         with open('saveIp.txt', 'r+') as save:
             save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}')
-        print(f'Salvo com sucesso, no diretório.\n{os.getcwd}')
+        print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
 
-    @final
     def ipConfig(self:object) -> None:
         os.chdir(f'/home/{os.getlogin()}')
         try:
@@ -90,14 +92,14 @@ class Ip:
         os.mknod('interfaces')
         with open('interfaces', 'r+') as arq:
             arq.write('source /etc/network/interfaces.d/*\n'\
-                'auto lo\n\niface auto lo inet loopback\n'\
-                f'address {self.ip}\nnetmask {self.subNetMask}\n'\
-                f'network {self.network}\ngateway {self.gateway}\ndns-server {self.dns}')
+                'auto lo\n\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
+                f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         os.system('cp -p interfaces /etc/network')
         os.system('rm interfaces')
         os.system('/etc/init.d/networking restart')
-        print('Executado com sucesso')
-        sys.wait(5)        
+        os.system('echo SERVIÇO CONFIGURADO COM SUCESSO!!!!!')
+        time.sleep(3)
 
 if __name__ == '__main__':
     raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')
