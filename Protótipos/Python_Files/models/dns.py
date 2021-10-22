@@ -13,6 +13,7 @@ class Dns():
         """
         Configuração do Serviço DNS por parte do Bind9
         """
+        os.chdir(f'/home/{os.getlogin()}')
         arquivo = self.__domain.split('.')
         try:
             os.mknod(f'db.{arquivo[0]}')
@@ -31,6 +32,7 @@ class Dns():
                             f'www     IN      A       {self.ipv4}\n'\
                             f'ftp     IN      A       {self.ipv4}')
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
+        os.system(f'rm db.{arquivo[0]}')
         try:                              
             os.mknod('named.conf.default-zones')
         except FileExistsError:
@@ -38,7 +40,7 @@ class Dns():
             os.mknod('named.conf.default-zones')
         with open('named.conf.default-zones', 'w+') as defaultZones:
             defaultZones.write('zone "." {\n        type master;\n        file "usr/share/dns/root.hints";\n};\n'\
-                            'zone "localhost\n        typemaster;\n        file "etc/bind/db.local;\n};\n'\
+                            'zone "localhost" {\n        type master;\n        file "etc/bind/db.local";\n};\n'\
                             'zone "127.inaddr.arpa" {\n        type master;\n        file "/etc/bind/db/127";\n};\n'\
                             'zone  "0.in-addr.arpa" {\n        type master;\n        file "/etc/bind/db.0";\n};\n'\
                             'zone "255.in-addr.arpa" {\n        type master;\n        file "/etc/bind/db.255";\n};\n'\
@@ -47,6 +49,8 @@ class Dns():
                             f'file "/etc/bind/db.{arquivo[0]}";\n'\
                             '};')
         os.system('cp -p named.conf.default-zones /etc/bind')
+        os.system('rm named.conf.default-zones')
+        os.system('chmod 644 /etc/bind/named.conf.default-zones')
     
     def changeDnsApache2(self:object) -> None:
         """
@@ -58,9 +62,13 @@ class Dns():
         except FileExistsError:
             os.system(f'rm {os.getlogin()}.conf')
             os.mknod(f'{os.getlogin()}.conf')
+        try:
+            os.mkdir('/var/www/sites')
+        except FileExistsError:
+            pass
         with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
             apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{arquivo[0]}\n\n        ServerAlias www.{self.__domain}\n        "\
-                                f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/html\n        ErrorLog"\
+                                f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                 " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost")
             os.system(f'cp -p {os.getlogin()}.conf /etc/apache2/sites-available')
             os.system(f'rm {os.getlogin()}.conf')
