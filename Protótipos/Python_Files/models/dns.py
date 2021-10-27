@@ -34,11 +34,11 @@ class Dns():
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
         os.system(f'rm db.{arquivo[0]}')
         os.system(f'cp -p /etc/bind/named.conf.default-zones /home/{os.getlogin()}')
-        os.chdir(f'/home{os.getlogin()}')
+        os.chdir(f'/home/{os.getlogin()}')
         with open('named.conf.default-zones', 'a') as defaultZones:
             defaultZones.write(f'zone "{self.__domain}" '\
                                '{\n       type master;\n        '\
-                               f'file "/etc/bind/db.{arquivo[0]};\n'\
+                               f'file "/etc/bind/db.{arquivo[0]}";\n'\
                                '};')
         os.system('cp -p named.conf.default-zones /etc/bind')
         os.system('rm named.conf.default-zones')
