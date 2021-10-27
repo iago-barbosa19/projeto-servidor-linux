@@ -33,13 +33,11 @@ class Dns():
                             f'ftp     IN      A       {self.__ipv4}')
         os.system(f'cp -p db.{arquivo[0]} /etc/bind')
         os.system(f'rm db.{arquivo[0]}')
-        try:                              
+        try:
+            os.chdir('/etc/bind')                              
             os.mknod('named.conf.default-zones')
-        except FileExistsError:
-            os.system('rm named.conf.default-zones')
-            os.mknod('named.conf.default-zones')
-        with open('named.conf.default-zones', 'w+') as defaultZones:
-            defaultZones.write('zone "." {\n        type master;\n        file "usr/share/dns/root.hints";\n};\n'\
+            with open('named.conf.default-zones', 'w+') as defaultZones:
+                defaultZones.write('zone "." {\n        type master;\n        file "usr/share/dns/root.hints";\n};\n'\
                             'zone "localhost" {\n        type master;\n        file "etc/bind/db.local";\n};\n'\
                             'zone "127.inaddr.arpa" {\n        type master;\n        file "/etc/bind/db/127";\n};\n'\
                             'zone  "0.in-addr.arpa" {\n        type master;\n        file "/etc/bind/db.0";\n};\n'\
@@ -48,6 +46,13 @@ class Dns():
                             ' {\n        type master;\n        '\
                             f'file "/etc/bind/db.{arquivo[0]}";\n'\
                             '};')
+        except FileExistsError:
+            with open('named.conf.default-zones', 'a') as defaultZones:
+                defaultZones.write(f'\nzone {self.__domain}'\
+                                   '{\n        type master;\n        '\
+                                   f'file "/etc/bind/db.{arquivo[0]};\n'\
+                                   '};')
+       
         os.system('cp -p named.conf.default-zones /etc/bind')
         os.system('rm named.conf.default-zones')
         os.system('chmod 644 /etc/bind/named.conf.default-zones')
@@ -72,7 +77,6 @@ class Dns():
                                 " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
             os.system(f'cp -p {os.getlogin()}.conf /etc/apache2/sites-available')
             os.system(f'rm {os.getlogin()}.conf')
-            os.system('su -')
             os.chdir('/etc/apache2/sites-available')
             os.system(f'a2ensite {os.getlogin()}.conf')
             

@@ -92,7 +92,7 @@ class Ip:
         os.mknod('interfaces')
         with open('interfaces', 'r+') as arq:
             arq.write('source /etc/network/interfaces.d/*\n'\
-                'auto lo\n\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         os.system('cp -p interfaces /etc/network')
