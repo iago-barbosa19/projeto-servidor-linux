@@ -21,6 +21,7 @@ class Dhcp(Ip):
     @property
     def networkIp(self):
         return self.__networkIp
+
     def dhcpConf(self:object):
         try:
             os.chdir(f'/home{os.getlogin()}/')
@@ -34,12 +35,13 @@ class Dhcp(Ip):
             os.system('rm dhcpd.conf')
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
         with open(f'dhcpd.conf', 'a+') as dhcpConfig:
-            dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIp}\n')
+            dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
+                             ' {\n  range')
         
 
     def saveSettings(self:object):
         try:
-            os.chdir(f'/home{os.getlogin()}')
+            os.chdir(f'/home/{os.getlogin()}')
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
             os.chdir(f'/home{os.getlogin()}/Config_Saves_PSC')
