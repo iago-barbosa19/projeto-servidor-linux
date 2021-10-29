@@ -36,7 +36,7 @@ class Dns():
         os.system(f'cp -p /etc/bind/named.conf.default-zones /home/{os.getlogin()}')
         os.chdir(f'/home/{os.getlogin()}')
         with open('named.conf.default-zones', 'a') as defaultZones:
-            defaultZones.write(f'zone "{self.__domain}" '\
+            defaultZones.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
                                '{\n       type master;\n        '\
                                f'file "/etc/bind/db.{arquivo[0]}";\n'\
                                '};')

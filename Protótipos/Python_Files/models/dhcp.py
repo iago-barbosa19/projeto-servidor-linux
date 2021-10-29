@@ -34,9 +34,19 @@ class Dhcp(Ip):
         except FileExistsError:
             os.system('rm dhcpd.conf')
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
-        with open(f'dhcpd.conf', 'a+') as dhcpConfig:
-            dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
-                             ' {\n  range')
+        with open('dhcpd.conf', 'a+') as dhcpConfig:
+            dhcpConfig.seek(0)
+            teste = dhcpConfig.read()
+            if f'#DHCP REDE:{self.networkIP}' in teste:
+                os.system('echo Essa rede já esta cadastrada.')
+                dhcpConfig.seek(0)
+            else:
+                dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
+                                ' {\n  range'\
+                                f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
+                                f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                '}')
+                dhcpConfig.seek(0)
         
 
     def saveSettings(self:object):
