@@ -13,13 +13,13 @@ class Dns():
         """
         Configuração do Serviço DNS por parte do Bind9
         """
-        os.chdir(f'/home/{os.getlogin()}')
+        os.chdir('/etc/bind')
         arquivo = self.__domain.split('.')
         try:
-            os.mknod(f'db.{arquivo[0]}')
+            os.system(f'cp -p db.local db.{arquivo[0]}')
         except FileExistsError:
             os.system(f'rm db.{arquivo[0]}')
-            os.mknod(f'db.{arquivo[0]}')
+            os.system(f'cp -p db.local db.{arquivo[0]}')
         with open(f'db.{arquivo[0]}', 'w+') as dbAdminFile:
             dbAdminFile.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
                             f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
@@ -31,29 +31,19 @@ class Dns():
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}')
-        os.system(f'cp -p db.{arquivo[0]} /etc/bind')
-        os.system(f'rm db.{arquivo[0]}')
-        os.system(f'cp -p /etc/bind/named.conf.default-zones /home/{os.getlogin()}')
-        os.chdir(f'/home/{os.getlogin()}')
         with open('named.conf.default-zones', 'a') as defaultZones:
             defaultZones.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
-                               '{\n       type master;\n        '\
-                               f'file "/etc/bind/db.{arquivo[0]}";\n'\
-                               '};')
-        os.system('cp -p named.conf.default-zones /etc/bind')
-        os.system('rm named.conf.default-zones')
-        os.system('chmod 644 /etc/bind/named.conf.default-zones')
+                            '{\n        type master;\n        '\
+                            f'file "/etc/bind/db.{arquivo[0]}";\n'\
+                            '};')
+        # os.system('chmod 644 /etc/bind/named.conf.default-zones')
     
     def changeDnsApache2(self:object) -> None:
         """
         Configuração do Serviço DNS por parte do Apache2.
         """
         arquivo = self.__domain.split('.')
-        try:
-            os.mknod(f'{os.getlogin()}.conf')
-        except FileExistsError:
-            os.system(f'rm {os.getlogin()}.conf')
-            os.mknod(f'{os.getlogin()}.conf')
+        os.chdir('/etc/apache2/sites-available')
         try:
             os.mkdir('/var/www/sites')
         except FileExistsError:
@@ -61,13 +51,10 @@ class Dns():
         with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
             apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nomeServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                 f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
-                                " ${APACHE_LOG_DIR}\error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-            os.system(f'cp -p {os.getlogin()}.conf /etc/apache2/sites-available')
-            os.system(f'rm {os.getlogin()}.conf')
-            os.chdir('/etc/apache2/sites-available')
+                                " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
             os.system(f'a2ensite {os.getlogin()}.conf')
             
-    def configDns(self:object) -> None:
+    def dnsConf(self:object) -> None:
         """Função que vai efetuar a configuração do DNS"""
         self.changeDnsBind9()
         self.changeDnsApache2()

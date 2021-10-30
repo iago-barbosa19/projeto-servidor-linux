@@ -83,7 +83,7 @@ class Ip:
                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}')
         print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
 
-    def ipConfig(self:object) -> None:
+    def ipConf(self:object) -> None:
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
@@ -99,7 +99,6 @@ class Ip:
         os.system('rm interfaces')
         os.system('/etc/init.d/networking restart')
         os.system('echo SERVIÇO CONFIGURADO COM SUCESSO!!!!!')
-        time.sleep(3)
 
 if __name__ == '__main__':
     raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')

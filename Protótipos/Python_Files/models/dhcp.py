@@ -1,34 +1,33 @@
-from models.ip import Ip
-import os, sys
+import os
 
 
-class Dhcp(Ip):
+class Dhcp():
     
-    def __init__(self, ipv4, gateway, dns1, dns2, subNetMask, dhcpPoolInicial, dhcpPoolFinal):
+    def __init__(self, ipv4, gateway, dns1, dns2, subNetMask, dhcpPoolInicial, dhcpPoolFinal) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
-        self.__networkIp = self.networkIpSetter(ipv4, gateway) 
+        self.__networkIp = self.networkIpSetter(ipv4, subNetMask) 
         self.__dhcpPoolInicial = dhcpPoolInicial
         self.__dhcpPoolFinal = dhcpPoolFinal
 
     @property
-    def dhcpPoolInicial(self):
+    def dhcpPoolInicial(self) -> None:
         return self.__dhcpPoolInicial
     
     @property
-    def dhcpPoolFinal(self):
+    def dhcpPoolFinal(self) -> None:
         return self.__dhcpPoolFinal
 
     @property
-    def networkIp(self):
+    def networkIp(self) -> None:
         return self.__networkIp
 
-    def dhcpConf(self:object):
+    def dhcpConf(self:object) -> None:
         try:
-            os.chdir(f'/home{os.getlogin()}/')
+            os.chdir(f'/home/{os.getlogin()}/')
             os.mkdir('Config_Saves_PSC')
-            os.chdir(f'/home{os.getlogin()}/Config_Saves_PSC')
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         except FileExistsError:
-            os.chdir(f'/home{os.getlogin()}/Config_Saves_PSC')
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         try:
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
         except FileExistsError:
@@ -41,20 +40,41 @@ class Dhcp(Ip):
                 os.system('echo Essa rede já esta cadastrada.')
                 dhcpConfig.seek(0)
             else:
-                dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
+                dhcpConfig.write(f'\n\n#DHCP Rede:{self.__networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
                                 ' {\n  range'\
                                 f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
                                 f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
                                 '}')
                 dhcpConfig.seek(0)
-        
+        os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
+        os.system('/etc/init.d/isc-dhcp-server restart')
 
-    def saveSettings(self:object):
+    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
+        """
+        Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
+        Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
+        """
+        subNetMask = subNetMask.split('.')
+        subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
+        if subNetMask[0] == 255 and subNetMask[1] == 0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.0.0.0'
+            return  ipv4
+        elif subNetMask[0] == 255 and subNetMask[1] >0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
+            return  ipv4
+        elif subNetMask[0] == 255 and subNetMask[1] > 0 and subNetMask[2] > 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
+            return  ipv4
+
+    def saveSettings(self:object) -> None:
         try:
             os.chdir(f'/home/{os.getlogin()}')
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
-            os.chdir(f'/home{os.getlogin()}/Config_Saves_PSC')
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         with open('ConfigDHCP.txt', 'w+') as dhcpSave:
             dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
                            f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}')
