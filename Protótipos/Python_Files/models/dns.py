@@ -31,12 +31,15 @@ class Dns():
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}')
-        with open('named.conf.default-zones', 'a') as defaultZones:
-            defaultZones.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
-                            '{\n        type master;\n        '\
-                            f'file "/etc/bind/db.{arquivo[0]}";\n'\
-                            '};')
-        # os.system('chmod 644 /etc/bind/named.conf.default-zones')
+        with open('named.conf.default-zones', 'a+') as defaultZones:
+            for x in list(defaultZones.readlines()):
+                if x == f'//Zona {self.__doamin}':
+                    pass
+                else:
+                    defaultZones.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
+                                    '{\n        type master;\n        '\
+                                    f'file "/etc/bind/db.{arquivo[0]}";\n'\
+                                    '};')
     
     def changeDnsApache2(self:object) -> None:
         """

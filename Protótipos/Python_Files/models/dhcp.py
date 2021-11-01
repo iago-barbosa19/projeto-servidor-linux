@@ -1,11 +1,12 @@
+from models.ip import Ip
 import os
 
 
-class Dhcp():
+class Dhcp(Ip):
     
     def __init__(self, ipv4, gateway, dns1, dns2, subNetMask, dhcpPoolInicial, dhcpPoolFinal) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
-        self.__networkIp = self.networkIpSetter(ipv4, subNetMask) 
+        self.__networkIp = self.networkIpSetter(self.ipv4, self.subNetMask)
         self.__dhcpPoolInicial = dhcpPoolInicial
         self.__dhcpPoolFinal = dhcpPoolFinal
 
@@ -16,10 +17,6 @@ class Dhcp():
     @property
     def dhcpPoolFinal(self) -> None:
         return self.__dhcpPoolFinal
-
-    @property
-    def networkIp(self) -> None:
-        return self.__networkIp
 
     def dhcpConf(self:object) -> None:
         try:
@@ -36,11 +33,11 @@ class Dhcp():
         with open('dhcpd.conf', 'a+') as dhcpConfig:
             dhcpConfig.seek(0)
             teste = dhcpConfig.read()
-            if f'#DHCP REDE:{self.networkIP}' in teste:
+            if f'#DHCP REDE:{self.__networkIP}' in teste:
                 os.system('echo Essa rede já esta cadastrada.')
                 dhcpConfig.seek(0)
             else:
-                dhcpConfig.write(f'\n\n#DHCP Rede:{self.__networkIp}\nsubnet {self.networkIp} netmask {self.subNetMask}'\
+                dhcpConfig.write(f'\n\n#DHCP Rede:{self.__networkIp}\nsubnet {self.__networkIp} netmask {self.subNetMask}'\
                                 ' {\n  range'\
                                 f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
                                 f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
@@ -48,26 +45,6 @@ class Dhcp():
                 dhcpConfig.seek(0)
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
         os.system('/etc/init.d/isc-dhcp-server restart')
-
-    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
-        """
-        Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
-        Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
-        """
-        subNetMask = subNetMask.split('.')
-        subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
-        if subNetMask[0] == 255 and subNetMask[1] == 0 and subNetMask[2] == 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.0.0.0'
-            return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] >0 and subNetMask[2] == 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
-            return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] > 0 and subNetMask[2] > 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
-            return  ipv4
 
     def saveSettings(self:object) -> None:
         try:
@@ -77,7 +54,7 @@ class Dhcp():
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         with open('ConfigDHCP.txt', 'w+') as dhcpSave:
             dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
-                           f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}')
+                           f'NetworkIp: {self.__networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}')
 
 if __name__ == '__main__':
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')
