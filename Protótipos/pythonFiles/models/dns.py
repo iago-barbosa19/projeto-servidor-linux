@@ -1,4 +1,4 @@
-import os, sys
+import os, datetime
 
 
 class Dns():
@@ -7,7 +7,7 @@ class Dns():
         self.__ipv4: str = ipv4
         self.__subNetMask: str = subNetMask
         self.__domain:str = domain
-        self.__nomeServer = nomeServer
+        self.__nomeServer:str = nomeServer
 
     def changeDnsBind9(self:object) -> None:
         """
@@ -72,10 +72,12 @@ class Dns():
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
             os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
-        with open('saveDNS.txt', 'x+') as save:
+        with open('saveDNS.txt', 'a+') as save:
             save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
-                       f'Domínio:{self.__domain}| Prefixo:{self.__prefix}|')
+                       f'Domínio:{self.__domain}| Prefixo:{self.__prefix}|\nData da modificação:'\
+                        f'{datetime.datetime.now()}')
         os.system('echo A configuração foi salva com sucesso')
+
 
 if __name__ == '__main__':
     raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')

@@ -1,5 +1,5 @@
 from models.ip import Ip
-import os
+import os, datetime
 
 
 class Dhcp(Ip):
@@ -45,6 +45,10 @@ class Dhcp(Ip):
                 dhcpConfig.seek(0)
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
         os.system('/etc/init.d/isc-dhcp-server restart')
+        os.system('cd /etc/default')
+        with open('isc-dhcp-server', 'w') as iscDhcpServer:
+            iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+
 
     def saveSettings(self:object) -> None:
         try:
@@ -52,9 +56,11 @@ class Dhcp(Ip):
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        with open('ConfigDHCP.txt', 'w+') as dhcpSave:
+        with open('ConfigDHCP.txt', 'a+') as dhcpSave:
             dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
-                           f'NetworkIp: {self.__networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}')
+                           f'NetworkIp: {self.__networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}'\
+                           f'\nData da modificação:{datetime.datetime.now()}')
+
 
 if __name__ == '__main__':
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')

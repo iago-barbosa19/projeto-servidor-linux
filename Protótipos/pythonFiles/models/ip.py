@@ -1,4 +1,4 @@
-import os, sys, time
+import os, datetime
 
 
 class Ip:
@@ -71,18 +71,6 @@ class Ip:
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
             return  ipv4
 
-    def saveSettings(self:object) -> None:
-        """Método para salvar as configurações que foram feitas até então."""
-        os.chdir(f'/home/{os.getlogin()}')
-        try:
-            os.mkdir('Config_Saves_PSC')
-        except FileExistsError:
-            os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
-        with open('saveIp.txt', 'r+') as save:
-            save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
-                       f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}')
-        print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
-
     def ipConf(self:object) -> None:
         os.chdir(f'/home/{os.getlogin()}')
         try:
@@ -98,7 +86,22 @@ class Ip:
         os.system('cp -p interfaces /etc/network')
         os.system('rm interfaces')
         os.system('/etc/init.d/networking restart')
-        os.system('echo SERVIÇO CONFIGURADO COM SUCESSO!!!!!')
+        self.saveSettings()
+        os.system('echo Interface de rede configurada com sucesso!!!')
+    
+    def saveSettings(self:object) -> None:
+        """Método para salvar as configurações que foram feitas até então."""
+        os.chdir(f'/home/{os.getlogin()}')
+        try:
+            os.mkdir('Config_Saves_PSC')
+        except FileExistsError:
+            os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
+        with open('saveIp.txt', 'a+') as save:
+            save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
+                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
+                        f'{datetime.datetime.now()}')
+        print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
 
+    
 if __name__ == '__main__':
     raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')
