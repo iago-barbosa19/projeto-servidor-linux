@@ -6,7 +6,6 @@ class Dhcp(Ip):
     
     def __init__(self, ipv4, gateway, dns1, dns2, subNetMask, dhcpPoolInicial, dhcpPoolFinal) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
-        self.__networkIp = self.networkIpSetter(self.ipv4, self.subNetMask)
         self.__dhcpPoolInicial = dhcpPoolInicial
         self.__dhcpPoolFinal = dhcpPoolFinal
 
@@ -48,8 +47,27 @@ class Dhcp(Ip):
         os.system('cd /etc/default')
         with open('isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
-
-
+    
+    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
+        """
+        Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
+        Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
+        """
+        subNetMask = subNetMask.split('.')
+        subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
+        if subNetMask[0] == 255 and subNetMask[1] == 0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.0.0.0'
+            return  ipv4
+        elif subNetMask[0] == 255 and subNetMask[1] >0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
+            return  ipv4
+        elif subNetMask[0] == 255 and subNetMask[1] > 0 and subNetMask[2] > 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
+            return  ipv4
+    
     def saveSettings(self:object) -> None:
         try:
             os.chdir(f'/home/{os.getlogin()}')
