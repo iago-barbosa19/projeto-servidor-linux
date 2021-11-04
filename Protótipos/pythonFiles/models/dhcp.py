@@ -29,7 +29,7 @@ class Dhcp(Ip):
         except FileExistsError:
             os.system('rm dhcpd.conf')
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
-        with open('dhcpd.conf', 'a+') as dhcpConfig:
+        with open('dhcpd.conf', 'r+') as dhcpConfig:
             dhcpConfig.seek(0)
             for x in dhcpConfig.readlines():
                 if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == x:
