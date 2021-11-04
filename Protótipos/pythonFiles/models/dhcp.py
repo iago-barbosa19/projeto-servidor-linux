@@ -32,17 +32,17 @@ class Dhcp(Ip):
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
         with open('dhcpd.conf', 'a+') as dhcpConfig:
             dhcpConfig.seek(0)
-            teste = dhcpConfig.read()
-            if f'#DHCP REDE:{self.__networkIP}' in teste:
-                os.system('echo Essa rede já esta cadastrada.')
-                dhcpConfig.seek(0)
-            else:
-                dhcpConfig.write(f'\n\n#DHCP Rede:{self.__networkIp}\nsubnet {self.__networkIp} netmask {self.subNetMask}'\
-                                ' {\n  range'\
-                                f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
-                                f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
-                                '}')
-                dhcpConfig.seek(0)
+            for x in dhcpConfig.readlines():
+                if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == x:
+                    os.system('echo Essa rede já esta cadastrada.')
+                    dhcpConfig.seek(0)
+                else:
+                    dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
+                                    ' {\n  range'\
+                                    f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
+                                    f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                    '}')
+                    dhcpConfig.seek(0)
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
         os.system('/etc/init.d/isc-dhcp-server restart')
         os.system('cd /etc/default')
@@ -58,7 +58,7 @@ class Dhcp(Ip):
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         with open('ConfigDHCP.txt', 'a+') as dhcpSave:
             dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
-                           f'NetworkIp: {self.__networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}'\
+                           f'NetworkIp: {self.networkIpSetter(self.ipv4, self.subNetMask)}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}'\
                            f'\nData da modificação:{datetime.datetime.now()}')
 
 

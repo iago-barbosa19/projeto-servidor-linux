@@ -31,21 +31,21 @@ class Dns():
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}')
-        with open('named.conf.default-zones', 'a+') as defaultZones:
+        with open('named.conf.default-zones', 'r') as defaultZones:
             for x in list(defaultZones.readlines()):
-                if x == f'//Zona {self.__doamin}':
+                if x == f'//Zona {self.__domain}\n':
                     pass
                 else:
-                    defaultZones.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
-                                    '{\n        type master;\n        '\
-                                    f'file "/etc/bind/db.{arquivo[0]}";\n'\
-                                    '};')
+                    with open('named.conf.default-zones', 'a') as defaultZones1:
+                        defaultZones1.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
+                                        '{\n        type master;\n        '\
+                                        f'file "/etc/bind/db.{arquivo[0]}";\n'\
+                                        '};')
     
     def changeDnsApache2(self:object) -> None:
         """
         Configuração do Serviço DNS por parte do Apache2.
         """
-        arquivo = self.__domain.split('.')
         os.chdir('/etc/apache2/sites-available')
         try:
             os.mkdir('/var/www/sites')
