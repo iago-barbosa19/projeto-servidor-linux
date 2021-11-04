@@ -6,13 +6,14 @@ class Dhcp(Ip):
     
     def __init__(self, ipv4, gateway, dns1, dns2, subNetMask, dhcpPoolInicial, dhcpPoolFinal) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
-        self.__dhcpPoolInicial: str = dhcpPoolInicial
-        self.__dhcpPoolFinal: str = dhcpPoolFinal
+        self.__networkIp = self.networkIpSetter(self.ipv4, self.subNetMask)
+        self.__dhcpPoolInicial = dhcpPoolInicial
+        self.__dhcpPoolFinal = dhcpPoolFinal
 
     @property
     def dhcpPoolInicial(self) -> None:
         return self.__dhcpPoolInicial
-
+    
     @property
     def dhcpPoolFinal(self) -> None:
         return self.__dhcpPoolFinal
@@ -29,19 +30,19 @@ class Dhcp(Ip):
         except FileExistsError:
             os.system('rm dhcpd.conf')
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
-        with open('dhcpd.conf', 'r') as dhcpConfig:
+        with open('dhcpd.conf', 'a+') as dhcpConfig:
             dhcpConfig.seek(0)
-            for x in dhcpConfig.readlines():
-                if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == x:
-                    os.system('echo Essa rede já esta cadastrada.')
-                    dhcpConfig.seek(0)
-                else:
-                    dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
-                                    ' {\n  range'\
-                                    f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
-                                    f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
-                                    '}')
-                    dhcpConfig.seek(0)
+            teste = dhcpConfig.read()
+            if f'#DHCP REDE:{self.__networkIP}' in teste:
+                os.system('echo Essa rede já esta cadastrada.')
+                dhcpConfig.seek(0)
+            else:
+                dhcpConfig.write(f'\n\n#DHCP Rede:{self.__networkIp}\nsubnet {self.__networkIp} netmask {self.subNetMask}'\
+                                ' {\n  range'\
+                                f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
+                                f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                '}')
+                dhcpConfig.seek(0)
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
         os.system('/etc/init.d/isc-dhcp-server restart')
         os.system('cd /etc/default')
