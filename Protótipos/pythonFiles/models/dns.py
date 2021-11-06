@@ -41,6 +41,7 @@ class Dns():
                                         '{\n        type master;\n        '\
                                         f'file "/etc/bind/db.{arquivo[0]}";\n'\
                                         '};')
+                    break
     
     def changeDnsApache2(self:object) -> None:
         """
@@ -62,7 +63,8 @@ class Dns():
         self.changeDnsBind9()
         self.changeDnsApache2()
         os.system("/etc/init.d/apache2 restart")
-        os.system("/etc/init.d/bind9 restart")
+        os.system("systemctl restart bind9")
+        os.system("systemctl status bind9")
         os.system('echo Serviço concluído.')
         
     def saveSettings(self:object) -> None:

@@ -16,9 +16,12 @@ class TestServices(unittest.TestCase):
         self.ipv4.ipConf()
 
     def test_dns(self:object):
+        os.system('apt-get install apache2')
+        os.system('apt-get install bind9')
         self.dns.dnsConf()
         
     def test_dhcpv4(self:object):
+        os.system('apt-get install isc-dhcp-server')
         self.dhcpv4.dhcpConf()
 
     def tearDown(self:object):
@@ -27,3 +30,8 @@ class TestServices(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    os.system('systemctl status bind9')
+    os.system('systemctl status apache2')
+    os.system('systemctl status networking')
+    os.system('systemctl status isc-dhcp-server')
+    

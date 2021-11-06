@@ -29,7 +29,7 @@ class Dhcp(Ip):
         except FileExistsError:
             os.system('rm dhcpd.conf')
             os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
-        with open('dhcpd.conf', 'r+') as dhcpConfig:
+        with open('dhcpd.conf', 'r') as dhcpConfig:
             dhcpConfig.seek(0)
             for x in dhcpConfig.readlines():
                 if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == x:
@@ -41,12 +41,13 @@ class Dhcp(Ip):
                                     f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
                                     f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
                                     '}')
+                    break
                     dhcpConfig.seek(0)
-        os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcpd')
-        os.system('/etc/init.d/isc-dhcp-server restart')
+        os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcp/')
         os.system('cd /etc/default')
         with open('isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+        os.system('/etc/init.d/isc-dhcp-server restart')
     
     def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
         """
