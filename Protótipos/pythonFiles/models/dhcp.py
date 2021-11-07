@@ -18,17 +18,7 @@ class Dhcp(Ip):
         return self.__dhcpPoolFinal
 
     def dhcpConf(self:object) -> None:
-        try:
-            os.chdir(f'/home/{os.getlogin()}/')
-            os.mkdir('Config_Saves_PSC')
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        except FileExistsError:
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        try:
-            os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
-        except FileExistsError:
-            os.system('rm dhcpd.conf')
-            os.system(f'cp -p /etc/dhcp/dhcpd.conf /home/{os.getlogin()}/Config_Saves_PSC/')
+        os.chdir('/etc/dhcp')
         with open('dhcpd.conf', 'r') as dhcpConfig:
             dhcpConfig.seek(0)
             for x in dhcpConfig.readlines():
@@ -36,17 +26,25 @@ class Dhcp(Ip):
                     os.system('echo Essa rede já esta cadastrada.')
                     dhcpConfig.seek(0)
                 else:
-                    dhcpConfig.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
-                                    ' {\n  range'\
-                                    f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
-                                    f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
-                                    '}')
-                    break
+                    with open('dhcpd.conf', 'a') as dhcpd:
+                        dhcpd.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
+                                        ' {\n  range'\
+                                        f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
+                                        f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                        '}')
                     dhcpConfig.seek(0)
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcp/')
         os.system('cd /etc/default')
-        with open('isc-dhcp-server', 'w') as iscDhcpServer:
-            iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+        with open('isc-dhcp-server', 'w+') as iscDhcpServer:
+            for x in iscDhcpServer.readlines():
+                if x == 'INTERFACESv4="enp0s3"\n':
+                    pass
+                else:
+                    iscDhcpServer.write('INTERFACESv4="enp0s3"\n')
+                if x == 'INTERFACESv6="enp0s3"':
+                    pass
+                else:
+                    iscDhcpServer.write('INTERFACESv6=""')
         os.system('/etc/init.d/isc-dhcp-server restart')
     
     def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:

@@ -32,16 +32,16 @@ class Dns():
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}')
         with open('named.conf.default-zones', 'r') as defaultZones:
-            for x in list(defaultZones.readlines()):
-                if x == f'//Zona {self.__domain}\n':
+            for data in defaultZones.readlines():
+                if data == f'\n//Zona {self.__domain}\n':
                     pass
                 else:
                     with open('named.conf.default-zones', 'a') as defaultZones1:
-                        defaultZones1.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
+                        defaultZones1.write(f'\n//Zona {self.__domain}\nzone "{self.__domain}" '\
                                         '{\n        type master;\n        '\
                                         f'file "/etc/bind/db.{arquivo[0]}";\n'\
                                         '};')
-                    break
+                    defaultZones.seek(0)
     
     def changeDnsApache2(self:object) -> None:
         """
