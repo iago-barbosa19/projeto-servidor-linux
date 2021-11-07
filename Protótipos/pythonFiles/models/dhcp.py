@@ -20,12 +20,16 @@ class Dhcp(Ip):
     def dhcpConf(self:object) -> None:
         os.chdir('/etc/dhcp')
         with open('dhcpd.conf', 'r') as dhcpConfig:
+            lines = 0
+            temporaryData = []
             dhcpConfig.seek(0)
-            for x in dhcpConfig.readlines():
-                if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == x:
+            for data in dhcpConfig.readlines():
+                temporaryData.append(data)
+            for data in temporaryData:
+                if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == data:
                     os.system('echo Essa rede já esta cadastrada.')
-                    dhcpConfig.seek(0)
-                else:
+                    break
+                elif lines == (len(temporaryData) - 1):
                     with open('dhcpd.conf', 'a') as dhcpd:
                         dhcpd.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
                                         ' {\n  range'\
@@ -33,6 +37,7 @@ class Dhcp(Ip):
                                         f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
                                         '}')
                     dhcpConfig.seek(0)
+                
         os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcp/')
         os.system('cd /etc/default')
         with open('isc-dhcp-server', 'w+') as iscDhcpServer:
