@@ -42,7 +42,7 @@ class Dns():
                         break
                     elif lines == (len(temporaryData) - 1):
                         with open('named.conf.default-zones', 'a') as defaultZones1:
-                            defaultZones1.write(f'//Zona {self.__domain}\nzone "{self.__domain}" '\
+                            defaultZones1.write(f'// zona {self.__domain}\nzone "{self.__domain}" '\
                                             '{\n        type master;\n        '\
                                             f'file "/etc/bind/db.{arquivo[0]}";\n'\
                                             '};\n')

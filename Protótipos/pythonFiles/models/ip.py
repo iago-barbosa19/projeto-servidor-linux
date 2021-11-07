@@ -3,7 +3,7 @@ import os, datetime
 
 class Ip:
 
-    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, subNetMask:str) -> None:
+    def __init__(self:object, /, ipv4:str, gateway:str, dns1:str, dns2: str, subNetMask:str) -> None:
         self.__ipv4 = ipv4
         self.__gateway = gateway
         self.__dns1 = dns1

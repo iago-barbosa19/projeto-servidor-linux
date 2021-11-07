@@ -8,6 +8,7 @@ class Dhcp(Ip):
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
         self.__dhcpPoolInicial = dhcpPoolInicial
         self.__dhcpPoolFinal = dhcpPoolFinal
+        self._Ip__networkIpSetter(self._Ip__ipv4, self._Ip__subNetMask)
 
     @property
     def dhcpPoolInicial(self) -> None:
@@ -26,15 +27,15 @@ class Dhcp(Ip):
             for data in dhcpConfig.readlines():
                 temporaryData.append(data)
             for data in temporaryData:
-                if f'#DHCP REDE:{self.networkIpSetter(self.ipv4, self.subNetMask)}\n' == data:
+                if f'#DHCP REDE:{self.networkIpSetter(self._Ip__ipv4, self._Ip__subNetMask)}\n' == data:
                     os.system('echo Essa rede já esta cadastrada.')
                     break
                 elif lines == (len(temporaryData) - 1):
                     with open('dhcpd.conf', 'a') as dhcpd:
-                        dhcpd.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self.ipv4, self.subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
+                        dhcpd.write(f'\n\n#DHCP Rede:{self.networkIpSetter(self._Ip__ipv4, self._Ip__subNetMask)}\nsubnet {self.networkIpSetter(self.ipv4, self.subNetMask)} netmask {self.subNetMask}'\
                                         ' {\n  range'\
-                                        f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self.gateway};\n  '\
-                                        f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                        f' {self.dhcpPoolInicial} {self.dhcpPoolFinal};\n  option routers {self._Ip__gateway};\n  '\
+                                        f'option domain-name-servers {self._Ip__dns1}, {self._Ip__dns2};\n'\
                                         '}')
                     dhcpConfig.seek(0)
                 
@@ -52,25 +53,6 @@ class Dhcp(Ip):
                     iscDhcpServer.write('INTERFACESv6=""')
         os.system('/etc/init.d/isc-dhcp-server restart')
     
-    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
-        """
-        Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
-        Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
-        """
-        subNetMask = subNetMask.split('.')
-        subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
-        if subNetMask[0] == 255 and subNetMask[1] == 0 and subNetMask[2] == 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.0.0.0'
-            return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] >0 and subNetMask[2] == 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
-            return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] > 0 and subNetMask[2] > 0 and subNetMask[3] == 0:
-            ipv4 = ipv4.split('.')
-            ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
-            return  ipv4
     
     def saveSettings(self:object) -> None:
         try:
@@ -79,8 +61,8 @@ class Dhcp(Ip):
         except FileExistsError:
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         with open('ConfigDHCP.txt', 'a+') as dhcpSave:
-            dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
-                           f'NetworkIp: {self.networkIpSetter(self.ipv4, self.subNetMask)}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}'\
+            dhcpSave.write(f'IPV4:{self._Ip__ipv4}|Gateway{self._Ip__gateway}|DNS1{self._Ip__dns1}|DNS2{self._Ip__dns2}|Máscara de Sub-Rede{self._Ip__subNetMask}'\
+                           f'NetworkIp: {self._Ip__networkIpSetter(self._Ip__ipv4, self._Ip__subNetMask)}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpFinal}'\
                            f'\nData da modificação:{datetime.datetime.now()}')
 
 
