@@ -1,11 +1,12 @@
-from models.ip import Ip
+
 import os, datetime
 
 
-class Dns(Ip):
+class Dns():
     
     def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nomeServer: str) -> None:
-        super().__init__(ipv4, subNetMask,)
+        self.__ipv4:str = ipv4
+        self.__subNetMask:str = subNetMask
         self.__domain:str = domain
         self.__nomeServer:str = nomeServer
 
@@ -40,8 +41,8 @@ class Dns(Ip):
                             f'                       2419200         ; Expire\n'\
                             f'                        604800 )       ; Negative Cache TTL\n;\n'\
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
-                            f'www     IN      A       {self.ipv4}\n'\
-                            f'ftp     IN      A       {self.ipv4}')
+                            f'www     IN      A       {self.__ipv4}\n'\
+                            f'ftp     IN      A       {self.__ipv4}\n\n')
         
         with open('named.conf.default-zones', 'r') as defaultZones:
             lines = 0
@@ -83,8 +84,8 @@ class Dns(Ip):
         except FileExistsError:
             pass
         with open('/var/www/sites/index.html', 'w') as index:
-            index.write('<html>\n<head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
-                        'margin: 1000px 1000px; ">Página Principal funcionando</h1>\n</body>\n</html>')
+            index.write('<html>\n<meta charset="utf-8"><head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
+                        'margin: 500px; ">Página Principal funcionando</h1>\n</body>\n</html>')
         try:
             os.system(f'cp -p ./000-default.conf ./{os.getlogin()}.conf')
             with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
@@ -111,7 +112,6 @@ class Dns(Ip):
         self.changeDnsApache2()
         os.system("systemctl restart apache2")
         os.system("systemctl restart bind9")
-        os.system('echo Configuração terminada.\nVoltando para página principal.')
         
     def saveSettings(self:object) -> None:
         """Função para salvar as configurações em um txt."""

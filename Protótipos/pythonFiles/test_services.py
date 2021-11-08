@@ -14,12 +14,15 @@ class TestServices(unittest.TestCase):
     
     def test_ip(self:object):
         self.ipv4.ipConf()
-
+        self.ipv4.saveSettings()
+        
     def test_dns(self:object):
         self.dns.dnsConf()
+        self.dns.saveSettings()
         
     def test_dhcpv4(self:object):
         self.dhcpv4.dhcpConf()
+        self.dhcpv4.saveSettings()
 
     def tearDown(self:object):
         os.system('echo o teste foi efetuado. Verifique os resultados.')
@@ -27,7 +30,3 @@ class TestServices(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    os.system('systemctl status bind9')
-    os.system('systemctl status apache2')
-    os.system('systemctl status networking')
-    os.system('systemctl status isc-dhcp-server')

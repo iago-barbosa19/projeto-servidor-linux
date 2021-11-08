@@ -3,7 +3,7 @@ import os, datetime
 
 class Ip:
 
-    def __init__(self:object, /, ipv4:str, gateway:str, dns1:str, dns2: str, subNetMask:str) -> None:
+    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, subNetMask:str) -> None:
         self.__ipv4 = ipv4
         self.__gateway = gateway
         self.__dns1 = dns1
@@ -55,6 +55,9 @@ class Ip:
         """
         Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
         Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
+        
+        Ele separa a máscara de sub-rede para que vire uma lista com 4 indíces, para que assim cada indíce contenha uma string.
+        É feito um cast nas Strings para virarem Int, e assim poder ser checado os valores maiores ou iguais a 0.
         """
         subNetMask = subNetMask.split('.')
         subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
@@ -66,12 +69,17 @@ class Ip:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
             return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] > 0 and subNetMask[2] > 0 and subNetMask[3] == 0:
+        elif subNetMask[0] == 255 and subNetMask[1] == 255 and subNetMask[2] > 0 and subNetMask[3] == 0:
+            ipv4 = ipv4.split('.')
+            ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
+            return  ipv4
+        elif subNetMask[0] == 255 and subNetMask[1] == 255 and subNetMask[2] == 255 and subNetMask[3] > 0:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
             return  ipv4
 
     def ipConf(self:object) -> None:
+        """"""
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
@@ -102,6 +110,10 @@ class Ip:
                         f'{datetime.datetime.now()}')
         print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
 
-    
+    def __repr__(self):
+        print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\
+              'Em casos de dúvidas no uso do programa, consulte-as.')    
+        
+        
 if __name__ == '__main__':
     raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')
