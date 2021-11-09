@@ -4,7 +4,7 @@ import os, datetime
 
 class Dns():
     
-    def __init__(self:object, *, ipv4:str, subNetMask:str, domain:str, nameServer: str) -> None:
+    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nameServer: str) -> None:
         self.__ipv4:str = ipv4
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
@@ -51,7 +51,7 @@ class Dns():
                 temporaryData.append(data)
             for checkDatas in temporaryData:
                     if checkDatas == f'// zona {self.__domain}\n':
-                        os.system('Zona já cadastrada')
+                        os.system('echo Zona já cadastrada')
                         break
                     elif lines == (len(temporaryData) - 1):
                         with open('named.conf.default-zones', 'a') as defaultZones1:
@@ -80,7 +80,7 @@ class Dns():
         """
         os.chdir('/etc/apache2/sites-available')
         try:
-            os.mkdir('/var/www/sites')
+            os.mkdir('/var/www/sites')  # Pasta padrão. Talvez eu dê a opção para o usuário eventualmente.
         except FileExistsError:
             pass
         with open('/var/www/sites/index.html', 'w') as index:
@@ -89,7 +89,7 @@ class Dns():
         try:
             os.system(f'cp -p ./000-default.conf ./{os.getlogin()}.conf')
             with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
-                apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nomeServer}\n\n        ServerAlias www.{self.__domain}\n        "\
+                apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                     f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                     " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 os.system(f'a2ensite {os.getlogin()}.conf')
@@ -97,7 +97,7 @@ class Dns():
             os.system(f'echo O nomeArquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\ny/n')
             if opc:= input() == 'y':
                 with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
-                    apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nomeServer}\n\n        ServerAlias www.{self.__domain}\n        "\
+                    apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 os.system(f'a2ensite {os.getlogin()}.conf')
@@ -122,14 +122,15 @@ class Dns():
             os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
         with open('saveDNS.txt', 'a+') as save:
             save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
-                       f'Domínio:{self.__domain}| Prefixo:{self.__prefix}|\nData da modificação:'\
+                       f'Domínio:{self.__domain}|\nData da modificação:'\
                         f'{datetime.datetime.now()}')
         os.system('echo A configuração foi salva com sucesso')
 
+    
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')
-              
+
 
 if __name__ == '__main__':
     raise NotImplementedError('Esse nomeArquivo não pode ser inicializado como principal')

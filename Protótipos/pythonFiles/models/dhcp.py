@@ -4,7 +4,7 @@ import os, datetime
 
 class Dhcp(Ip):
     
-    def __init__(self: object, *,  ipv4: str, gateway: str, dns1: str, dns2: str, subNetMask: str, dhcpPoolInicial: str, dhcpPoolFinal: str) -> None:
+    def __init__(self: object,  ipv4: str, gateway: str, dns1: str, dns2: str, subNetMask: str, dhcpPoolInicial: str, dhcpPoolFinal: str) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
         self.__dhcpPoolInicial: str = dhcpPoolInicial
         self.__dhcpPoolFinal: str = dhcpPoolFinal
@@ -18,7 +18,7 @@ class Dhcp(Ip):
     def dhcpPoolFinal(self) -> None:
         return self.__dhcpPoolFinal
 
-    def dhcpConf(self:object, dhcpv: int) -> None:
+    def dhcpConf(self:object) -> None:
         """Método que configura o serviço de DHCP.
         O método configura uma pool DHCP de acordo com os dados que forem inseridos e passados para a classe.
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.
@@ -28,7 +28,7 @@ class Dhcp(Ip):
         if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC/configDHCP.txt') == False:
             with open('dhcpd.conf', 'a') as dhcpd:
                 dhcpd.write('authoritative;\n')
-        with open('dhcpd.conf', 'r+') as dhcpConfig:
+        with open('dhcpd.conf', 'r+') as dhcpConfig:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
             lines = 0
             temporaryData = []
             dhcpConfig.seek(0)
@@ -47,9 +47,7 @@ class Dhcp(Ip):
                                     '}')
                     dhcpConfig.seek(0)
                 lines += 1
-        os.system(f'cp -p /home/{os.getlogin()}/Config_Saves_PSC/dhcpd.conf /etc/dhcp/')
-        os.chdir('/etc/default')
-        with open('isc-dhcp-server', 'w') as iscDhcpServer:
+        with open('/etc/default/isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
     
     def saveSettings(self:object) -> None:
