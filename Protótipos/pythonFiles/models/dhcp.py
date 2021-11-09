@@ -4,11 +4,11 @@ import os, datetime
 
 class Dhcp(Ip):
     
-    def __init__(self, ipv4: str, gateway: str, dns1: str, dns2: str, subNetMask: str, dhcpPoolInicial: str, dhcpPoolFinal: str) -> None:
+    def __init__(self: object, *,  ipv4: str, gateway: str, dns1: str, dns2: str, subNetMask: str, dhcpPoolInicial: str, dhcpPoolFinal: str) -> None:
         super().__init__(ipv4, gateway, dns1, dns2, subNetMask)
         self.__dhcpPoolInicial: str = dhcpPoolInicial
         self.__dhcpPoolFinal: str = dhcpPoolFinal
-        self.__networkIp = self.networkIpSetter(self.ipv4, self.subNetMask)
+        self.__networkIp: str = self.networkIpSetter(self.ipv4, self.subNetMask)
 
     @property
     def dhcpPoolInicial(self) -> None:
@@ -66,9 +66,10 @@ class Dhcp(Ip):
                            f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpPoolFinal}'\
                            f'\nData da modificação:{datetime.datetime.now()}\n')
 
-    def __repr__(self):
+    def __repr__(self) :
         print('Os métodos que é possível visualizar as Docstrings:\n\ndhcpConf\nsaveSettings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')
-
+ 
+ 
 if __name__ == '__main__':
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')

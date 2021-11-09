@@ -4,11 +4,11 @@ import os, datetime
 
 class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nomeServer: str) -> None:
+    def __init__(self:object, *, ipv4:str, subNetMask:str, domain:str, nameServer: str) -> None:
         self.__ipv4:str = ipv4
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
-        self.__nomeServer:str = nomeServer
+        self.__nameServer:str = nameServer
 
     def changeDnsBind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
@@ -129,6 +129,7 @@ class Dns():
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')
+              
 
 if __name__ == '__main__':
     raise NotImplementedError('Esse nomeArquivo não pode ser inicializado como principal')
