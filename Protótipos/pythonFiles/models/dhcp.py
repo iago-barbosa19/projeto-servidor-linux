@@ -49,6 +49,7 @@ class Dhcp(Ip):
                 lines += 1
         with open('/etc/default/isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+        os.system('systemctl restart isc-dhcp-server') 
     
     def saveSettings(self:object) -> None:
         """Função para salvar as configurações em um txt."""
