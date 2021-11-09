@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href='../style.css'>
+</head>
+<body style='margin:0;box-sizing: border-box; overflow: hidden;'>
+<div class="login">
+    <p></p>
+    <form action="http://localhost:3003/usuarios" method="POST">
+        <div class="container">
+            <p id='textoLogin'>Login</p>
+            <p>E-mail</p>
+            <input type="email" title="E-mail de acesso" placeholder="E-mail"></input>
+            <p>ID do Servidor</p>
+            <input type="text" title="Server-ID" placeholder="ID Server"></input>
+            <p style='margin-left: 750px; margin-top: 35px; margin-bottom: 25px;'>Senha</p>
+            <input type="password" placeholder="Senha do usuário"></input>
+            <a href="./pages/forgotPass.html" id='forgotPass'>Esqueci minha senha</a>
+            <br>
+            <button class='login-btn'>Login</button>
+        </div>
+    </form>
+</div>
+</body>
+</html> 

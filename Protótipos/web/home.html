@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Teste</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+	<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script> 
+	<script src='jquerymask.js'></script>
+	<script>
+		// Início do Script da NavBar
+		$(document).ready(function(){
+				
+			$('.expandHome').mouseover(function() {
+			$('.sub-home').css({
+				'display': 'block'
+				}); 
+			});
+			$('.subnavbtn').mouseover(function() {
+			$('.sub-home').css({
+					'display': 'none'
+				}); 
+			});
+
+			$('#trapezoid').mouseleave(function() {
+			$('#trapezoid').css({
+					'margin-top': '-53px'
+				}); 
+				$('.sub-home').css({
+					'display': 'none'
+				}); 
+			}).mouseenter(function() {
+			$('#trapezoid').css({
+				'margin-top': '0px'
+				}); 
+			});
+			});
+			// Fim do Script da NavBar
+			// Início do menu de rodapé.
+			$(document).ready(function(){
+				// Parte que o menu sobe
+			$("#btn-suporte").click(function(){
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);
+				$("#btn-suporte").hide();
+				  });
+			});
+			// Parte que o menu desce.
+			$(document).ready(function(){
+			$("#btn-suporte2").click(function(){ 
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);// selecionar o elemento que vai receber a função
+				$("#btn-suporte").slideDown(200);
+				  });
+			});
+	</script>
+	<style>
+		body {
+			background: #333;
+		}
+	</style>
+</head>
+<body>
+	<!-- Barra de navegação. -->
+	<nav class="navbar">
+		<div id="trapezoid">
+		  <a class="sub-home" href="./home.html">Página Inicial</a>
+		  <a href="./index.html" class="expandHome">Sair</a>
+		   <div class="subnav">
+		   <button class="subnavbtn">Conf de Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div id="subnav-trapezoid">
+				<a  style="cursor:pointer" nav="./pages/dhcp.html">DHCP</a>
+				<a style="cursor:pointer" nav="./pages/ip.html">IP</a>
+				<a style="cursor:pointer" nav="./pages/dns.html">DNS</a>
+			  </div>
+			 </div>
+		  </div>
+		   <div class="subnav">
+		   <button class="subnavbtn">Instalar Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div class="subnav-trapezoid">
+				<a href nav='dhcp.html'>DHCP</a>
+				<a href nav='dhcp.html'>DNS</a>
+			   </div>
+			 </div>
+			</div>
+		</div>
+	  </nav>
+	  <!-- Fim da Barra de navegação.  -->
+	  <a id='btn-suporte'></a>
+	<!-- Área de Conteúdo. -->
+	<section id='conteudo' style='margin-top:20px;padding-bottom: 25px;'></section>
+	<!-- Fim da área de Conteúdo-->
+	<!-- Área de contato com o suporte ou sugestões -->
+	<footer class="rodape">
+		<a id='btn-suporte2' style='display:none;'></a>
+		<ul>
+			<li>
+				<a class='support' href='mailto:iagofbarbosa23@gmail.com'>Entrar em contato com o suporte</a></footer>
+			</li>
+		</ul>
+	<!-- Fim da área de suporte -->
+</body>
+<script src='script.js'></script>
+	
+</html>
