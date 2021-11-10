@@ -23,7 +23,6 @@ body{
 	bottom: 0px;
 	overflow: hidden;
 	cursor: pointer;
-
 	left: 880px;
 	height: 20px;
 }
@@ -35,7 +34,6 @@ body{
 	transform: rotatey(60deg);
 	transform: rotateX(180deg);
 	padding: 10px 40px;
-	background-color: #80ffff;
 	bottom: 80px;
 	cursor: pointer;
 	left: 200px;
