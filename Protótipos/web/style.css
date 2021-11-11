@@ -16,14 +16,19 @@ body{
 	position: absolute;
 	border-radius: 0px 0px 200px 200px;
 	transform: rotatey(60deg);
-	left: 160px;
+	/* left: 160px; */
 	transform: rotateX(180deg);
 	padding: 10px 40px;
 	background-color: #80ffff;
 	bottom: 0px;
 	overflow: hidden;
 	cursor: pointer;
+<<<<<<< HEAD
 	left: 880px;
+=======
+
+	left: 50%;
+>>>>>>> f7d6249d905d9fc73fb5ec2cde27d0d211ecbacc
 	height: 20px;
 }
 /* Segundo botão da área de suporte, mas esse fecha a área de suporte */
@@ -34,9 +39,14 @@ body{
 	transform: rotatey(60deg);
 	transform: rotateX(180deg);
 	padding: 10px 40px;
+<<<<<<< HEAD
+=======
+	margin: 0px;
+	background-color: #80ffff;
+>>>>>>> f7d6249d905d9fc73fb5ec2cde27d0d211ecbacc
 	bottom: 80px;
 	cursor: pointer;
-	left: 200px;
+	left: 50%;
 	height: 20px;
 }
 .rodape {
@@ -57,13 +67,18 @@ body{
 	color: #333;
 	font-style: italic;
 	vertical-align: center;
-	text-align: center;
 	font-size: 1.5em;
-	padding: 10px;
+	/* padding: 10px; */
 	margin-top: 5px;
 	bottom: 20px;
 	text-decoration: none;
-	margin-left: 680px;
+	margin-left: 45%;
+}
+@media (min-width: 750px) and (max-width: 1000px) {
+	.rodape a {margin-left: 30%;}
+}
+@media (min-width: 1001) and (max-width:1280px) {
+	.rodape a {margin-left: 40%;}
 }
 .support {transition: all 0.5s ease-in-out;}
 .support:hover {
@@ -218,19 +233,19 @@ body{
 /* Ajuste do texto que marca o Login */
 #textoLogin {
 	margin-top: 25px;
-	margin-left: 880px;
+	margin-left: 48%;
 	font-size: 1.4em
 }
 /* Área onde ficam as caixas de inserção de dados*/
 .container > p {
 	margin-top: 25px;
-	margin-left: 750px;
+	margin-left: 45%;
 }
 /* Inputs gerais */
 .container > input{
 	height: 50px;
 	font-size: 0.7em;
-	margin-left: 700;
+	margin-left: 40%;
 	padding-right: 280px;
 	border-radius: 10px 20px;
 }
@@ -238,7 +253,7 @@ body{
 .container > input[type="password"] {
 	position: absolute;
 	padding-right: 280px;
-	margin-left: 700px;
+	margin-left: 40%;
 	margin-bottom: 20px;
 }
 /* Área de "Esqueci minha senha" */
@@ -247,18 +262,20 @@ body{
 	font-size: 0.4em;
 	display: inline-block;
 	box-sizing: content-box;
-	margin: 60px 0px 0px 1120px;
+	margin: 60px 0px 0px 57%;
 	cursor: pointer;
 	color: skyblue;
 	text-decoration: underline;
+	transition: all ease 500ms;
 }
+#forgotPass:hover {color: #0059b3;}
 /* Botão Login */
 .login-btn {
 	position: relative;
 	padding: 20px 70px;
 	font-size: 1em;
 	background: linear-gradient(220deg, #80ffff, #9933ff);
-	margin: 70px 840px 80px 850px;
+	margin: 70px 840px 80px 47%;
 	color: #fff;
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;
@@ -316,7 +333,7 @@ body{
 	background-color: #fff;
 	padding-top: 20px;
 	border-radius: 20px 30px;
-	margin: 20px 20px 0px 560px;
+	margin: 20px 20px 0px 35%;
 	box-sizing: border-box;
 	width: 800px;
 	box-shadow: 1px 1px 2px 2px #fff8;
@@ -324,6 +341,7 @@ body{
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
 }
+#paginaInacessivel{display: none;}
 .inicio{
 	display: inline-block;
 	margin: 10px 20px 0px 280px;
@@ -354,11 +372,11 @@ body{
 #dns {
 	position:absolute;
 	top: 220px;
-	right: 650px;
+	margin-left: 430px;
 }
 #dns > p {
 	padding: 5px;
-	margin-left: 15px;
+	
 }
 #dns > input {
 	font-size: 1.1em;
@@ -404,9 +422,8 @@ span {margin-right: 5px;}
 #dns > input[type='radio'] {display: inline; margin-left: 20px;}
 .btn-confirm {
 	display: block;
-	position: absolute;
-	top: 580px;
-	left: 870px;
+	/* top: 580px; */
+	margin: 45% 36% ;
 	cursor: pointer;
 	border-radius: 20px 20px;
 	padding: 20px 40px;
@@ -418,6 +435,38 @@ span {margin-right: 5px;}
 .btn-confirm:hover {background:#7300e6; color: #fff;}
 /* Fim da página de configuraçõesd e Ip e Etc. */
 
+@media (max-width:2241px) and (min-width:2010px) {
+	.secao{
+		margin-left: 35%;
+	}
+}
+@media (max-width: 2009px) and (min-width: 1890px) {
+	.secao{
+		margin-left:30%;
+	}
+}
+@media (max-width: 1890px) and (min-width: 1350px) {
+	.secao{
+		margin-left:25%;
+	}
+}
+@media (max-width:1350px) and (min-width:700px) {
+	.secao{margin-left: 10%;}
+}
+@media (max-width: 700px) and (min-width: 0px) {
+	.secao{
+		display: none;
+	}
+	#paginaInacessivel{
+		position: absolute;
+		display: inline-block;
+		font-size:1.6rem;
+		font-weight:bold;
+		color: #fff;
+		margin: 10%;
+	}
+
+}
 /* Animação de mudança de cor gradiente.*/
 @keyframes css-change {
     0%{background-position:0% 50%}

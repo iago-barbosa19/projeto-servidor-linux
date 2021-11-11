@@ -9,7 +9,6 @@ class Dns():
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
         self.__nameServer:str = nameServer
-        self.__siteAlias:str = siteAliasGenerator
         
     @property
     def ipv4(self: object) -> None:
@@ -80,6 +79,7 @@ class Dns():
                                             f'file "/etc/bind/db.{nomeArquivo[0]}";\n'\
                                             '};\n')
                     lines += 1
+            os.system('clear')
     
     def changeDnsApache2(self:object) -> None:
         """Configuração do serviço Apache2.
@@ -123,6 +123,7 @@ class Dns():
                 os.system(f'a2ensite {os.getlogin()}.conf')
             else:
                 pass
+        os.system('clear')
             
     def dnsConf(self:object) -> None:
         """Função que inicializa as configurações do DNS. 
@@ -130,22 +131,28 @@ class Dns():
         Esse método que é chamado para configurar o DNS no geral."""
         self.changeDnsBind9()
         self.changeDnsApache2()
-        os.system("systemctl restart apache2")
-        os.system("systemctl restart bind9")
         
     def saveSettings(self:object) -> None:
-        """Função para salvar as configurações em um txt."""
+        """Método para salvar as configurações que foram feitas até então.
+        Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
+        possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
-            os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
-        with open('saveDNS.txt', 'a+') as save:
-            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
-                       f'Domínio:{self.__domain}|\nData da modificação:'\
-                        f'{datetime.datetime.now()}')
-        os.system('echo A configuração foi salva com sucesso')
-
+            pass
+        finally:
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
+        try:
+            os.mknod('saveConfigDNS.txt')
+        except FileExistsError:
+            pass
+        finally:
+            with open('saveConfigDNS.txt', 'a+') as save:
+                save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
+                           f'Domínio:{self.__domain}|\nData da modificação:'\
+                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
+            os.system('echo A configuração foi salva com sucesso')
     
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\
@@ -153,4 +160,4 @@ class Dns():
 
 
 if __name__ == '__main__':
-    raise NotImplementedError('Esse nomeArquivo não pode ser inicializado como principal')
+    raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')
