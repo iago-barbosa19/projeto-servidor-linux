@@ -91,6 +91,7 @@ class Ip:
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+    os.system('clear')
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
@@ -100,16 +101,19 @@ class Ip:
         try:
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
-            os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
+            pass
+        finally:
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         try:
             os.mknod('saveConfigIp.txt')
         except FileExistsError:
             pass
-        with open('saveConfigIp.txt', 'a+') as save:
-            save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
-                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
-                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
-
+        finally:
+            with open('saveConfigIp.txt', 'a+') as save:
+                save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
+                           f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
+                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
+                
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')    

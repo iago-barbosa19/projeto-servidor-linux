@@ -226,19 +226,19 @@ body{
 /* Ajuste do texto que marca o Login */
 #textoLogin {
 	margin-top: 25px;
-	margin-left: 880px;
+	margin-left: 48%;
 	font-size: 1.4em
 }
 /* Área onde ficam as caixas de inserção de dados*/
 .container > p {
 	margin-top: 25px;
-	margin-left: 750px;
+	margin-left: 45%;
 }
 /* Inputs gerais */
 .container > input{
 	height: 50px;
 	font-size: 0.7em;
-	margin-left: 700;
+	margin-left: 40%;
 	padding-right: 280px;
 	border-radius: 10px 20px;
 }
@@ -246,7 +246,7 @@ body{
 .container > input[type="password"] {
 	position: absolute;
 	padding-right: 280px;
-	margin-left: 700px;
+	margin-left: 40%;
 	margin-bottom: 20px;
 }
 /* Área de "Esqueci minha senha" */
@@ -255,18 +255,20 @@ body{
 	font-size: 0.4em;
 	display: inline-block;
 	box-sizing: content-box;
-	margin: 60px 0px 0px 1120px;
+	margin: 60px 0px 0px 57%;
 	cursor: pointer;
 	color: skyblue;
 	text-decoration: underline;
+	transition: all ease 500ms;
 }
+#forgotPass:hover {color: #0059b3;}
 /* Botão Login */
 .login-btn {
 	position: relative;
 	padding: 20px 70px;
 	font-size: 1em;
 	background: linear-gradient(220deg, #80ffff, #9933ff);
-	margin: 70px 840px 80px 850px;
+	margin: 70px 840px 80px 47%;
 	color: #fff;
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;

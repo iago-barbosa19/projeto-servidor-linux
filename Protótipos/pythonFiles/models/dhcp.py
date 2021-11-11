@@ -49,6 +49,7 @@ class Dhcp(Ip):
         os.chdir('/etc/default')
         with open('isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+        os.system('clear')
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
@@ -57,13 +58,19 @@ class Dhcp(Ip):
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         except FileExistsError:
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')        
-        with open('ConfigDHCP.txt', 'a+') as dhcpSave:
-            dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
-                           f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpPoolFinal}'\
-                           f'\nData da modificação:{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
+            pass        
+        finally:
+            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
+        try:
+            os.mknod('saveConfigDHCP.txt')
+        except FileExistsError:
+            pass
+        finally:
+            with open('saveConfigDHCP.txt', 'a+') as dhcpSave:
+                dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
+                               f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpPoolFinal}'\
+                               f'\nData da modificação:{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
 
     def __repr__(self) :
         print('Os métodos que é possível visualizar as Docstrings:\n\ndhcpConf\nsaveSettings\n\n'\
