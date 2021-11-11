@@ -64,40 +64,6 @@ class Dns():
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}\n\n')
-        if zonaIndireta == True:
-            indirectZoneIp = self.ipv4.split('.')
-            try:
-                os.system(f'cp -p db.0 db.{indirectZoneIp[0]}')
-            except FileExistsError:
-                os.system(f'cp -p db.{indirectZoneIp[0]} /home/{os.getlogin()}/Config_Saves_PSC/db.{indirectZoneIp[0]}.backup')
-                os.system(f'rm db.{indirectZoneIp[0]}')
-                os.system(f'cp -p db.0 db.{indirectZoneIp[0]}')
-            finally:
-                    with open(f'/etc/bind/db.{indirectZoneIp[0]}', 'w') as db_indirectZone:            
-                        db_indirectZone.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
-                                        f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
-                                        f'                             2         ; Serial\n'\
-                                        f'                        604800         ; Refresh\n'\
-                                        f'                         86400         ; Retry\n'\
-                                        f'                       2419200         ; Expire\n'\
-                                        f'                        604800 )       ; Negative Cache TTL\n;\n'\
-                                        f'@       IN      NS      {self.__domain}.\n1       IN      PTR     {self.siteAlias}.\n'\
-                                        f'1       IN      PTR    ftp.{self.siteAlias}.\n')
-                    with open('named.conf.default-zones', 'a') as defaultZones:
-                        lines = 0
-                        temporaryData = []
-                        for data in defaultZones.readlines():
-                            temporaryData.append(data)
-                        for checkDatas in temporaryData:
-                                if checkDatas == f'// zona indireta {self.__domain}\n':
-                                    os.system('echo Zona já cadastrada')
-                                    break
-                                elif lines == (len(temporaryData) - 1):
-                                    with open('named.conf.default-zones', 'a') as defaultZones1:
-                                        defaultZones1.write(f'// zona indireta {self.__domain}\nzone "{self.__domain}" '\
-                                                        '{\n        type master;\n        '\
-                                                        f'file "/etc/bind/db.{indirectZoneIp[0]}";\n'\
-                                                        '};\n')
         with open('named.conf.default-zones', 'r') as defaultZones:
             lines = 0
             temporaryData = []
