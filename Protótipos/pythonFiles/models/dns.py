@@ -101,6 +101,7 @@ class Dns():
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 os.system(f'a2ensite {os.getlogin()}.conf')
+                os.system('clear')
             else:
                 pass
             
@@ -114,7 +115,9 @@ class Dns():
         os.system("systemctl restart bind9")
         
     def saveSettings(self:object) -> None:
-        """Função para salvar as configurações em um txt."""
+        """Método para salvar as configurações que foram feitas até então.
+        Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
+        possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
@@ -123,9 +126,8 @@ class Dns():
         with open('saveDNS.txt', 'a+') as save:
             save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
                        f'Domínio:{self.__domain}|\nData da modificação:'\
-                        f'{datetime.datetime.now()}')
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
         os.system('echo A configuração foi salva com sucesso')
-
     
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\
@@ -133,4 +135,4 @@ class Dns():
 
 
 if __name__ == '__main__':
-    raise NotImplementedError('Esse nomeArquivo não pode ser inicializado como principal')
+    raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')

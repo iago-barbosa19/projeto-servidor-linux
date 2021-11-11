@@ -90,13 +90,13 @@ class Ip:
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-        os.system('cp -p ./interfaces /etc/network')
-        os.system('rm interfaces')
         os.system('systemctl restart networking')
         self.saveSettings()
     
     def saveSettings(self:object) -> None:
-        """Método para salvar as configurações que foram feitas até então."""
+        """Método para salvar as configurações que foram feitas até então.
+        Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
+        possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir('Config_Saves_PSC')
@@ -109,8 +109,7 @@ class Ip:
         with open('saveConfigIp.txt', 'a+') as save:
             save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
                         f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
-                        f'{datetime.datetime.now()}\n\n')
-        print(f'Salvo com sucesso, no diretório.\n{os.getcwd()}')
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
 
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\
@@ -118,4 +117,4 @@ class Ip:
         
         
 if __name__ == '__main__':
-    raise NotImplementedError('Esse arquivo não pode ser inicializado como principal')
+    raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')
