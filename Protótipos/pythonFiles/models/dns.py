@@ -9,28 +9,8 @@ class Dns():
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
         self.__nameServer:str = nameServer
-        
-    @property
-    def ipv4(self: object) -> None:
-        return self.__ipv4
-    
-    @property
-    def subNetMask(self: object) -> None:
-        return self.__subNetMask
-    
-    @property
-    def domain(self: object) -> None:
-        return self.__domain
-    
-    @property
-    def nameServer(self: object) -> None:
-        return self.__nameServer
-    
-    @property
-    def siteAlias(self:object) -> None:
-        return self.__siteAlias
-            
-    def changeDnsBind9(self:object, zonaIndireta: bool) -> None:
+
+    def changeDnsBind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
         Esse serviço seria para a configuração da página local de rede.
 
@@ -63,6 +43,7 @@ class Dns():
                             f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}\n\n')
+        
         with open('named.conf.default-zones', 'r') as defaultZones:
             lines = 0
             temporaryData = []
