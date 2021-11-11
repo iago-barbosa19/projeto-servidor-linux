@@ -46,15 +46,16 @@ class Dhcp(Ip):
                                     '}')
                     dhcpConfig.seek(0)
                 lines += 1
-        with open('/etc/default/isc-dhcp-server', 'w') as iscDhcpServer:
+        os.chdir('/etc/default')
+        with open('isc-dhcp-server', 'w') as iscDhcpServer:
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
+        os.chdir(f'/home/{os.getlogin()}')
         try:
-            os.chdir(f'/home/{os.getlogin()}')
             os.mkdir('Config_Saves_PSC')
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         except FileExistsError:

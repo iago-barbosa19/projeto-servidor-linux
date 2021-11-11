@@ -85,13 +85,12 @@ class Ip:
         Esse método devia ser usado '@final' nele, para que não possa ser extendido por mais nenhum outro, porém
         como é normal ver máquinas com Python 3.7 para baixo, ainda não coloquei os itens da nova versão.
         """
-        with open('/etc/network/interfaces', 'w') as arq:
-            arq.write('source /etc/network/interfaces.d/*\n'\
+        os.chdir('/etc/network')
+        with open('interfaces', 'w') as interfaces:
+            interfaces.write('source /etc/network/interfaces.d/*\n'\
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-        os.system('systemctl restart networking')
-        self.saveSettings()
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.

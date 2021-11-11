@@ -101,7 +101,6 @@ class Dns():
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 os.system(f'a2ensite {os.getlogin()}.conf')
-                os.system('clear')
             else:
                 pass
             
@@ -111,8 +110,6 @@ class Dns():
         Esse método que é chamado para configurar o DNS no geral."""
         self.changeDnsBind9()
         self.changeDnsApache2()
-        os.system("systemctl restart apache2")
-        os.system("systemctl restart bind9")
         
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
@@ -123,6 +120,10 @@ class Dns():
             os.mkdir('Config_Saves_PSC')
         except FileExistsError:
             os.chdir(f'{os.getcwd()}/Config_Saves_PSC')
+        try:
+            os.mknod('saveConfigDns.txt')
+        except FileExistsError:
+            pass
         with open('saveDNS.txt', 'a+') as save:
             save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
                        f'Domínio:{self.__domain}|\nData da modificação:'\
