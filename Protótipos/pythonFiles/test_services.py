@@ -14,15 +14,18 @@ class TestServices(unittest.TestCase):
     
     def test_ip(self:object) -> None:
         self.ipv4.ipConf()
+        self.ipv4.saveSettings()
         os.system('systemctl restart networking')
         
     def test_dns(self:object) -> None:
         self.dns.dnsConf()
+        self.dns.saveSettings()
         os.system('systemctl restart bind9')
         os.system('systemctl restart apache2')
         
     def test_dhcpv4(self:object) -> None:
         self.dhcpv4.dhcpConf()
+        self.dhcpv4.saveSettings()
         os.system('systemctl restart isc-dhcp-server')
 
     def tearDown(self:object):

@@ -23,12 +23,7 @@ body{
 	bottom: 0px;
 	overflow: hidden;
 	cursor: pointer;
-<<<<<<< HEAD
-	left: 880px;
-=======
-
 	left: 50%;
->>>>>>> f7d6249d905d9fc73fb5ec2cde27d0d211ecbacc
 	height: 20px;
 }
 /* Segundo botão da área de suporte, mas esse fecha a área de suporte */
@@ -39,11 +34,8 @@ body{
 	transform: rotatey(60deg);
 	transform: rotateX(180deg);
 	padding: 10px 40px;
-<<<<<<< HEAD
-=======
 	margin: 0px;
 	background-color: #80ffff;
->>>>>>> f7d6249d905d9fc73fb5ec2cde27d0d211ecbacc
 	bottom: 80px;
 	cursor: pointer;
 	left: 50%;
@@ -201,9 +193,9 @@ body{
   }
   /* Fim da navbar */
 
-  /* Fim do Estilo da página Index.html */
+  /* Fim do Estilo da página home.html */
 
-  /* Início da página de login. Arquivo: login.html*/
+  /* Início da página de login. Arquivo: index.html*/
 
   /* Área geral da página, onde fica o background secundário*/
 .login {
@@ -244,15 +236,15 @@ body{
 /* Inputs gerais */
 .container > input{
 	height: 50px;
-	font-size: 0.7em;
+	width: 600px;
+	font-size: 1em;
 	margin-left: 40%;
-	padding-right: 280px;
 	border-radius: 10px 20px;
 }
 /* Input de senha */
 .container > input[type="password"] {
 	position: absolute;
-	padding-right: 280px;
+	width: 600px;
 	margin-left: 40%;
 	margin-bottom: 20px;
 }
@@ -325,7 +317,7 @@ body{
 	cursor: pointer;
 	text-decoration: none;
 }
-/* Fim da página de login. Arquivo: login.html*/
+/* Fim da página de login. Arquivo: index.html*/
 
 /* Início da página de Configurações de IP e etc */
 .secao{
@@ -337,7 +329,7 @@ body{
 	box-sizing: border-box;
 	width: 800px;
 	box-shadow: 1px 1px 2px 2px #fff8;
-	height: 520px;
+	height: 550px;
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
 }
@@ -423,7 +415,7 @@ span {margin-right: 5px;}
 .btn-confirm {
 	display: block;
 	/* top: 580px; */
-	margin: 45% 36% ;
+	margin: 47% 36% ;
 	cursor: pointer;
 	border-radius: 20px 20px;
 	padding: 20px 40px;
@@ -433,6 +425,8 @@ span {margin-right: 5px;}
 	transition: all 500ms ease;
 }
 .btn-confirm:hover {background:#7300e6; color: #fff;}
+
+
 /* Fim da página de configuraçõesd e Ip e Etc. */
 
 @media (max-width:2241px) and (min-width:2010px) {

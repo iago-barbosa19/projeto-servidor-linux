@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Teste</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+	<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script> 
+	<script>
+		// Início do Script da NavBar
+		$(document).ready(function(){
+				
+			$('.expandHome').mouseover(function() {
+			$('.sub-home').css({
+				'display': 'block'
+				}); 
+			});
+			$('.subnavbtn').mouseover(function() {
+			$('.sub-home').css({
+					'display': 'none'
+				}); 
+			});
+
+			$('#trapezoid').mouseleave(function() {
+			$('#trapezoid').css({
+					'margin-top': '-53px'
+				}); 
+				$('.sub-home').css({
+					'display': 'none'
+				}); 
+			}).mouseenter(function() {
+			$('#trapezoid').css({
+				'margin-top': '0px'
+				}); 
+			});
+			});
+			// Fim do Script da NavBar
+			// Início do menu de rodapé.
+			$(document).ready(function(){
+				// Parte que o menu suba
+			$("#btn-suporte").click(function(){
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);
+				$("#btn-suporte").hide();
+				  });
+			});
+			// Parte que o menu desce.
+			$(document).ready(function(){
+			$("#btn-suporte2").click(function(){ 
+				$("#btn-suporte2").slideToggle(1150);
+				$(".rodape").slideToggle(500);// selecionar o elemento que vai receber a função
+				$("#btn-suporte").slideDown(200);
+				  });
+			});
+			$(document).ready(function(){
+				$('#DhcpPage').click(function(){
+					$('#DHCPConf').fadeToggle(10);
+					$('#IPConf').hide();
+					$('#DNSConf').hide();
+				});
+			});
+			$(document).ready(function(){
+				$('#IpPage').click(function(){
+					$('#IPConf').fadeToggle(10);
+					$('#DHCPConf').hide();
+					$('#DNSConf').hide();
+				});
+			});
+			$(document).ready(function(){
+				$('#DnsPage').click(function(){
+					$('#DNSConf').fadeToggle(10);
+					$('#IPConf').hide();
+					$('#DHCPConf').hide();
+				});
+			});
+			jQuery(function($){
+				$(".ipv4").mask("999.999.999.999");
+			});
+	</script>
+	<style>
+		body {
+			background: #333;
+		}
+	</style>
+</head>
+<body>
+	<!-- Barra de navegação. -->
+	<nav class="navbar">
+		<div id="trapezoid">
+		  <a class="sub-home" href="/home">Página Inicial</a>
+		  <a href="/" class="expandHome">Sair</a>
+		   <div class="subnav">
+		   <button class="subnavbtn">Conf de Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div id="subnav-trapezoid">
+				<a style="cursor:pointer" id='DhcpPage'>DHCP</a>
+				<a style="cursor:pointer" id='IpPage'>IP</a>
+				<a style="cursor:pointer" id='DnsPage'>DNS</a>
+			  </div>
+			 </div>
+		  </div>
+		   <div class="subnav">
+		   <button class="subnavbtn">Instalar Serviços<i class="fa fa-caret-down"></i></button>
+			 <div class="subnav-content">
+			  <div class="subnav-trapezoid">
+				<a href nav='dhcp.html'>DHCP</a> <!-- Alterar o código --> 
+				<a href nav='dhcp.html'>DNS</a> <!-- Alterar o código --> 
+			   </div>
+			 </div>
+			</div>
+		</div>
+	  </nav>
+	  <!-- Fim da Barra de navegação.  -->
+	  <a id='btn-suporte'></a>
+	<!-- Área de Conteúdo. -->
+	<section id='conteudo' style='margin-top:20px;padding-bottom: 25px;'>
+		<!-- Início Formulário de IP. -->
+		<form style='display: none;' id='IPConf' method="POST">
+            <p id='paginaInacessivel'>Resolução indisponível.</p>
+            <section class="secao">
+                <p class='inicio'>Configuração do IP</p>
+                <section id="ip">
+					<input type='hidden' name='tipoConfig' value='configIp'>
+                    <p >IPv4</p>
+                    <input type="text" class='ipv4' name='ipv4' placeholder="192.168.1.15">
+                    <p>Máscara de Sub-Rede</p>
+                    <input type='text' class='ipv4' name='subNetMask'placeholder="255.255.255.0">
+                    <p>Gateway da rede</p>
+                    <input type='text' class='ipv4' name='gateway' placeholder='192.168.1.1'>
+                </section>
+                <section id='dns'>
+                    <p>Tipos de DNS</p>
+                    <label for='ipDns1'>
+                        <input type='radio' id='ipDns1' name='dnsChoice' value='dnsPadrao'>
+                        <span>DNS Padrão</span>
+                        </label>
+                    <label for='ipDns2'>
+                        <input type='radio' id='ipDns2' name='dnsChoice' value='dnsProprio'>
+                        <span>DNS Próprio</span>
+                    </label>
+                    <p>DNS 1</p>
+                    <input name='dns1'type=text class='ipv4' placeholder='8.8.8.8'>
+                    <p>DNS 2</p>
+                    <input name='dns2'type=text class='ipv4' placeholder='8.8.4.4'>
+                </section>
+                <button class='btn-confirm'>Confirmar</button>
+            </section>
+        </form>
+		<!-- Fim Formulário de IP. -->
+		<!-- Início Formulário de DHCP. -->
+		<form style='display: none;'id='DHCPConf' method="post">
+			<p id='paginaInacessivel'>Resolução indisponível.</p>
+			<section class="secao">
+				<p class='inicio'>Configuração do DHCP</p>
+				<input type='hidden' name='tipoConfig' value='configDhcp'>
+				<section id="ip">
+						<p>Endereço inicial da pool DHCP</p>
+						<input type='text' class='ipv4' name='rangeInicial'placeholder="192.168.1.25">
+						<p>Endereço final da pool DHCP</p>
+						<input type='text' class='ipv4' name='rangeFinal' placeholder='192.168.1.25'>
+					</section>
+					<section id='dns'>
+							<p>Tipos de DNS</p>
+							<label for='dhcpDns1'>
+								<input type='radio' id='dhcpDns1' name='dnsChoice' value='dnsPadrao'>
+								<span>DNS Padrão</span>
+							</label>
+							<label for='dhcpDns2'>
+								<input type='radio' id='dhcpDns2' name='dnsChoice' value='dnsProprio'>
+								<span>DNS Próprio</span>
+							</label>
+							<p>DNS 1</p>
+							<input name='dns1'class='ipv4' type=text placeholder='8.8.8.8'>
+							<p>DNS 2</p>
+							<input name='dns1' class='ipv4' type=text placeholder='8.8.4.4'>
+						</section>
+					<button class='btn-confirm'>Confirmar</button>
+				</section>
+			</form>
+				<!-- Fim Formulário de DHCP. -->
+				<!-- Início do Formulário de DNS.  -->
+				<form style='display: none;'id='DNSConf' method="post">
+					<p id='paginaInacessivel'>Resolução indisponível.</p>
+					<section class="secao">
+						<p class='inicio'>Configuração do DNS</p>
+						<input type='hidden' name='tipoConfig' value='configDhcp'>
+						<section id="ip">
+								<p>Endereço IP do DNS</p>
+								<input type='text' class='ipv4' name='ipv4'placeholder="192.168.1.15">
+								<p>Domínio desejado</p>
+								<input type='text' name='domain' placeholder='teste.com.br'>
+							</section>
+							<section id='dns'>
+									<p>Nome do Servidor</p>
+									<input type='text' name='serverName' placeholder='debianServer.com'>
+								</section>
+							<button class='btn-confirm'>Confirmar</button>
+						</section>
+					</form>
+					<!-- Fim do DNS Conf -->
+		</section>
+	<!-- Fim da área de Conteúdo-->
+	<!-- Área de contato com o suporte ou sugestões -->
+	<footer class="rodape">
+		<a id='btn-suporte2' style='display:none;'></a>
+		<ul>
+			<li>
+				<a class='support' href='mailto:iagofbarbosa23@gmail.com'>Entrar em contato com o suporte</a></footer>
+			</li>
+		</ul>
+	<!-- Fim da área de suporte -->
+</body>
+</html>

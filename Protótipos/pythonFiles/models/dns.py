@@ -4,11 +4,11 @@ import os, datetime
 
 class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nameServer: str) -> None:
+    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverName: str) -> None:
         self.__ipv4:str = ipv4
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
-        self.__nameServer:str = nameServer
+        self.__nameServer:str = serverName
 
     def changeDnsBind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
