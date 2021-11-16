@@ -99,13 +99,13 @@ class Ip:
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
         os.chdir(f'/home/{os.getlogin()}')
         try:
-            os.mkdir('Config_Saves_PSC')
+            os.mkdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         except FileExistsError:
             pass
         finally:
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         try:
-            os.mknod('saveConfigIp.txt')
+            os.mknod(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigIp.txt')
         except FileExistsError:
             pass
         finally:

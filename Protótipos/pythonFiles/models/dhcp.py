@@ -1,6 +1,6 @@
 from models.ip import Ip
 import os, datetime
-
+import logging
 
 class Dhcp(Ip):
     
@@ -55,15 +55,14 @@ class Dhcp(Ip):
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        os.chdir(f'/home/{os.getlogin()}')
         try:
-            os.mkdir('Config_Saves_PSC')
+            os.system(f'mkdir -p /home/{os.getlogin()}/Config_Saves_PSC/')
         except FileExistsError:
             pass        
         finally:
             os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
         try:
-            os.mknod('saveConfigDHCP.txt')
+            os.mknod(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigDHCP.txt')
         except FileExistsError:
             pass
         finally:
@@ -79,3 +78,6 @@ class Dhcp(Ip):
  
 if __name__ == '__main__':
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')
+else:
+    logging.basicConfig(level=logging.DEBUG, filename=f'/home/{os.getlogin()}/Config_Saves_PSC/log-IP.txt',
+                            filemode='a', format=f'{datetime.datetime.now().strftime(f"%d/%b/%Y - %H:%M - ")}')
