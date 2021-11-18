@@ -333,6 +333,19 @@ body{
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
 }
+.secaoDhcp{
+	display: inline-block;
+	background-color: #fff;
+	padding-top: 20px;
+	border-radius: 20px 30px;
+	margin: 20px 20px 0px 35%;
+	box-sizing: border-box;
+	width: 800px;
+	box-shadow: 1px 1px 2px 2px #fff8;
+	height: 730px;
+	font-size: 1.3em;
+	font: 'Montserrat', Arial, sans-serif;
+}
 #paginaInacessivel{display: none;}
 .inicio{
 	display: inline-block;
@@ -426,6 +439,19 @@ span {margin-right: 5px;}
 }
 .btn-confirm:hover {background:#7300e6; color: #fff;}
 
+.btn-confirmDhcp {
+	display: block;
+	/* top: 580px; */
+	margin: 70% 36% ;
+	cursor: pointer;
+	border-radius: 20px 20px;
+	padding: 20px 40px;
+	color: #000;
+	background-color: #9966ff;
+	font-size: 1.3em;
+	transition: all 500ms ease;
+}
+.btn-confirmDhcp:hover {background:#7300e6; color: #fff;}
 
 /* Fim da página de configuraçõesd e Ip e Etc. */
 

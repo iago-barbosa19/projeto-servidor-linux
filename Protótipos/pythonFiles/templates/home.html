@@ -115,7 +115,7 @@
 	<!-- Área de Conteúdo. -->
 	<section id='conteudo' style='margin-top:20px;padding-bottom: 25px;'>
 		<!-- Início Formulário de IP. -->
-		<form style='display: none;' id='IPConf' method="POST">
+		<form style='display: none;' id='IPConf' action='/alterar' method="POST">
             <p id='paginaInacessivel'>Resolução indisponível.</p>
             <section class="secao">
                 <p class='inicio'>Configuração do IP</p>
@@ -148,12 +148,18 @@
         </form>
 		<!-- Fim Formulário de IP. -->
 		<!-- Início Formulário de DHCP. -->
-		<form style='display: none;'id='DHCPConf' method="post">
+		<form style='display: none;'id='DHCPConf' action='/alterar' method="POST">
 			<p id='paginaInacessivel'>Resolução indisponível.</p>
-			<section class="secao">
+			<section class="secaoDhcp">
 				<p class='inicio'>Configuração do DHCP</p>
 				<input type='hidden' name='tipoConfig' value='configDhcp'>
 				<section id="ip">
+						<p>IPv4</p>
+						<input type="text" class='ipv4' name='ipv4' placeholder="192.168.1.15">
+						<p>Máscara de Sub-Rede</p>
+						<input type='text' class='ipv4' name='subNetMask'placeholder="255.255.255.0">
+						<p>Gateway da rede</p>
+						<input type='text' class='ipv4' name='gateway' placeholder='192.168.1.1'>
 						<p>Endereço inicial da pool DHCP</p>
 						<input type='text' class='ipv4' name='rangeInicial'placeholder="192.168.1.25">
 						<p>Endereço final da pool DHCP</p>
@@ -172,32 +178,34 @@
 							<p>DNS 1</p>
 							<input name='dns1'class='ipv4' type=text placeholder='8.8.8.8'>
 							<p>DNS 2</p>
-							<input name='dns1' class='ipv4' type=text placeholder='8.8.4.4'>
+							<input name='dns2' class='ipv4' type=text placeholder='8.8.4.4'>
 						</section>
+					<button class='btn-confirmDhcp'>Confirmar</button>
+				</section>
+			</form>
+			<!-- Fim Formulário de DHCP. -->
+			<!-- Início do Formulário de DNS.  -->
+			<form style='display: none;' id='DNSConf' action='/alterar' method="POST">
+				<p id='paginaInacessivel'>Resolução indisponível.</p>
+				<section class="secao">
+					<p class='inicio'>Configuração do DNS</p>
+					<input type='hidden' name='tipoConfig' value='configDns'>
+					<section id="ip">
+							<p>Endereço IP do DNS</p>
+							<input type='text' class='ipv4' name='ipv4'placeholder="192.168.1.15">
+							<p>Endereço IP do DNS</p>
+							<input type='text' class='ipv4' name='subNetMask' placeholder="255.255.255.0">
+							<p>Domínio desejado</p>
+							<input type='text' name='domain' placeholder='teste.com.br'>
+					</section>
+					<section id='dns'>
+							<p>Nome do Servidor</p>
+							<input type='text' name='serverName' placeholder='debianServer.com'>
+					</section>
 					<button class='btn-confirm'>Confirmar</button>
 				</section>
 			</form>
-				<!-- Fim Formulário de DHCP. -->
-				<!-- Início do Formulário de DNS.  -->
-				<form style='display: none;'id='DNSConf' method="post">
-					<p id='paginaInacessivel'>Resolução indisponível.</p>
-					<section class="secao">
-						<p class='inicio'>Configuração do DNS</p>
-						<input type='hidden' name='tipoConfig' value='configDhcp'>
-						<section id="ip">
-								<p>Endereço IP do DNS</p>
-								<input type='text' class='ipv4' name='ipv4'placeholder="192.168.1.15">
-								<p>Domínio desejado</p>
-								<input type='text' name='domain' placeholder='teste.com.br'>
-							</section>
-							<section id='dns'>
-									<p>Nome do Servidor</p>
-									<input type='text' name='serverName' placeholder='debianServer.com'>
-								</section>
-							<button class='btn-confirm'>Confirmar</button>
-						</section>
-					</form>
-					<!-- Fim do DNS Conf -->
+			<!-- Fim do DNS Conf -->
 		</section>
 	<!-- Fim da área de Conteúdo-->
 	<!-- Área de contato com o suporte ou sugestões -->
