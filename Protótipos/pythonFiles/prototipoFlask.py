@@ -17,6 +17,7 @@ def index():
             if request.form['senha'] == 'Senai*123':
                 session['username'] = 'Iago'
                 return redirect(url_for('home'))
+        return render_template('loginIncorreto.html')
 
 @software.route('/home', methods=['GET', 'POST'])
 def home():

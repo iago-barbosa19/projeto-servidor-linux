@@ -1,6 +1,5 @@
-
 import os, datetime
-
+from time import sleep
 
 class Dns():
     
@@ -60,6 +59,8 @@ class Dns():
                                             f'file "/etc/bind/db.{nomeArquivo[0]}";\n'\
                                             '};\n')
                     lines += 1
+            os.system('echo Configuração efetuada com sucesso!')
+            sleep(2)
             os.system('clear')
     
     def changeDnsApache2(self:object) -> None:
@@ -104,6 +105,8 @@ class Dns():
                 os.system(f'a2ensite {os.getlogin()}.conf')
             else:
                 pass
+        os.system('echo Configuração efetuada com sucesso!')
+        sleep(2)
         os.system('clear')
             
     def dnsConf(self:object) -> None:
@@ -117,23 +120,14 @@ class Dns():
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        os.chdir(f'/home/{os.getlogin()}')
-        try:
-            os.mkdir('Config_Saves_PSC')
-        except FileExistsError:
+        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC'):
             pass
-        finally:
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        try:
-            os.mknod('saveConfigDNS.txt')
-        except FileExistsError:
-            pass
-        finally:
-            with open('saveConfigDNS.txt', 'a+') as save:
-                save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
-                           f'Domínio:{self.__domain}|\nData da modificação:'\
-                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
-            os.system('echo A configuração foi salva com sucesso')
+        else:
+            os.system(f"mkdir /home/{os.getlogin()}/Config_Saves_PSC")
+        with open(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigDNS.txt', 'a') as save:
+            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
+                        f'Domínio:{self.__domain}|\nData da modificação:'\
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
     
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\

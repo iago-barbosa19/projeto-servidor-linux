@@ -1,5 +1,5 @@
 import os, datetime
-
+from time import sleep
 
 class Ip:
 
@@ -91,28 +91,22 @@ class Ip:
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-    os.system('clear')
+        os.system('echo Configuração efetuada com sucesso!')
+        sleep(2)
+        os.system('clear')
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        os.chdir(f'/home/{os.getlogin()}')
-        try:
-            os.mkdir('Config_Saves_PSC')
-        except FileExistsError:
+        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC'):
             pass
-        finally:
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        try:
-            os.mknod('saveConfigIp.txt')
-        except FileExistsError:
-            pass
-        finally:
-            with open('saveConfigIp.txt', 'a+') as save:
-                save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
-                           f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
-                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
+        else:
+            os.system(f"mkdir /home/{os.getlogin()}/Config_Saves_PSC")
+        with open(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigIp.txt', 'a') as save:
+            save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
+                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\
