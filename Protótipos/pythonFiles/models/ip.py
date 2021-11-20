@@ -99,11 +99,15 @@ class Ip:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC'):
+        if os.path.exists('/etc/psc'):
             pass
         else:
-            os.system(f"mkdir /home/{os.getlogin()}/Config_Saves_PSC")
-        with open(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigIp.txt', 'a') as save:
+            os.system(f"mkdir /etc/psc")
+        if os.path.exists('/etc/psc/configs'):
+            pass
+        else:
+            os.system(f"mkdir /etc/psc/configs")
+        with open('/etc/psc/configs/saveConfigIp.txt', 'a') as save:
             save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
                         f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')

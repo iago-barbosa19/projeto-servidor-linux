@@ -50,3 +50,8 @@ def alterar():
         configDns = Dns(ipv4=request.form['ipv4'], subNetMask=request.form['subNetMask'], domain=request.form['domain'], serverName=request.form['serverName'])
         configDns.dnsConf()
     return redirect(url_for('home'))
+
+@software.route('/informacoes_servicos', methods=['POST', 'GET'])
+def informacoes_servicosDhcp():
+    with open('/etc/psc/templates') as arq:
+        pass

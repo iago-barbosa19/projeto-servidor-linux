@@ -24,7 +24,7 @@ class Dhcp(Ip):
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.    
         """
         os.chdir('/etc/dhcp')
-        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC/configDHCP.txt') == False:
+        if not os.path.exists('/etc/psc/configDHCP.txt'):
             with open('dhcpd.conf', 'a') as dhcpd:
                 dhcpd.write('authoritative;\n')
         with open('dhcpd.conf', 'r+') as dhcpConfig:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
@@ -57,11 +57,15 @@ class Dhcp(Ip):
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC'):
+        if os.path.exists('/etc/psc'):
             pass
         else:
-            os.system(f"mkdir /home/{os.getlogin()}/Config_Saves_PSC")
-        with open(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigDHCP.txt', 'a') as dhcpSave:
+            os.system(f"mkdir /etc/psc")
+        if os.path.exists('/etc/psc/configs'):
+            pass
+        else:
+            os.system(f"mkdir /etc/psc/configs")
+        with open('/etc/psc/configs/saveConfigDHCP.txt', 'a') as dhcpSave:
             dhcpSave.write(f'IPV4:{self.ipv4}|Gateway{self.gateway}|DNS1{self.dns1}|DNS2{self.dns2}|Máscara de Sub-Rede{self.subNetMask}'\
                             f'NetworkIp: {self.networkIp}|Pool Inicial do DHCP:{self.dhcpPoolInicial}|Pool Final do DHCP:{self.dhcpPoolFinal}'\
                             f'\nData da modificação:{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')

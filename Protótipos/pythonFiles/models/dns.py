@@ -120,11 +120,15 @@ class Dns():
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-        if os.path.exists(f'/home/{os.getlogin()}/Config_Saves_PSC'):
+        if os.path.exists('/etc/psc'):
             pass
         else:
-            os.system(f"mkdir /home/{os.getlogin()}/Config_Saves_PSC")
-        with open(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigDNS.txt', 'a') as save:
+            os.system("mkdir /etc/psc")
+        if os.path.exists('/etc/psc/configs'):
+            pass
+        else:
+            os.system(f"mkdir /etc/psc/configs")
+        with open('/etc/psc/configs/saveConfigDNS.txt', 'a') as save:
             save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
                         f'Domínio:{self.__domain}|\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
