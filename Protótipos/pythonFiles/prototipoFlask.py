@@ -1,4 +1,5 @@
 import secrets
+import tempfile
 from flask import Flask, redirect, render_template, session, url_for, make_response, request
 from secrets import token_hex
 from models.ip import Ip
@@ -51,7 +52,23 @@ def alterar():
         configDns.dnsConf()
     return redirect(url_for('home'))
 
-@software.route('/informacoes_servicos', methods=['POST', 'GET'])
-def informacoes_servicosDhcp():
-    with open('/etc/psc/templates') as arq:
-        pass
+@software.route('/teste')
+def teste():
+    """"
+    Código inicial para montar um possível gerador de tabelas. 
+    Seria necessário um arquivo CSV para a melhor qualidade de arquivos e dados, porém, isso serve somente para o protótipo
+    code: 
+    teste = None
+    arquivo = None
+    arq = None
+    
+    with open("./static/saves/saveConfigIp.txt", 'r') as arq:
+        teste = arq.read()
+    with open("./templates/teste.html", 'r') as arq:
+        arquivo = arq.read()
+        with open('./templates/uso.html', 'w+') as temp:
+            temp.write(arquivo)
+            temp.write(f'\n<p>{teste}</p>\n</div>\n</body>\n</html>')
+    with open('./templates/uso.html', 'r') as teste:
+        arq = teste.read()"""
+    return render_template('dados.html')
