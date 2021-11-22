@@ -87,8 +87,8 @@
 	<!-- Barra de navegação. -->
 	<nav class="navbar">
 		<div id="trapezoid">
-		  <a class="sub-home" href="/home">Página Inicial</a>
-		  <a href="/" class="expandHome">Sair</a>
+		  <a class="sub-home" href="/psc/home">Página Inicial</a>
+		  <a href="/psc/" class="expandHome">Sair</a>
 		   <div class="subnav">
 		   <button class="subnavbtn">Conf de Serviços<i class="fa fa-caret-down"></i></button>
 			 <div class="subnav-content">
@@ -100,7 +100,7 @@
 			 </div>
 		  </div>
 		   <div class="subnav">
-			<a href="/teste" class="expandHome">Checar Informações</a>
+			<a href="/psc/visuDados" class="expandHome">Checar Informações</a>
 			</div>
 		</div>
 	  </nav>
@@ -109,7 +109,7 @@
 	<!-- Área de Conteúdo. -->
 	<section id='conteudo' style='margin-top:20px;padding-bottom: 25px;'>
 		<!-- Início Formulário de IP. -->
-		<form style='display: none;' id='IPConf' action='/alterar' method="POST">
+		<form style='display: none;' id='IPConf' action='/psc/alterar' method="POST">
             <p id='paginaInacessivel'>Resolução indisponível.</p>
             <section class="secao">
                 <p class='inicio'>Configuração do IP</p>
@@ -142,7 +142,7 @@
         </form>
 		<!-- Fim Formulário de IP. -->
 		<!-- Início Formulário de DHCP. -->
-		<form style='display: none;'id='DHCPConf' action='/alterar' method="POST">
+		<form style='display: none;'id='DHCPConf' action='/psc/alterar' method="POST">
 			<p id='paginaInacessivel'>Resolução indisponível.</p>
 			<section class="secaoDhcp">
 				<p class='inicio'>Configuração do DHCP</p>
@@ -179,7 +179,7 @@
 			</form>
 			<!-- Fim Formulário de DHCP. -->
 			<!-- Início do Formulário de DNS.  -->
-			<form style='display: none;' id='DNSConf' action='/alterar' method="POST">
+			<form style='display: none;' id='DNSConf' action='/psc/alterar' method="POST">
 				<p id='paginaInacessivel'>Resolução indisponível.</p>
 				<section class="secao">
 					<p class='inicio'>Configuração do DNS</p>

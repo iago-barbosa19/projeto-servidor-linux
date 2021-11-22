@@ -1,13 +1,11 @@
-import secrets
-import tempfile
-from flask import Flask, redirect, render_template, session, url_for, make_response, request
+from flask import Flask, redirect, render_template, session, url_for, request
 from secrets import token_hex
 from models.ip import Ip
 from models.dns import Dns
 from models.dhcp import Dhcp
 
 software = Flask(__name__)
-software.secret_key = secrets.token_hex(16)
+software.secret_key = token_hex(16)
 
 @software.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,7 +35,7 @@ def alterar():
             configIp.ipConf()
     elif request.form['tipoConfig'] == 'configDhcp': 
         if request.form['dnsChoice'] == 'dnsProprio': 
-            # Itens necessários no DHCP:
+            # Itens necessarios no DHCP:
             # IPV4, gateway, DNS1 e DNS2, subnetMask, DhcpPoolInicial e DhcpPoolFinal
            configDhcp = Dhcp(ipv4=request.form['ipv4'], gateway=request.form['gateway'], subNetMask=request.form['subNetMask'],
                              dns1=request.form['dns1'], dns2=request.form['dns2'],
@@ -47,16 +45,16 @@ def alterar():
                         dns1='8.8.8.8', dns2='8.8.4.4',
                         dhcpPoolInicial=request.form['rangeInicial'], dhcpPoolFinal=request.form['rangeFinal'])
         configDhcp.dhcpConf()
-    else: # Configuração do DNS
+    else: # Configuracao do DNS
         configDns = Dns(ipv4=request.form['ipv4'], subNetMask=request.form['subNetMask'], domain=request.form['domain'], serverName=request.form['serverName'])
         configDns.dnsConf()
     return redirect(url_for('home'))
 
-@software.route('/teste')
-def teste():
+@software.route('/visuDados')
+def VisuDados():
     """"
-    Código inicial para montar um possível gerador de tabelas. 
-    Seria necessário um arquivo CSV para a melhor qualidade de arquivos e dados, porém, isso serve somente para o protótipo
+    Codigo inicial para montar um possivel gerador de tabelas. 
+    Seria necessario um arquivo CSV para a melhor qualidade de arquivos e dados, porem, isso serve somente para o prototipo
     code: 
     teste = None
     arquivo = None
@@ -72,3 +70,14 @@ def teste():
     with open('./templates/uso.html', 'r') as teste:
         arq = teste.read()"""
     return render_template('dados.html')
+
+
+@software.route('/forgotPass', methods=[ 'GET', 'POST'])
+def forgotPass():
+    if request.method == 'GET':
+        return render_template('forgotPass.html')
+    else:
+        return render_template('forgotPassEnv.html')
+
+if __name__ == '__main__':
+    software.run(debug=True)

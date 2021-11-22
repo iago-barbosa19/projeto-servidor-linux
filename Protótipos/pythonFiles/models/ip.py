@@ -94,6 +94,8 @@ class Ip:
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
+        os.system('systemctl restart networking')
+        self.saveSettings()
         os.system('clear')
     
     def saveSettings(self:object) -> None:
@@ -109,8 +111,8 @@ class Ip:
         else:
             os.system(f"mkdir /etc/psc/configs")
         with open('/etc/psc/configs/saveConfigIp.txt', 'a') as save:
-            save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
-                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
+            save.write(f'Informações Gerais\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|NetworkIp:{self.__networkIp}\n'\
+                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
     def __repr__(self):

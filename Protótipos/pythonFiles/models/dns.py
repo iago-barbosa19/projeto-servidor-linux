@@ -96,8 +96,9 @@ class Dns():
                                     " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 os.system(f'a2ensite {os.getlogin()}.conf')
         except FileExistsError:
-            os.system(f'echo O nomeArquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\ny/n')
-            if opc:= input() == 'y':
+            print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
+            opc = input('y\n ->')
+            if opc == 'y':
                 with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
                     apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
@@ -107,6 +108,7 @@ class Dns():
                 pass
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
+        self.saveSettings()
         os.system('clear')
             
     def dnsConf(self:object) -> None:
@@ -115,6 +117,8 @@ class Dns():
         Esse método que é chamado para configurar o DNS no geral."""
         self.changeDnsBind9()
         self.changeDnsApache2()
+        os.system('systemctl restart bind9')
+        os.system('systemctl restart apache2')
         
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.

@@ -51,6 +51,8 @@ class Dhcp(Ip):
             iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
+        os.system('systemctl restart isc-dhcp-server')
+        self.saveSettings()
         os.system('clear')
         
     def saveSettings(self:object) -> None:
