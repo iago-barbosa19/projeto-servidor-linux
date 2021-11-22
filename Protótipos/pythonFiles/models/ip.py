@@ -51,7 +51,8 @@ class Ip:
     def dns2(self:object, dns2: str) -> None:
         self.__dns2 = dns2
         
-    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
+    @staticmethod
+    def networkIpSetter(ipv4:str, subNetMask:str) -> str:
         """
         Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
         Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
