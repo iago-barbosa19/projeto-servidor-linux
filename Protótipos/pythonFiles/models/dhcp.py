@@ -24,7 +24,7 @@ class Dhcp(Ip):
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.    
         """
         os.chdir('/etc/dhcp')
-        if not os.path.exists('/etc/psc/configDHCP.txt'):
+        if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):
             with open('dhcpd.conf', 'a') as dhcpd:
                 dhcpd.write('authoritative;\n')
         with open('dhcpd.conf', 'r+') as dhcpConfig:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
@@ -52,7 +52,7 @@ class Dhcp(Ip):
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
         os.system('systemctl restart isc-dhcp-server')
-        self.saveSettings()
+        # self.saveSettings()
         os.system('clear')
         
     def saveSettings(self:object) -> None:

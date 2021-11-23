@@ -36,8 +36,10 @@ def main():
         os.system('clear')
         print('O sistema de configuracao remota estara sendo configurado, e recomendado que o servidor ja tenha um IP fixo configurado de antemao.\n'\
               'Vamos instalar alguns servicos necessarios, que nos deixe fazer as configuracoes. \n')
-        opc = input('y/n  ->')
-        preparacaoServidor()
+        opc = input('Y/n  ->')
+        if opc == 'Y' or opc == 'y':
+            preparacaoServidor()
+        main()
     else:
         exit()
 
@@ -53,6 +55,7 @@ def configServicos():
             configs.append(input(f'Insira o {dado} ->'))
         ipConfig = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4])
         ipConfig.ipConf()
+        os.system('systemctl restart networking')
     elif opc == 2:
         os.system('clear')
         print('Insira as informacoes necessarias para configurar o DHCP:\n')
@@ -60,6 +63,7 @@ def configServicos():
             configs.append(input(f'Insira o(a) {dado} ->'))
         dhcpConfig = Dhcp(ipv4=configs[0], gateway=configs[1], dns1=configs[2], dns2=configs[3], subNetMask=configs[4], dhcpPoolInicial=configs[5], dhcpPoolFinal=configs[6])
         dhcpConfig.dhcpConf()
+        os.system('systemctl restart isc-dhcp-server')
     elif opc == 3:
         os.system('clear')
         print('Insira as informações necessárias para configurar o DNS:\n')
@@ -67,6 +71,8 @@ def configServicos():
             configs.append(input(f'Insira o {dado} ->'))
         dnsConfig = Dns(ipv4=configs[0], subNetMask=configs[1], domain=configs[2], serverName=configs[3])
         dnsConfig.dnsConf()
+        os.system('systemctl restart bind9')
+        os.system('systemctl restart apache2')
     print('Voltando para a página inicial')
     main()
 
@@ -81,6 +87,7 @@ def checkServicos():
         os.system('systemctl status bind9')
     elif opc == 3:
         os.system('systemctl status isc-dhcp-server')
+    sleep(5)
     print('echo Voltando para a página inicial')
     main()
 
@@ -91,8 +98,18 @@ def installServices():
     if opc == 1:
         os.system('apt-get install --assume-yes apache2')
         os.system('apt-get install --assume-yes bind9')
+        os.system('chown -R www-data:www-data /etc/apache2/sites-available/')
+        os.system('chown -R www-data:www-data /etc/apache2/sites-enabled/')
+        os.system('chown -R www-data:www-data /etc/bind')
+        os.system('mkdir -p /var/www/sites')
+        os.system('chown -R www-data:www-data /var/www/sites')
+        os.system('chown -R www-data:www-data /etc/bind/named.conf.default-zones')
     elif opc == 2:
         os.system('apt-get install --assume-yes isc-dhcp-server')
+        with open('/etc/dhcp/dhcpd.conf', 'a') as dhcpd:
+            dhcpd.write('\nauthoritative;\n')
+        os.system('chown -R www-data:www-data /etc/dhcp/dhcpd.conf')
+        os.system('chown -R www-data:www-data /etc/default/isc-dhcp-server')
     print('Voltando para a página inicial')
     main()
 
@@ -109,6 +126,14 @@ def preparacaoServidor():
     os.system('pip3 install flask')
     os.system('apt-get install --assume-yes libapache2-mod-wsgi-py3')
     log.debug('Serviços "instalados".')
+    if not os.path.exists('/etc/psc/configs/saveConfigDHCP.txt'):
+        os.mknod('/etc/psc/configs/saveConfigDHCP.txt')
+    if not os.path.exists('/etc/psc/configs/saveConfigDNS.txt'):
+        os.mknod('/etc/psc/configs/saveConfigDNS.txt')
+    os.system('chown -R www-data:www-data /etc/network/interfaces')
+    os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDHCP.txt')
+    os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDNS.txt')
+    os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigIp.txt')
     with open('/etc/psc/configs/saveConfigIp.txt', 'r') as config:
         configTamanho = len(tuple(config.readlines()))
         config.seek(0)
@@ -129,8 +154,10 @@ def preparacaoServidor():
     log.debug("Arquivo Flask de host virtual criado")
     os.chdir('/etc/apache2/sites-available/')
     os.system('a2ensite flask')
+    os.system('chown -R www-data:www-data /etc/apache2/sites-available/flask.conf')
     os.system('systemctl restart apache2')
     log.debug("Fim do preparamento do Servidor")
+    main()
     
 
 if __name__ == '__main__':

@@ -95,7 +95,26 @@ class Ip:
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
         os.system('systemctl restart networking')
-        self.saveSettings()
+        if os.getlogin() != 'www-data':
+            self.saveSettings()
+        os.system('clear')
+        
+    def ipConfAlt(self:object) -> None:
+        with open('/etc/apache2/sites-avaliable/flask.conf', 'w') as flaskServer:
+            flaskServer.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
+                            "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
+                            "        AllowOverride None\n        Require all granted\n"\
+                            "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
+                            "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+        os.chdir('/etc/network')
+        with open('interfaces', 'w') as interfaces:
+            interfaces.write('source /etc/network/interfaces.d/*\n'\
+                '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
+                f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+        sleep(2)
+        if os.getlogin() != 'www-data':
+            self.saveSettings()
         os.system('clear')
     
     def saveSettings(self:object) -> None:
