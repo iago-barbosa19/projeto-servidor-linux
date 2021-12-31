@@ -100,7 +100,7 @@ class Ip:
         os.system('clear')
         
     def ipConfAlt(self:object) -> None:
-        with open('/etc/apache2/sites-avaliable/flask.conf', 'w') as flaskServer:
+        with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:
             flaskServer.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
                             "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
                             "        AllowOverride None\n        Require all granted\n"\
