@@ -23,7 +23,6 @@ body{
 	bottom: 0px;
 	overflow: hidden;
 	cursor: pointer;
-
 	left: 50%;
 	height: 20px;
 }
@@ -194,9 +193,9 @@ body{
   }
   /* Fim da navbar */
 
-  /* Fim do Estilo da página Index.html */
+  /* Fim do Estilo da página home.html */
 
-  /* Início da página de login. Arquivo: login.html*/
+  /* Início da página de login. Arquivo: index.html*/
 
   /* Área geral da página, onde fica o background secundário*/
 .login {
@@ -215,11 +214,30 @@ body{
 .login > p {
 	padding: 70px 0px 15px 820px;
 }
+#togglePass{
+			color: #333;
+			cursor: pointer;
+			position: absolute;
+			margin-left: 61%;
+			margin-top: 10px;
+			}
+#loginIncorreto {
+	position: absolute;
+	background-color:  #ff000080;
+	border-radius: 10px;
+	padding: 5px;
+	margin: 0;
+	top: 620px;
+	left: 47%;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
 /* Na página de Login, background primário da página */
 .container {
 	display: inline-block;
 	box-sizing: border-box;
 	width: 100%;
+	height: 75%;
 	border: 1px solid #fff0;
 	background-color: #333;
 }
@@ -237,15 +255,21 @@ body{
 /* Inputs gerais */
 .container > input{
 	height: 50px;
-	font-size: 0.7em;
+	width: 600px;
+	font-size: 1em;
+	margin-bottom: 2%;
 	margin-left: 40%;
-	padding-right: 280px;
 	border-radius: 10px 20px;
 }
 /* Input de senha */
-.container > input[type="password"] {
+.container2 > input {
+	height: 50px;
+	width: 600px;
+	font-size: 1em;
+	margin-left: 40%;
+	border-radius: 10px 20px;
 	position: absolute;
-	padding-right: 280px;
+	width: 600px;
 	margin-left: 40%;
 	margin-bottom: 20px;
 }
@@ -268,7 +292,7 @@ body{
 	padding: 20px 70px;
 	font-size: 1em;
 	background: linear-gradient(220deg, #80ffff, #9933ff);
-	margin: 70px 840px 80px 47%;
+	margin: 170px 840px 80px 47%;
 	color: #fff;
 	background-size: 400% 400%;
     animation: css-change 11s ease infinite;
@@ -318,7 +342,7 @@ body{
 	cursor: pointer;
 	text-decoration: none;
 }
-/* Fim da página de login. Arquivo: login.html*/
+/* Fim da página de login. Arquivo: index.html*/
 
 /* Início da página de Configurações de IP e etc */
 .secao{
@@ -330,7 +354,20 @@ body{
 	box-sizing: border-box;
 	width: 800px;
 	box-shadow: 1px 1px 2px 2px #fff8;
-	height: 520px;
+	height: 550px;
+	font-size: 1.3em;
+	font: 'Montserrat', Arial, sans-serif;
+}
+.secaoDhcp{
+	display: inline-block;
+	background-color: #fff;
+	padding-top: 20px;
+	border-radius: 20px 30px;
+	margin: 20px 20px 0px 35%;
+	box-sizing: border-box;
+	width: 800px;
+	box-shadow: 1px 1px 2px 2px #fff8;
+	height: 730px;
 	font-size: 1.3em;
 	font: 'Montserrat', Arial, sans-serif;
 }
@@ -416,7 +453,7 @@ span {margin-right: 5px;}
 .btn-confirm {
 	display: block;
 	/* top: 580px; */
-	margin: 45% 36% ;
+	margin: 47% 36% ;
 	cursor: pointer;
 	border-radius: 20px 20px;
 	padding: 20px 40px;
@@ -426,6 +463,21 @@ span {margin-right: 5px;}
 	transition: all 500ms ease;
 }
 .btn-confirm:hover {background:#7300e6; color: #fff;}
+
+.btn-confirmDhcp {
+	display: block;
+	/* top: 580px; */
+	margin: 70% 36% ;
+	cursor: pointer;
+	border-radius: 20px 20px;
+	padding: 20px 40px;
+	color: #000;
+	background-color: #9966ff;
+	font-size: 1.3em;
+	transition: all 500ms ease;
+}
+.btn-confirmDhcp:hover {background:#7300e6; color: #fff;}
+
 /* Fim da página de configuraçõesd e Ip e Etc. */
 
 @media (max-width:2241px) and (min-width:2010px) {

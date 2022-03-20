@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Esqueci minha senha</title>
+    <style>
+        body {
+            margin: 0;
+            font: arial;
+            font-size: 2.2em;
+            font-weight: 300s;
+            background: linear-gradient(220deg, #9933ff, #80ffff);
+	        background-size: 400% 400%;
+            animation: css-change 11s ease infinite;
+        }
+        form {
+            background: #333;
+            height: 800px;
+            width: 100%;
+            margin-top: 100px;
+            color: #fff;
+        }
+        .container {
+            display: inline-block;
+            margin-top: 100px;
+            margin-left: 500px;
+        }
+        .container p {
+            margin-left: 20px;
+        }
+        #header {
+            position: absolute;
+            top: 100px;
+            left: 420px;
+        }
+        .container button {
+            position: absolute;
+            font-style: italic;
+            text-transform: uppercase;
+            border-radius: 20px 20px;
+            background-color: #fff;
+            padding: 22px;
+            left: 870px;
+            top: 385px;
+        }
+        .container button:hover {
+            background-color:grey;
+        }
+        form input{
+            border-radius: 20px 20px;
+            padding: 20px;
+            width: 300px;
+        }
+        @keyframes css-change {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+        }
+    </style>
+</head>
+<body>
+    
+    <form action="/psc/forgotPass" method="POST">
+        <section class='container'>
+            <p id="header">Requerimento de Troca de senha</p>
+            <p>Será enviado um e-mail para o detentor da conta, relacionado a troca de senha.</p>
+            <p>Insira o e-mail</p>
+            <input type="email" placeholder="example@gmail.com">
+            <button>enviar</button>        
+        </section>
+    </form>
+</body>
+</html>

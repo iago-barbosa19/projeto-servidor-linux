@@ -1,14 +1,13 @@
-
 import os, datetime
-
+from time import sleep
 
 class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, nameServer: str) -> None:
+    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverName: str) -> None:
         self.__ipv4:str = ipv4
         self.__subNetMask:str = subNetMask
         self.__domain:str = domain
-        self.__nameServer:str = nameServer
+        self.__nameServer:str = serverName
 
     def changeDnsBind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
@@ -60,6 +59,8 @@ class Dns():
                                             f'file "/etc/bind/db.{nomeArquivo[0]}";\n'\
                                             '};\n')
                     lines += 1
+            os.system('echo Configuração efetuada com sucesso!')
+            sleep(2)
             os.system('clear')
     
     def changeDnsApache2(self:object) -> None:
@@ -79,7 +80,9 @@ class Dns():
         Nessa pasta vai ficar guardado a página html index.
         Essa vai ser a página principal do DNS.
         """
+        nomeArquivo = self.__domain.split('.')
         os.chdir('/etc/apache2/sites-available')
+        os.system(f'cp -p ./000-default.conf ./{nomeArquivo[0]}.conf')
         try:
             os.mkdir('/var/www/sites')  # Pasta padrão. Talvez eu dê a opção para o usuário eventualmente.
         except FileExistsError:
@@ -88,22 +91,24 @@ class Dns():
             index.write('<html>\n<meta charset="utf-8"><head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
                         'margin: 500px; ">Página Principal funcionando</h1>\n</body>\n</html>')
         try:
-            os.system(f'cp -p ./000-default.conf ./{os.getlogin()}.conf')
-            with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
+            with open(f'{nomeArquivo[0]}.conf', 'w+') as apacheArquivo:
                 apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                     f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                     " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-                os.system(f'a2ensite {os.getlogin()}.conf')
         except FileExistsError:
-            os.system(f'echo O nomeArquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\ny/n')
-            if opc:= input() == 'y':
-                with open(f'{os.getlogin()}.conf', 'w+') as apacheArquivo:
+            print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
+            opc = input('y\n ->')
+            if opc == 'y':
+                with open(f'{nomeArquivo[0]}.conf', 'w+') as apacheArquivo:
                     apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-                os.system(f'a2ensite {os.getlogin()}.conf')
             else:
                 pass
+        os.system(f'a2ensite {nomeArquivo[0]}.conf')
+        os.system('echo Configuração efetuada com sucesso!')
+        sleep(2)
+        # self.saveSettings()
         os.system('clear')
             
     def dnsConf(self:object) -> None:
@@ -112,11 +117,14 @@ class Dns():
         Esse método que é chamado para configurar o DNS no geral."""
         self.changeDnsBind9()
         self.changeDnsApache2()
+        os.system('systemctl restart bind9')
+        os.system('systemctl restart apache2')
         
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
+<<<<<<< HEAD
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
@@ -127,13 +135,20 @@ class Dns():
         try:
             os.mknod(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigDNS.txt')
         except FileExistsError:
+=======
+        if os.path.exists('/etc/psc'):
             pass
-        finally:
-            with open('saveConfigDNS.txt', 'a+') as save:
-                save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
-                           f'Domínio:{self.__domain}|\nData da modificação:'\
-                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
-            os.system('echo A configuração foi salva com sucesso')
+        else:
+            os.system("mkdir /etc/psc")
+        if os.path.exists('/etc/psc/configs'):
+>>>>>>> testeFlaskPython
+            pass
+        else:
+            os.system(f"mkdir /etc/psc/configs")
+        with open('/etc/psc/configs/saveConfigDNS.txt', 'a') as save:
+            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
+                        f'Domínio:{self.__domain}|\nData da modificação:'\
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
     
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\

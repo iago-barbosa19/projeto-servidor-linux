@@ -1,5 +1,5 @@
 import os, datetime
-
+from time import sleep
 
 class Ip:
 
@@ -51,7 +51,8 @@ class Ip:
     def dns2(self:object, dns2: str) -> None:
         self.__dns2 = dns2
         
-    def networkIpSetter(self:object, ipv4:str, subNetMask:str) -> str:
+    @staticmethod
+    def networkIpSetter(ipv4:str, subNetMask:str) -> str:
         """
         Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
         Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
@@ -91,12 +92,36 @@ class Ip:
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
                 f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
                 f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-    os.system('clear')
+        os.system('echo Configuração efetuada com sucesso!')
+        sleep(2)
+        os.system('systemctl restart networking')
+        if os.getlogin() != 'www-data':
+            self.saveSettings()
+        os.system('clear')
+        
+    def ipConfAlt(self:object) -> None:
+        with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:
+            flaskServer.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
+                            "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
+                            "        AllowOverride None\n        Require all granted\n"\
+                            "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
+                            "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+        os.chdir('/etc/network')
+        with open('interfaces', 'w') as interfaces:
+            interfaces.write('source /etc/network/interfaces.d/*\n'\
+                '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
+                f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+        sleep(2)
+        if os.getlogin() != 'www-data':
+            self.saveSettings()
+        os.system('clear')
     
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
+<<<<<<< HEAD
         os.chdir(f'/home/{os.getlogin()}')
         try:
             os.mkdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
@@ -107,12 +132,20 @@ class Ip:
         try:
             os.mknod(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigIp.txt')
         except FileExistsError:
+=======
+        if os.path.exists('/etc/psc'):
             pass
-        finally:
-            with open('saveConfigIp.txt', 'a+') as save:
-                save.write(f'Informações Gerais\nIP:{self.ipv4}|Gateway:{self.gateway}|NetworkIp:{self.__networkIp}\n'\
-                           f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}|DNS2:{self.dns2}\nData da modificação:'\
-                           f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
+        else:
+            os.system(f"mkdir /etc/psc")
+        if os.path.exists('/etc/psc/configs'):
+>>>>>>> testeFlaskPython
+            pass
+        else:
+            os.system(f"mkdir /etc/psc/configs")
+        with open('/etc/psc/configs/saveConfigIp.txt', 'a') as save:
+            save.write(f'Informações Gerais\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|NetworkIp:{self.__networkIp}\n'\
+                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
+                        f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
     def __repr__(self):
         print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\

@@ -42,6 +42,18 @@
             left: 870px;
             top: 385px;
         }
+        .container button:hover {
+            background-color:grey;
+        }
+        #finalizado {
+            border: 2px solid;
+            background-color: #f007;
+            color: #fff;
+            height: 45px;
+            width: 220px;
+            margin: 10px 20px;
+            overflow: hidden;
+        }
         form input{
             border-radius: 20px 20px;
             padding: 20px;
@@ -56,13 +68,14 @@
 </head>
 <body>
     
-    <form action="trocarSenha/3002" method="POST">
+    <form action="/psc/forgotPass" method="POST">
         <section class='container'>
             <p id="header">Requerimento de Troca de senha</p>
             <p>Será enviado um e-mail para o detentor da conta, relacionado a troca de senha.</p>
             <p>Insira o e-mail</p>
             <input type="email" placeholder="example@gmail.com">
-            <button>enviar</button>        
+            <button>enviar</button>
+            <div id='finalizado'>E-mail enviado</div>        
         </section>
     </form>
 </body>

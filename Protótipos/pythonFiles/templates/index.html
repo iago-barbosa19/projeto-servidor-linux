@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href="{{ url_for('static',filename='styles/style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <script>
+        $(document).ready(function(){
+            $(document).ready(function(){
+				$('#togglePass').click(function(){
+                    if (document.getElementById("password").type === "password") {
+                        document.getElementById("password").type = "text";
+                    } else {
+                        document.getElementById("password").type = "password";
+                    }
+				});
+			});
+        })       
+    </script>
+</head>
+<body style='margin:0;box-sizing: border-box; overflow: hidden;'>
+<div class="login">
+    <p></p>
+    <form method="POST" action=''>
+        <div class="container">
+            <p id='textoLogin'>Login</p>
+            <p>E-mail</p>
+            <input type="email" title="E-mail de acesso" name="email" placeholder="E-mail">
+            <p>Senha</p>
+            <div class="container2">
+                <input type="password" title='Senha' name="senha" id="password" placeholder="Senha do usuário">
+                <a class="bi bi-eye-slash" id="togglePass"></a>
+            </div>
+            <a href="/psc/forgotPass" id='forgotPass'>Esqueci minha senha</a>
+            <br>
+            <button type='submit'style="margin: 170px 840px 80px 47%;" class='login-btn'>Login</button>
+        </div>
+    </form>
+</div>
+</body>
+</html> 
