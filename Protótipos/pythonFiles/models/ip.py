@@ -121,24 +121,11 @@ class Ip:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
-<<<<<<< HEAD
-        os.chdir(f'/home/{os.getlogin()}')
-        try:
-            os.mkdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        except FileExistsError:
-            pass
-        finally:
-            os.chdir(f'/home/{os.getlogin()}/Config_Saves_PSC')
-        try:
-            os.mknod(f'/home/{os.getlogin()}/Config_Saves_PSC/saveConfigIp.txt')
-        except FileExistsError:
-=======
         if os.path.exists('/etc/psc'):
             pass
         else:
             os.system(f"mkdir /etc/psc")
         if os.path.exists('/etc/psc/configs'):
->>>>>>> testeFlaskPython
             pass
         else:
             os.system(f"mkdir /etc/psc/configs")
