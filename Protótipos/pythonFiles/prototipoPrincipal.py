@@ -1,6 +1,4 @@
-from models.ip import Ip
-from models.dhcp import Dhcp
-from models.dns import Dns
+from models import Ip, Dhcp, Dns
 from time import sleep
 import os
 import json
@@ -92,13 +90,15 @@ def configServicos():
         dnsConfig.dnsConf()
         os.system('systemctl restart bind9')
         os.system('systemctl restart apache2')
-    print(language['services-config']['final'])
+    print(language['services-config']['dns']['final'])
     main()
 
 
 def checkServicos():
-    print('---------------------------------------------------\nServicos:\n1)Interface de rede\n2)DNS\n3)DHCP\n4)Voltar')
-    opc = int(input('O que deseja fazer? ->'))
+    language = language['services-config']['service-check']
+    print("---------------------------------------------------"+
+          language['main-text'])
+    opc = int(input(language['data-input']))
     if opc == 1:
         os.system('systemctl status networking')
     elif opc == 2:
@@ -107,13 +107,15 @@ def checkServicos():
     elif opc == 3:
         os.system('systemctl status isc-dhcp-server')
     sleep(5)
-    print('echo Voltando para a página inicial')
+    print(f'echo {language["final"]}')
     main()
 
 
 def installServices():
-    print('---------------------------------------------------\nServicos:\n1)DNS\n2)DHCP\n3)Voltar')
-    opc = int(input('O que deseja fazer? ->'))
+    language = language['services-config']['install-services']
+    print("---------------------------------------------------"+
+          language['main-text'])
+    opc = int(input(language['data-input']))
     if opc == 1:
         os.system('apt-get install --assume-yes apache2')
         os.system('apt-get install --assume-yes bind9')
@@ -129,13 +131,14 @@ def installServices():
             dhcpd.write('\nauthoritative;\n')
         os.system('chown -R www-data:www-data /etc/dhcp/dhcpd.conf')
         os.system('chown -R www-data:www-data /etc/default/isc-dhcp-server')
-    print('Voltando para a página inicial')
+    print(language['final'])
     main()
 
 
 def preparacaoServidor():
     log.debug('Preparamento do Servidor começou')
-    print('Iniciaremos a instalacao de alguns servicos para o funcionamento do aplicativo.')
+    language = language['server-preparation']
+    print(language['main-text'])
     sleep(1)
     ipv4=None
     contador = 0
@@ -161,7 +164,7 @@ def preparacaoServidor():
                 ipv4= dado.split(':')
             contador +=1
             if contador == configTamanho and 'IPV4:' in dado:
-                print('Por favor, faca a configuracao do IP por meio do nosso programa, para que identifiquemos o IP corretamente.')
+                print(language['ipv4-config-error'])
                 main()
     os.system('cp -p /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/flask.conf')
     with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:         # modify the below line. 
