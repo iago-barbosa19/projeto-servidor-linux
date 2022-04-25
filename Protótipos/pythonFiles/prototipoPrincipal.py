@@ -5,37 +5,23 @@ import json
 import logging
 
 
-
 log = logging.getLogger(__name__)
 
 language = None
 
 def main():
-    with open('appSettings.json', 'r') as dataConfs:
-        data = json.load(dataConfs)['actualLanguage'];
-        dataConfs.write.seek(0)
-        if(data == 'pt-BR'):
-            language = json.load(dataConfs)['languages']['pt-BR']["server-side"]
-        elif(data == 'en'): 
-            language = json.load(dataConfs)['languages']['en']["server-side"]
-        else: 
-            print('Please select your language\n1)Portuguese\n2)English')
-            languageOption = int(input('R:'))
-            with open('appSettings.json', 'w+') as languageConfig:
-                if(languageOption == 1):
-                    json.dump({"actualLanguage": "pt-BR"}, languageConfig)
-                elif(languageOption == 2):
-                    json.dump({"actualLanguage": "en"}, languageConfig)
+    # Tentativa de idioma
+    idioma()
     log.debug('Aplicativo comecou')
     os.system('clear')
     # Local temporário, para conseguir identificar se o aplicativo já está instalado, ou não.
-    if not os.path.exists('/etc/psc/fst'):        
-        with open('/etc/psc/fst', 'w') as fst:
-            fst.write('This program has been already initialized on this system.')
-        os.system(f'cp -r * /etc/psc/')
-        print(language["instalation"])
-        sleep(3)
-        os.system('clear')
+    # if not os.path.exists('/etc/psc/fst'):        
+        # with open('/etc/psc/fst', 'w') as fst:
+            # fst.write('This program has been already initialized on this system.')
+        # os.system(f'cp -r * /etc/psc/')
+        # print(language["instalation"])
+        # sleep(3)
+        # os.system('clear')
     print('---------------------------------------------------\n '+ language['main-page']['main-menu'])
     opc = int(input(language['main-page']['main-menu-input']))
     if opc == 1:
@@ -56,6 +42,9 @@ def main():
         if opc.lower() == 'y':
             preparacaoServidor()
         main()
+    elif opc == 5:
+        os.system('clear')
+        idioma(int(input(language['main-page']['languague-change'])))
     else:
         exit()
 
@@ -70,24 +59,24 @@ def configServicos():
         print(language['services-config']['interface']['main-text'])
         for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
             configs.append(input(language['services']['interface']['data-insert'] + f' {dado} ->'))
-        ipConfig = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4])
-        ipConfig.ipConf()
+        ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4])
+        ip_config.ipConf()
         os.system('systemctl restart networking')
     elif opc == 2:
         os.system('clear')
         print(language['services-config']['dhcp']['main-text'])
         for dado in ['ipv4', 'gateway', 'dns1', 'dns2', 'subnetMask', 'Pool Inicial do DHCP', 'Pool Final do DHCP']:
             configs.append(input(language['services-config']['dhcp']['data-input'] + f' {dado} ->'))
-        dhcpConfig = Dhcp(ipv4=configs[0], gateway=configs[1], dns1=configs[2], dns2=configs[3], subNetMask=configs[4], dhcpPoolInicial=configs[5], dhcpPoolFinal=configs[6])
-        dhcpConfig.dhcpConf()
+        dhcp_config = Dhcp(ipv4=configs[0], gateway=configs[1], dns1=configs[2], dns2=configs[3], subNetMask=configs[4], dhcpPoolInicial=configs[5], dhcpPoolFinal=configs[6])
+        dhcp_config.dhcpConf()
         os.system('systemctl restart isc-dhcp-server')
     elif opc == 3:
         os.system('clear')
         print(language['services-config']['dns']['main-text'])
         for dado in ['ipv4', 'subnetMask', 'dominio', 'Nome do servidor']:
             configs.append(input(language['services-config']['dns']['data-input'] + f'{dado} ->'))
-        dnsConfig = Dns(ipv4=configs[0], subNetMask=configs[1], domain=configs[2], serverName=configs[3])
-        dnsConfig.dnsConf()
+        dns_config = Dns(ipv4=configs[0], subNetMask=configs[1], domain=configs[2], serverName=configs[3])
+        dns_config.dnsConf()
         os.system('systemctl restart bind9')
         os.system('systemctl restart apache2')
     print(language['services-config']['dns']['final'])
@@ -180,7 +169,37 @@ def preparacaoServidor():
     os.system('systemctl restart apache2')
     log.debug("Fim do preparamento do Servidor")
     main()
-    
+
+
+def idioma(idioma = 0):
+    os.chdir('./Protótipos/pythonFiles/')
+    with open('appSettings.json', 'r') as data_confs:
+        data = json.load(data_confs)['actualLanguage']
+        data_confs.seek(0)
+        data = json.load(data_confs)
+        if(data == 'pt-BR'):
+            language = json.load(data_confs)['languages']['pt-BR']["server-side"]
+        elif(data == 'en'): 
+            language = json.load(data_confs)['languages']['en']["server-side"]
+        else: 
+            print('Please select your language\n1)Portuguese\n2)English')
+            language_option = int(input('R:'))
+            
+            with open('appSettings.json', 'w+') as language_config:
+                if(language_option == 1):
+                    data['actualLanguage'] = "pt-BR"
+                    language_config.write("{\n")
+                    for x, y in data.items():
+                        
+                        if(type(y) == str()):
+                            language_config.write(f'"{x}" : "{y}"'.replace("'", '"'))
+                        else:
+                            language_config.write(f'"{x}" : {y}'.replace("'", '"'))
+                    language_config.write("\n}")
+                elif(language_option == 2):
+                    data['actualLanguage'] = "en"
+                    json.dump(data, language_config)
+
 
 if __name__ == '__main__':
     if not os.path.exists('/etc/psc'):

@@ -5,11 +5,11 @@ class Dns():
     
     def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverName: str) -> None:
         self.__ipv4:str = ipv4
-        self.__subNetMask:str = subNetMask
+        self.__sub_net_mask:str = subNetMask
         self.__domain:str = domain
-        self.__nameServer:str = serverName
+        self.__name_server:str = serverName
 
-    def changeDnsBind9(self:object) -> None:
+    def change_dns_bind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
         Esse serviço seria para a configuração da página local de rede.
 
@@ -18,21 +18,21 @@ class Dns():
 
         Os arquivos db.local e db.0 respectivamente são copiados para a mesma página, com nomes devidamente alterados. 
 
-        nomeArquivo| A variável domínio é repartida de acordo com a pontuação, separando assim o domínio.
-        db.{nomeArquivo[0]}| Ele seria a cópia do nomeArquivo db.local. Usária o indíce 0 da lista. O conteúdo desse indíce seria o nome
+        nome_arquivo| A variável domínio é repartida de acordo com a pontuação, separando assim o domínio.
+        db.{nome_arquivo[0]}| Ele seria a cópia do nome_arquivo db.local. Usária o indíce 0 da lista. O conteúdo desse indíce seria o nome
         do domínio.
 
 
         """
         os.chdir('/etc/bind')
-        nomeArquivo = self.__domain.split('.')
+        nome_arquivo = self.__domain.split('.')
         try:
-            os.system(f'cp -p db.local db.{nomeArquivo[0]}')
+            os.system(f'cp -p db.local db.{nome_arquivo[0]}')
         except FileExistsError:
-            os.system(f'rm db.{nomeArquivo[0]}')
-            os.system(f'cp -p db.local db.{nomeArquivo[0]}')
-        with open(f'db.{nomeArquivo[0]}', 'w+') as dbAdminFile:
-            dbAdminFile.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
+            os.system(f'rm db.{nome_arquivo[0]}')
+            os.system(f'cp -p db.local db.{nome_arquivo[0]}')
+        with open(f'db.{nome_arquivo[0]}', 'w+') as db_admin_file:
+            db_admin_file.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
                             f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
                             f'                             2         ; Serial\n'\
                             f'                        604800         ; Refresh\n'\
@@ -43,46 +43,46 @@ class Dns():
                             f'www     IN      A       {self.__ipv4}\n'\
                             f'ftp     IN      A       {self.__ipv4}\n\n')
         
-        with open('named.conf.default-zones', 'r') as defaultZones:
+        with open('named.conf.default-zones', 'r') as default_zones:
             lines = 0
-            temporaryData = []
-            for data in defaultZones.readlines():
-                temporaryData.append(data)
-            for checkDatas in temporaryData:
-                    if checkDatas == f'// zona {self.__domain}\n':
+            temporary_data = []
+            for data in default_zones.readlines():
+                temporary_data.append(data)
+            for check_datas in temporary_data:
+                    if check_datas == f'// zona {self.__domain}\n':
                         os.system('echo Zona já cadastrada')
                         break
-                    elif lines == (len(temporaryData) - 1):
-                        with open('named.conf.default-zones', 'a') as defaultZones1:
-                            defaultZones1.write(f'// zona {self.__domain}\nzone "{self.__domain}" '\
+                    elif lines == (len(temporary_data) - 1):
+                        with open('named.conf.default-zones', 'a') as default_zones1:
+                            default_zones1.write(f'// zona {self.__domain}\nzone "{self.__domain}" '\
                                             '{\n        type master;\n        '\
-                                            f'file "/etc/bind/db.{nomeArquivo[0]}";\n'\
+                                            f'file "/etc/bind/db.{nome_arquivo[0]}";\n'\
                                             '};\n')
                     lines += 1
             os.system('echo Configuração efetuada com sucesso!')
             sleep(2)
             os.system('clear')
     
-    def changeDnsApache2(self:object) -> None:
+    def change_dns_apache2(self:object) -> None:
         """Configuração do serviço Apache2.
         Por meio desta configuração que é possível que o BIND9 funcione de maneira adequada e acesse sites.
 
-        O método executa cópia o nomeArquivo 000-default.conf para a mesma página, no entanto com o nome do usuário logado.
-        Como o nomeArquivo 000-default.conf já tem as permissões pré-definidas durante a instalação do serviço apache2, foi decidido
-        copiar o nomeArquivo e alterá-lo, pois desta forma era possível ter certeza de que erros devido à falta de permissões não ocorreriam.
+        O método executa cópia o nome_arquivo 000-default.conf para a mesma página, no entanto com o nome do usuário logado.
+        Como o nome_arquivo 000-default.conf já tem as permissões pré-definidas durante a instalação do serviço apache2, foi decidido
+        copiar o nome_arquivo e alterá-lo, pois desta forma era possível ter certeza de que erros devido à falta de permissões não ocorreriam.
 
         Após executar a cópia, as alterações começam a serem feitas nela.
         
-        Caso o nomeArquivo já exista, é possível sobrescreve-lo, ou deixá-lo intacto.
+        Caso o nome_arquivo já exista, é possível sobrescreve-lo, ou deixá-lo intacto.
 
         Esse método também cria pasta sites, localizada no diretório /etc/www
 
         Nessa pasta vai ficar guardado a página html index.
         Essa vai ser a página principal do DNS.
         """
-        nomeArquivo = self.__domain.split('.')
+        nome_arquivo = self.__domain.split('.')
         os.chdir('/etc/apache2/sites-available')
-        os.system(f'cp -p ./000-default.conf ./{nomeArquivo[0]}.conf')
+        os.system(f'cp -p ./000-default.conf ./{nome_arquivo[0]}.conf')
         try:
             os.mkdir('/var/www/sites')  # Pasta padrão. Talvez eu dê a opção para o usuário eventualmente.
         except FileExistsError:
@@ -91,36 +91,36 @@ class Dns():
             index.write('<html>\n<meta charset="utf-8"><head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
                         'margin: 500px; ">Página Principal funcionando</h1>\n</body>\n</html>')
         try:
-            with open(f'{nomeArquivo[0]}.conf', 'w+') as apacheArquivo:
-                apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
+            with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
+                apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
                                     f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                     " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
         except FileExistsError:
             print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
             opc = input('y\n ->')
             if opc == 'y':
-                with open(f'{nomeArquivo[0]}.conf', 'w+') as apacheArquivo:
-                    apacheArquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__nameServer}\n\n        ServerAlias www.{self.__domain}\n        "\
+                with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
+                    apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
             else:
                 pass
-        os.system(f'a2ensite {nomeArquivo[0]}.conf')
+        os.system(f'a2ensite {nome_arquivo[0]}.conf')
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
-        # self.saveSettings()
+        # self.save_settings()
         os.system('clear')
             
-    def dnsConf(self:object) -> None:
+    def dns_conf(self:object) -> None:
         """Função que inicializa as configurações do DNS. 
         Ela inicializa os métodos de configuração de cada um dos serviços.
         Esse método que é chamado para configurar o DNS no geral."""
-        self.changeDnsBind9()
-        self.changeDnsApache2()
+        self.change_dns_bind9()
+        self.change_dns_apache2()
         os.system('systemctl restart bind9')
         os.system('systemctl restart apache2')
         
-    def saveSettings(self:object) -> None:
+    def save_settings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das da configuração DNS, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
@@ -133,12 +133,12 @@ class Dns():
         else:
             os.system(f"mkdir /etc/psc/configs")
         with open('/etc/psc/configs/saveConfigDNS.txt', 'a') as save:
-            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__subNetMask}|\n'\
+            save.write(f'IPV4:{self.__ipv4}| Máscara de Sub-Rede:{self.__sub_net_mask}|\n'\
                         f'Domínio:{self.__domain}|\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração:{os.getlogin()}\n\n')
     
     def __repr__(self):
-        print('Os métodos que é possível visualizar as Docstrings:\ndnsConf\nchangeDnsApache2\nchangeDnsBind9\nsaveSettings\n\n'\
+        print('Os métodos que é possível visualizar as Docstrings:\ndns_conf\nchange_dns_apache2\nchange_dns_bind9\nsave_settings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')
 
 

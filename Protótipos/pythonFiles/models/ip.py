@@ -3,13 +3,13 @@ from time import sleep
 
 class Ip:
 
-    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, subNetMask:str) -> None:
+    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, sub_net_mask:str) -> None:
         self.__ipv4 = ipv4
         self.__gateway = gateway
         self.__dns1 = dns1
         self.__dns2 = dns2
-        self.__subNetMask = subNetMask
-        self.__networkIp = self.networkIpSetter(ipv4, subNetMask)
+        self.__sub_net_mask = sub_net_mask
+        self.__network_ip = self.network_ip_setter(ipv4, sub_net_mask)
     
     @property
     def ipv4(self:object) -> str:
@@ -28,12 +28,12 @@ class Ip:
         return self.__dns2
     
     @property
-    def networkIp(self:object) -> str:
-        return self.__networkIp
+    def network_ip(self:object) -> str:
+        return self.__network_ip
 
     @property
-    def subNetMask(self:object) -> str:
-        return self.__subNetMask
+    def sub_net_mask(self:object) -> str:
+        return self.__sub_net_mask
 
     @ipv4.setter
     def ipv4(self:object, ipv4:str) -> None:
@@ -52,7 +52,7 @@ class Ip:
         self.__dns2 = dns2
         
     @staticmethod
-    def networkIpSetter(ipv4:str, subNetMask:str) -> str:
+    def network_ip_setter(ipv4:str, sub_net_mask:str) -> str:
         """
         Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
         Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
@@ -60,21 +60,21 @@ class Ip:
         Ele separa a máscara de sub-rede para que vire uma lista com 4 indíces, para que assim cada indíce contenha uma string.
         É feito um cast nas Strings para virarem Int, e assim poder ser checado os valores maiores ou iguais a 0.
         """
-        subNetMask = subNetMask.split('.')
-        subNetMask = [int(subNetMask[0]), int(subNetMask[1]), int(subNetMask[2]), int(subNetMask[3])]
-        if subNetMask[0] == 255 and subNetMask[1] == 0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+        sub_net_mask = sub_net_mask.split('.')
+        sub_net_mask = [int(sub_net_mask[0]), int(sub_net_mask[1]), int(sub_net_mask[2]), int(sub_net_mask[3])]
+        if sub_net_mask[0] == 255 and sub_net_mask[1] == 0 and sub_net_mask[2] == 0 and sub_net_mask[3] == 0:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.0.0.0'
             return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] >0 and subNetMask[2] == 0 and subNetMask[3] == 0:
+        elif sub_net_mask[0] == 255 and sub_net_mask[1] >0 and sub_net_mask[2] == 0 and sub_net_mask[3] == 0:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.0.0'
             return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] == 255 and subNetMask[2] > 0 and subNetMask[3] == 0:
+        elif sub_net_mask[0] == 255 and sub_net_mask[1] == 255 and sub_net_mask[2] > 0 and sub_net_mask[3] == 0:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
             return  ipv4
-        elif subNetMask[0] == 255 and subNetMask[1] == 255 and subNetMask[2] == 255 and subNetMask[3] > 0:
+        elif sub_net_mask[0] == 255 and sub_net_mask[1] == 255 and sub_net_mask[2] == 255 and sub_net_mask[3] > 0:
             ipv4 = ipv4.split('.')
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
             return  ipv4
@@ -90,18 +90,18 @@ class Ip:
         with open('interfaces', 'w') as interfaces:
             interfaces.write('source /etc/network/interfaces.d/*\n'\
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
-                f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
-                f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         os.system('echo Configuração efetuada com sucesso!')
         sleep(2)
         os.system('systemctl restart networking')
         if os.getlogin() != 'www-data':
-            self.saveSettings()
+            self.save_settings()
         os.system('clear')
         
     def ipConfAlt(self:object) -> None:
-        with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:
-            flaskServer.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
+        with open('/etc/apache2/sites-available/flask.conf', 'w') as flask_server:
+            flask_server.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
                             "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
                             "        AllowOverride None\n        Require all granted\n"\
                             "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
@@ -110,14 +110,14 @@ class Ip:
         with open('interfaces', 'w') as interfaces:
             interfaces.write('source /etc/network/interfaces.d/*\n'\
                 '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
-                f'address {self.ipv4}\nnetmask {self.subNetMask}\n'\
-                f'network {self.networkIp}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         sleep(2)
         if os.getlogin() != 'www-data':
-            self.saveSettings()
+            self.save_settings()
         os.system('clear')
     
-    def saveSettings(self:object) -> None:
+    def save_settings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
         Aqui salva todas as informaçãos das interfaces de rede, para seber quando foram modificadas, e para o que foram modificadas, para que assim seja
         possível ter uma espécie de backup de configurações passadas e qual usuário mudou elas."""
@@ -130,12 +130,12 @@ class Ip:
         else:
             os.system(f"mkdir /etc/psc/configs")
         with open('/etc/psc/configs/saveConfigIp.txt', 'a') as save:
-            save.write(f'Informações Gerais\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|NetworkIp:{self.__networkIp}\n'\
-                        f'Subnet Mask:{self.subNetMask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
+            save.write(f'Informações Gerais\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|network_ip:{self.__network_ip}\n'\
+                        f'Subnet Mask:{self.sub_net_mask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
     def __repr__(self):
-        print('Os métodos que é possível visualizar as Docstrings:\nipConf\nnetworkIpSetter\nsaveSettings\n\n'\
+        print('Os métodos que são possíveis visualizar com as Docstrings:\nipConf\nnetwork_ip_setter\nsave_settings\n\n'\
               'Em casos de dúvidas no uso do programa, consulte-as.')    
         
         
