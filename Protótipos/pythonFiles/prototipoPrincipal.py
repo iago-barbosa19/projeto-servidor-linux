@@ -1,6 +1,7 @@
 from models import Ip, Dhcp, Dns
 from time import sleep
 import os
+import tqdm
 import json
 import logging
 
@@ -12,7 +13,6 @@ language = None
 def main():
     # Tentativa de idioma
     idioma()
-    log.debug('Aplicativo comecou')
     os.system('clear')
     # Local temporário, para conseguir identificar se o aplicativo já está instalado, ou não.
     # if not os.path.exists('/etc/psc/fst'):        
@@ -61,7 +61,6 @@ def configServicos():
             configs.append(input(language['services']['interface']['data-insert'] + f' {dado} ->'))
         ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4])
         ip_config.ipConf()
-        os.system('systemctl restart networking')
     elif opc == 2:
         os.system('clear')
         print(language['services-config']['dhcp']['main-text'])
@@ -69,7 +68,6 @@ def configServicos():
             configs.append(input(language['services-config']['dhcp']['data-input'] + f' {dado} ->'))
         dhcp_config = Dhcp(ipv4=configs[0], gateway=configs[1], dns1=configs[2], dns2=configs[3], subNetMask=configs[4], dhcpPoolInicial=configs[5], dhcpPoolFinal=configs[6])
         dhcp_config.dhcpConf()
-        os.system('systemctl restart isc-dhcp-server')
     elif opc == 3:
         os.system('clear')
         print(language['services-config']['dns']['main-text'])
@@ -77,9 +75,7 @@ def configServicos():
             configs.append(input(language['services-config']['dns']['data-input'] + f'{dado} ->'))
         dns_config = Dns(ipv4=configs[0], subNetMask=configs[1], domain=configs[2], serverName=configs[3])
         dns_config.dnsConf()
-        os.system('systemctl restart bind9')
-        os.system('systemctl restart apache2')
-    print(language['services-config']['dns']['final'])
+    print(language['services-config']['final'])
     main()
 
 
@@ -171,7 +167,7 @@ def preparacaoServidor():
     main()
 
 
-def idioma(idioma = 0):
+def idioma():
     os.chdir('./Protótipos/pythonFiles/')
     with open('appSettings.json', 'r') as data_confs:
         data = json.load(data_confs)['actualLanguage']
@@ -185,29 +181,28 @@ def idioma(idioma = 0):
             print('Please select your language\n1)Portuguese\n2)English')
             language_option = int(input('R:'))
             
-            with open('appSettings.json', 'w+') as language_config:
+            with open('appSettings.json', 'w+', encoding='utf-8') as language_config:
                 if(language_option == 1):
                     data['actualLanguage'] = "pt-BR"
-                    language_config.write("{\n")
-                    for x, y in data.items():
-                        
-                        if(type(y) == str()):
-                            language_config.write(f'"{x}" : "{y}"'.replace("'", '"'))
-                        else:
-                            language_config.write(f'"{x}" : {y}'.replace("'", '"'))
-                    language_config.write("\n}")
                 elif(language_option == 2):
                     data['actualLanguage'] = "en"
-                    json.dump(data, language_config)
+                language_config.write("{\n")
+                for x, y in data.items():        
+                    if(x == "actualLanguage"):
+                        language_config.write(f', "{x}" : "{y}"'.replace("'", '"'))
+                    else:
+                        language_config.write(f'"{x}" : {y}'.replace("'", '"'))
+                language_config.write("\n}")
 
 
 if __name__ == '__main__':
-    if not os.path.exists('/etc/psc'):
-        os.system('clear')
-        os.system('mkdir -p /etc/psc')
     # Forma de se configurar um log
     logging.basicConfig(level=logging.DEBUG, 
                                 format='%(asctime)s %(name)s %(levelname)s %(message)s',
                                 filename='psc.log',
-                                filemode='a')  # Filemodes = A == append. w == write
+                                filemode='a')
+    log.debug('Aplicativo comecou')
+    if not os.path.exists('/etc/psc'):
+        os.system('clear')
+        os.system('mkdir -p /etc/psc')
     main()

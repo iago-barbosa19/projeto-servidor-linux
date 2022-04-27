@@ -1,3 +1,4 @@
 .fst
 .Prototipo.py
 .test_services.py
+*/__pycache__

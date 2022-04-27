@@ -1,5 +1,7 @@
-from models.ip import Ip
-import os, datetime
+from models import Ip
+import os
+import datetime
+import tqdm
 from time import sleep
 
 class Dhcp(Ip):
@@ -23,37 +25,44 @@ class Dhcp(Ip):
         O método configura uma pool DHCP de acordo com os dados que forem inseridos e passados para a classe.
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.    
         """
-        os.chdir('/etc/dhcp')
-        if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):
-            with open('dhcpd.conf', 'a') as dhcpd:
-                dhcpd.write('authoritative;\n')
-        with open('dhcpd.conf', 'r+') as dhcp_config:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
-            lines = 0
-            temporary_data = []
-            dhcp_config.seek(0)
-            for data in dhcp_config.readlines():
-                temporary_data.append(data)
-            for data in temporary_data:
-                if f'#DHCP Rede:{self.__network_ip}\n' == data:
-                    os.system('echo Essa rede já esta cadastrada.')
-                    break
-                elif lines == (len(temporary_data) - 1):
-                    with open('dhcpd.conf', 'a') as dhcpd:
-                        dhcpd.write(f'\n\n#DHCP Rede:{self.network_ip}\nsubnet {self.network_ipSetter(self.ipv4, self.sub_net_mask)} netmask {self.sub_net_mask}'\
-                                    ' {\n  range'\
-                                    f' {self.dhcp_pool_inicial} {self.dhcp_pool_final};\n  option routers {self.gateway};\n  '\
-                                    f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
-                                    '}')
-                    dhcp_config.seek(0)
-                lines += 1
-        os.chdir('/etc/default')
-        with open('isc-dhcp-server', 'w') as iscDhcpServer:
-            iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
-        os.system('echo Configuração efetuada com sucesso!')
-        sleep(2)
-        os.system('systemctl restart isc-dhcp-server')
-        # self.saveSettings()
-        os.system('clear')
+        with tqdm(total=20) as pbar:
+            os.chdir('/etc/dhcp')
+            if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):
+                with open('dhcpd.conf', 'a') as dhcpd:
+                    dhcpd.write('authoritative;\n')
+            pbar.update(5)
+            sleep(0.2)
+            with open('dhcpd.conf', 'r+') as dhcp_config:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
+                lines = 0
+                temporary_data = []
+                dhcp_config.seek(0)
+                for data in dhcp_config.readlines():
+                    temporary_data.append(data)
+                for data in temporary_data:
+                    if f'#DHCP Rede:{self.__network_ip}\n' == data:
+                        os.system('echo Essa rede já esta cadastrada.')
+                        break
+                    elif lines == (len(temporary_data) - 1):
+                        with open('dhcpd.conf', 'a') as dhcpd:
+                            dhcpd.write(f'\n\n#DHCP Rede:{self.network_ip}\nsubnet {self.network_ipSetter(self.ipv4, self.sub_net_mask)} netmask {self.sub_net_mask}'\
+                                        ' {\n  range'\
+                                        f' {self.dhcp_pool_inicial} {self.dhcp_pool_final};\n  option routers {self.gateway};\n  '\
+                                        f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                        '}')
+                        dhcp_config.seek(0)
+                    lines += 1
+                pbar.update(5)
+                sleep(0.2)
+            os.chdir('/etc/default')
+            with open('isc-dhcp-server', 'w') as iscDhcpServer:
+                iscDhcpServer.write('INTERFACESv4="enp0s3"\nINTERFACESv6=""')
+            pbar.update(5)
+            sleep(0.2)
+            os.system('systemctl restart isc-dhcp-server')
+            # self.saveSettings()
+            pbar.update(5)
+            sleep(1.5)
+            os.system('clear')
         
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
