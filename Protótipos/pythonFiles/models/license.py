@@ -7,8 +7,8 @@ class Licence():
     
 
 if __name__ == '__main__':
-    result = subprocess.run(['ipconfig', '/all'], shell=True, universal_newlines=True, stdout=subprocess.PIPE).stdout
-    for x in result.split(':'):
-        if x == "Endere‡o F¡sico":
-            print(x)
-    pass
+    interfaces = 'INTERFACESv4="enp0s3, enp0s8"\nINTERFACESv6=""'
+    interfaces = interfaces.split("\n")[0]
+    if interfaces.split('"')[1]:
+        print(interfaces.split('"')[1])
+    

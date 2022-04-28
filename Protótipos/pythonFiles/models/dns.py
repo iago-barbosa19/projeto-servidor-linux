@@ -1,7 +1,11 @@
+from time import sleep
 import os
 import datetime
 import tqdm
-from time import sleep
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class Dns():
     
@@ -159,5 +163,11 @@ class Dns():
               'Em casos de dúvidas no uso do programa, consulte-as.')
 
 
-if __name__ == '__main__':
+if not __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, 
+                                format='%(asctime)s %(name)s %(levelname)s %(message)s',
+                                filename='psc.log',
+                                filemode='a',
+                                encoding='utf8')
+else:
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')

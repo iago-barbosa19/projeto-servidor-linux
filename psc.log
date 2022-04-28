@@ -1,0 +1,10 @@
+2022-04-28 11:42:28,817 __main__ DEBUG Fadami - Aplicativo comecou
+2022-04-28 15:39:36,914 werkzeug INFO  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.140.141:5000 (Press CTRL+C to quit)
+2022-04-28 15:40:44,111 werkzeug INFO  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-04-28 15:43:58,770 werkzeug INFO  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-04-28 15:46:47,231 werkzeug INFO  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-04-28 15:48:53,969 __main__ DEBUG Fadami - Aplicativo comecou
+2022-04-28 15:48:57,092 __main__ DEBUG Fadami - Mudança de Idioma
