@@ -1,6 +1,7 @@
 from models import Ip, Dhcp, Dns
 from time import sleep
 import os
+import subprocess
 import tqdm
 import json
 import logging
@@ -25,11 +26,9 @@ def main():
     print('---------------------------------------------------\n '+ language['main-page']['main-menu'])
     opc = int(input(language['main-page']['main-menu-input']))
     if opc == 1:
-        log.debug('Configurando Servicos.')
         os.system('clear')
         configServicos()
     elif opc == 2:
-        log.debug('Configurando Servicos.')
         os.system('clear')
         checkServicos()
     elif opc == 3:
@@ -50,17 +49,29 @@ def main():
 
 
 def configServicos():
+    log.debug('Entrando na Configuração de Serviços')
     configs = []
     print('---------------------------------------------------'+
           language['services-config']['main-menu'])
     opc = int(input(language['services-config']['main-menu-input']))
     if opc == 1:
+        log.debug('Configurando interface IPV4')
         os.system('clear')
-        print(language['services-config']['interface']['main-text'])
-        for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
-            configs.append(input(language['services']['interface']['data-insert'] + f' {dado} ->'))
-        ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4])
-        ip_config.ipConf()
+        system_interfaces = []
+        interface = subprocess(["ip", "addr"], stdout=subprocess.PIPE, universal_newlines=True).stdout()
+        with open("appSettings.json", "r") as interface_names:
+            interfaces = interface_names['os-interfaces-names'].readlines()
+            for network_interface in interfaces:
+                if network_interface in interface:
+                    system_interfaces.append(network_interface)
+                    log.debug(f'Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
+        print(len(system_interfaces) == 1 if language['services-config']['interface']['main-text'] 
+              else language['services-config']['interface']['main-text2'])
+        for x in range((len(system_interfaces))):
+            for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
+                configs.append(input(language['services']['interface']['data-insert'] + f' {dado} ->'))
+            ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4], interface=configs[5])
+            ip_config.ipConf()
     elif opc == 2:
         os.system('clear')
         print(language['services-config']['dhcp']['main-text'])

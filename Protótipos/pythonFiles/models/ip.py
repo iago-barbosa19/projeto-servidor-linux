@@ -5,11 +5,12 @@ from time import sleep
 
 class Ip:
 
-    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, sub_net_mask:str) -> None:
+    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, sub_net_mask:str, interface: str) -> None:
         self.__ipv4 = ipv4
         self.__gateway = gateway
         self.__dns1 = dns1
         self.__dns2 = dns2
+        self.__interface = interface
         self.__sub_net_mask = sub_net_mask
         self.__network_ip = self.network_ip_setter(ipv4, sub_net_mask)
     
@@ -37,6 +38,10 @@ class Ip:
     def sub_net_mask(self:object) -> str:
         return self.__sub_net_mask
 
+    @property
+    def interface(self:object) -> str:
+        return self.__interface
+    
     @ipv4.setter
     def ipv4(self:object, ipv4:str) -> None:
         self.__ipv4 = ipv4
@@ -52,6 +57,10 @@ class Ip:
     @dns2.setter
     def dns2(self:object, dns2: str) -> None:
         self.__dns2 = dns2
+        
+    @interface.setter
+    def interface(self:object, interface: str) -> None:
+        self.__interface = interface
         
     @staticmethod
     def network_ip_setter(ipv4:str, sub_net_mask:str) -> str:
@@ -92,7 +101,7 @@ class Ip:
             os.chdir('/etc/network')
             with open('interfaces', 'w') as interfaces:
                 interfaces.write('source /etc/network/interfaces.d/*\n'\
-                    '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                    f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
                     f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
                     f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
             pbar.update(5)
@@ -117,7 +126,7 @@ class Ip:
                 os.chdir('/etc/network')
                 with open('interfaces', 'w') as interfaces:
                     interfaces.write('source /etc/network/interfaces.d/*\n'\
-                        '\nauto lo\niface lo inet loopback\n\nauto enp0s3\niface enp0s3 inet static\n'\
+                        f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
                         f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
                         f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
                 pbar.update(5)
@@ -141,7 +150,7 @@ class Ip:
         else:
             os.system(f"mkdir /etc/psc/configs")
         with open('/etc/psc/configs/saveConfigIp.txt', 'a') as save:
-            save.write(f'Informações Gerais\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|network_ip:{self.__network_ip}\n'\
+            save.write(f'Informações Gerais\n|Interface:{self.interface}\n|IPV4:{self.ipv4}\n|Gateway:{self.gateway}\n|network_ip:{self.__network_ip}\n'\
                         f'Subnet Mask:{self.sub_net_mask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
