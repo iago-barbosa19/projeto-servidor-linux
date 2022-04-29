@@ -13,7 +13,7 @@ language = None
 
 def main():
     # Tentativa de idioma
-    idioma()
+    language = idioma()
     os.system('clear')
     # Local temporário, para conseguir identificar se o aplicativo já está instalado, ou não.
     # if not os.path.exists('/etc/psc/fst'):        
@@ -23,7 +23,7 @@ def main():
         # print(language["instalation"])
         # sleep(3)
         # os.system('clear')
-    print('---------------------------------------------------\n '+ language['main-page']['main-menu'])
+    print('---------------------------------------------------\n'+ language['main-page']['main-menu'])
     opc = int(input(language['main-page']['main-menu-input']))
     if opc == 1:
         os.system('clear')
@@ -191,24 +191,28 @@ def idioma():
         data_confs.seek(0)
         data = json.load(data_confs)
         if(data == 'pt-BR'):
-            language = json.load(data_confs)['languages']['pt-BR']["server-side"]
+            return json.load(data_confs)['languages']['pt-BR']["server-side"]
         elif(data == 'en'): 
-            language = json.load(data_confs)['languages']['en']["server-side"]
+            return json.load(data_confs)['languages']['en']["server-side"]
         else: 
             print('Please select your language\n1)Portuguese\n2)English')
             language_option = int(input('R:'))
             with open('appSettings.json', 'w+', encoding='utf-8') as language_config:
                 if(language_option == 1):
                     data['actualLanguage'] = "pt-BR"
+                    language_option = "pt-BR"
                 elif(language_option == 2):
                     data['actualLanguage'] = "en"
+                    language_option = "en"
                 language_config.write("{\n")
                 for x, y in data.items():        
                     if(x == "actualLanguage"):
-                        language_config.write(f', "{x}" : "{y}"'.replace("'", '"'))
+                        language_config.write(f',"{x}" : "{y}",'.replace("'", '"'))
                     else:
                         language_config.write(f'"{x}" : {y}'.replace("'", '"'))
                 language_config.write("\n}")
+            data_confs.seek(0)
+            return json.load(data_confs)['languages'][language_option]['server-side']
 
 
 if __name__ == '__main__':

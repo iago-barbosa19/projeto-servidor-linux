@@ -1,6 +1,6 @@
 from models import Ip
 from time import sleep
-# from enum import Error
+from enumTypes import Error
 import logging
 import os
 import datetime
@@ -31,7 +31,7 @@ class Dhcp(Ip):
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.    
         """
         log.debug(f"{os.getlogin()} - Iniciando configuração do serviço DHCP")
-        # error = Error()
+        error = Error()
         with tqdm(total=20) as pbar:
             os.chdir('/etc/dhcp')
             if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):

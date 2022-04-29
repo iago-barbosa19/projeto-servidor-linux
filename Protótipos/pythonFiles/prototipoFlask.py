@@ -1,9 +1,9 @@
 import os
 from flask import Flask, redirect, render_template, session, url_for, request
 from secrets import token_hex
-from models.ip import Ip
-from models.dns import Dns
-from models.dhcp import Dhcp
+from models import Ip
+from models import Dns
+from models import Dhcp
 
 software = Flask(__name__)
 software.secret_key = token_hex(16)
@@ -90,4 +90,4 @@ def forgotPass():
 
 
 if __name__ == '__main__':
-    software.run()
+    software.run(host="0.0.0.0", port=8080)
