@@ -25,3 +25,4 @@ with open("./Protótipos/pythonFiles/appSettings.json", "r") as interfaceNames:
     for network_interface in interfaces:
         if network_interface in network_interfaces:
             print(network_interface)
+            

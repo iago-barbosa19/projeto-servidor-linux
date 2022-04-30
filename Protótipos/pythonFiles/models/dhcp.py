@@ -30,7 +30,7 @@ class Dhcp(Ip):
         O método configura uma pool DHCP de acordo com os dados que forem inseridos e passados para a classe.
         O arquivo é modificado direto no diretório /etc/dhcp e /etc/default.    
         """
-        log.debug(f"{os.getlogin()} - Iniciando configuração do serviço DHCP")
+        log.info(f"{os.getlogin()} - Iniciando configuração do serviço DHCP")
         error = Error()
         with tqdm(total=20) as pbar:
             os.chdir('/etc/dhcp')

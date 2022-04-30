@@ -1,4 +1,7 @@
 .fst
 .Prototipo.py
 .test_services.py
+.log
 */__pycache__
+*/.vscode
+*/.pytest_cache

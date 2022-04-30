@@ -101,7 +101,7 @@ class Ip:
         Esse método devia ser usado '@final' nele, para que não possa ser extendido por mais nenhum outro, porém
         como é normal ver máquinas com Python 3.7 para baixo, ainda não coloquei os itens da nova versão.
         """
-        log.debug(f"{os.getlogin()} - Iniciando configuração de interface")
+        log.info(f"{os.getlogin()} - Iniciando configuração de interface")
         with tqdm(total=10) as pbar:
             os.chdir('/etc/network')
             with open('interfaces', 'w') as interfaces:
@@ -120,7 +120,6 @@ class Ip:
             os.system('clear')
             
         def ipConfAlt(self:object) -> None:
-            # ?
             with tqdm(total=15) as pbar:
                 with open('/etc/apache2/sites-available/flask.conf', 'w') as flask_server:
                     flask_server.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\

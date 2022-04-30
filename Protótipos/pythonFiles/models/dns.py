@@ -30,14 +30,21 @@ class Dns():
 
 
         """
+        log.info(f'{os.getlogin()} - Configuração do serviço Bind9 iniciada')
         with tqdm(total=20) as pbar:
             os.chdir('/etc/bind')
             nome_arquivo = self.__domain.split('.')
             try:
                 os.system(f'cp -p db.local db.{nome_arquivo[0]}')
+                log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
             except FileExistsError:
+                log.warning(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} já existe no sistema. Backup enviado para /etc/bind/backup/')
+                if not os.path.exists('/etc/bind/backup/'):
+                    os.mkdir('./backup')
+                os.system(f"cp -p {nome_arquivo[0]} ./backup/{nome_arquivo[0]}")
                 os.system(f'rm db.{nome_arquivo[0]}')
                 os.system(f'cp -p db.local db.{nome_arquivo[0]}')
+                log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
             pbar.update(5)
             sleep(0.2)
             with open(f'db.{nome_arquivo[0]}', 'w+') as db_admin_file:
@@ -52,6 +59,7 @@ class Dns():
                                 f'www     IN      A       {self.__ipv4}\n'\
                                 f'ftp     IN      A       {self.__ipv4}\n\n')
             pbar.update(5)
+            log.debug(f'{os.getlogin()} - db.{nome_arquivo[0]} configurado com sucesso')
             sleep(0.2)
             with open('named.conf.default-zones', 'r') as default_zones:
                 lines = 0
@@ -62,7 +70,7 @@ class Dns():
                 sleep(0.2)
                 for check_datas in temporary_data:
                         if check_datas == f'// zona {self.__domain}\n':
-                            os.system('echo Zona já cadastrada')
+                            log.warning(f'{os.getlogin()} - A zona {self.__domain} já foi cadastrada')
                             break
                         elif lines == (len(temporary_data) - 1):
                             with open('named.conf.default-zones', 'a') as default_zones1:
@@ -92,14 +100,23 @@ class Dns():
         Nessa pasta vai ficar guardado a página html index.
         Essa vai ser a página principal do DNS.
         """
+        log.info(f'{os.getlogin()} - Iniciada a configuração do serviço Apache2')
         with tqdm(total=20) as pbar:    
             nome_arquivo = self.__domain.split('.')
             os.chdir('/etc/apache2/sites-available')
-            os.system(f'cp -p ./000-default.conf ./{nome_arquivo[0]}.conf')
+            try:
+                os.system(f'cp -p ./000-default.conf ./{nome_arquivo[0]}.conf')
+            except FileExistsError:
+                log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]} já existe. Ele será enviado para /etc/apache2/sites-available/backup')
+                if not os.path.exists('/etc/apache2/sites-available/backup/'):
+                    os.mkdir('./backup')
+                os.system(f'cp -p db.{nome_arquivo[0]} ./backup')
             pbar.update(5)
             sleep(0.2)
             try:
-                os.mkdir('/var/www/sites')  # Pasta padrão. Talvez eu dê a opção para o usuário eventualmente.
+                os.mkdir('/var/www/sites')  # Pasta padrão. Como é para testes, vai continuar assim.
+                log.debug(f'{os.getlogin()} - Pasta para armazenar as páginas Web criada com sucesso')
+                # Talvez o usuário tenha opção de decidir a pasta mais para frente.
             except FileExistsError:
                 pass
             pbar.update(5)
@@ -114,7 +131,9 @@ class Dns():
                     apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+                log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
             except FileExistsError:
+                log.warning(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf já existe no diretório /etc/apache2/sites-available')
                 print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
                 opc = input('y\n ->')
                 if opc == 'y':
@@ -122,11 +141,14 @@ class Dns():
                         apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
                                             f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                             " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+                        log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi sobreescrito com sucesso')
                 else:
+                    log.debug(f'{os.getlogin()} - Arquivo já existente mantido')
                     pass
             pbar.update(5)
             os.sleep(0.2)
             os.system(f'a2ensite {nome_arquivo[0]}.conf')
+            log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
             pbar.update(5)
             os.sleep(1.5)
             # self.save_settings()
@@ -136,6 +158,7 @@ class Dns():
         """Função que inicializa as configurações do DNS. 
         Ela inicializa os métodos de configuração de cada um dos serviços.
         Esse método que é chamado para configurar o DNS no geral."""
+        log.info(f"{os.getlogin()} - Configuração dos serviços DNS iniciada")
         self.change_dns_bind9()
         self.change_dns_apache2()
         os.system('systemctl restart bind9')
