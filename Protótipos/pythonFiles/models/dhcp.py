@@ -1,12 +1,11 @@
 from models import Ip
-from time import sleep
 from enumTypes import Error
+from logger import Log
+from time import sleep
 import logging
 import os
 import datetime
 import tqdm
-
-log = logging.getLogger(__name__)
 
 
 class Dhcp(Ip):
@@ -103,10 +102,6 @@ class Dhcp(Ip):
  
  
 if not __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, 
-                                format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                                filename='psc.log',
-                                filemode='a',
-                                encoding='utf8')
+    log = Log(diretório='/logs', nome_arquivo='psc.log', modo_abertura='a')
 else:
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')

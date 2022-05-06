@@ -1,4 +1,5 @@
 import os, json
+from logger import Log
 network_interfaces = """
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -25,4 +26,15 @@ with open("./Protótipos/pythonFiles/appSettings.json", "r") as interfaceNames:
     for network_interface in interfaces:
         if network_interface in network_interfaces:
             print(network_interface)
-            
+
+if __name__ == '__main__':
+    print(os.getcwd())
+    print(os.path.join(os.getcwd()+"", r'\Protótipos\pythonFiles\logs'))
+    log = Log(
+        diretorio=fr'{os.getcwd()}\Protótipos\pythonFiles\logs',
+        nome_arquivo='psc.log',
+        modo_abertura='a')
+    log.debug('Teste, testando')
+    log.info('Teste, testando')
+    log.critical('Teste, testando')
+    log.error('Teste, testando')

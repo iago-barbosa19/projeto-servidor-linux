@@ -1,13 +1,11 @@
 from models import Ip, Dhcp, Dns
+from logger import Log
 from time import sleep
 import os
 import subprocess
 import tqdm
 import json
 import logging
-
-
-log = logging.getLogger(__name__)
 
 language = None
 
@@ -16,13 +14,13 @@ def main():
     idioma()
     os.system('clear')
     # Local temporário, para conseguir identificar se o aplicativo já está instalado, ou não.
-    # if not os.path.exists('/etc/psc/fst'):        
-        # with open('/etc/psc/fst', 'w') as fst:
-            # fst.write('This program has been already initialized on this system.')
-        # os.system(f'cp -r * /etc/psc/')
-        # print(language["instalation"])
-        # sleep(3)
-        # os.system('clear')
+    if not os.path.exists('/etc/psc/fst'):        
+        with open('/etc/psc/fst', 'w') as fst:
+            fst.write('This program has been already initialized on this system.')
+        os.system(f'cp -r * /etc/psc/')
+        print(language["instalation"])
+        sleep(3)
+        os.system('clear')
     print('---------------------------------------------------\n '+ language['main-page']['main-menu'])
     opc = int(input(language['main-page']['main-menu-input']))
     if opc == 1:
@@ -49,13 +47,13 @@ def main():
 
 
 def configServicos():
-    log.debug('Entrando na Configuração de Serviços')
+    log.debug(f'{os.getlogin()} - Entrando na Configuração de Serviços')
     configs = []
     print('---------------------------------------------------'+
           language['services-config']['main-menu'])
     opc = int(input(language['services-config']['main-menu-input']))
     if opc == 1:
-        log.debug('Configurando interface IPV4')
+        log.debug(f'{os.getlogin()} - Configurando interface IPV4')
         os.system('clear')
         system_interfaces = []
         interface = subprocess.run(["ip", "addr"], stdout=subprocess.PIPE, universal_newlines=True).stdout
@@ -64,7 +62,7 @@ def configServicos():
             for network_interface in interfaces:
                 if network_interface in interface:
                     system_interfaces.append(network_interface)
-                    log.debug(f'Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
+                    log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
         print(len(system_interfaces) == 1 if language['services-config']['interface']['main-text'] 
               else language['services-config']['interface']['main-text2'])
         for x in range((len(system_interfaces))):
@@ -180,7 +178,7 @@ def preparacaoServidor():
         os.system('apt-get install --assume-yes libapache2-mod-wsgi-py3 &> /dev/null')
         pbar.update(5)
         sleep(0.1)
-        log.debug('Serviços "instalados".')
+        log.debug(f'{os.getlogin()} - Serviços "instalados".')
         if not os.path.exists('/etc/psc/configs/saveConfigDHCP.txt'):
             os.mknod('/etc/psc/configs/saveConfigDHCP.txt')
         if not os.path.exists('/etc/psc/configs/saveConfigDNS.txt'):
@@ -222,12 +220,12 @@ def preparacaoServidor():
                             "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
         pbar.update(5)
         sleep(0.1)
-        log.debug("Arquivo Flask de host virtual criado")
+        log.debug(f'{os.getlogin()} - Arquivo Flask de host virtual criado')
         os.chdir('/etc/apache2/sites-available/')
         os.system('a2ensite flask')
         os.system('chown -R www-data:www-data /etc/apache2/sites-available/flask.conf &> /dev/null')
         os.system('systemctl restart apache2')
-        log.debug("Fim do preparamento do Servidor")
+        log.debug(f'{os.getlogin()} - Fim do preparamento do Servidor')
         main()
 
 
@@ -261,12 +259,10 @@ def idioma():
 
 if __name__ == '__main__':
     # Forma de se configurar um log
-    logging.basicConfig(level=logging.DEBUG, 
-                                format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                                filename='psc.log',
-                                filemode='a')
-    log.debug('Aplicativo comecou')
+    log = Log(diretorio='/logs', nome_arquivo='psc.log', modo_abertura='a')
+    log.debug(f'{os.getlogin()} - Aplicativo comecou')
     if not os.path.exists('/etc/psc'):
         os.system('clear')
         os.system('mkdir -p /etc/psc')
     main()
+    
