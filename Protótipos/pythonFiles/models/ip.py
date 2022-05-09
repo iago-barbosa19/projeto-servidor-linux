@@ -91,7 +91,7 @@ class Ip:
             ipv4 = f'{ipv4[0]}.{ipv4[1]}.{ipv4[2]}.0'
             return  ipv4
 
-    def ipConf(self:object) -> None:
+    def ipConf(self:object, network_interfaces: list) -> None:
         """Método de configuraçãodo serviço networking.
         Ele usa as informações usadas na hora da criação do objeto, para poder efetuar à escrita
         no arquivo interfaces.
@@ -118,6 +118,9 @@ class Ip:
                     f'\nauto lo\niface lo inet loopback\n\n#PSC-CONFIG\n\nauto {self.interface}\niface {self.interface} inet static\n'\
                     f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
                     f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+                if len(network_interfaces) > 1:
+                    for x in network_interfaces:
+                        interfaces.write(f'\n\nauto {self.x}\niface {self.x} inet dhcp\n')
         self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
         os.system('systemctl restart networking')
         if os.getlogin() != 'www-data':

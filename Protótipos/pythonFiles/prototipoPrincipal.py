@@ -75,7 +75,7 @@ class Software:
                         configs.append(valor)
                     ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
                                 interface=system_interfaces[x], logger=log)
-                    ip_config.ipConf()
+                    ip_config.ipConf(network_interfaces=system_interfaces)
         elif opc == 2:
             os.system('clear')
             system_interfaces = []
