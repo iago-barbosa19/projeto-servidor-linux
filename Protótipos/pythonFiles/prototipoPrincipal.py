@@ -10,17 +10,15 @@ import json
 class Software:
     
     def __init__(self):
-        self.language = self.idioma()
-        self.main()
-
-    def main(self):
         if not os.path.exists('/etc/psc/fst'):        
             with open('/etc/psc/fst', 'w') as fst:
                 fst.write('This program has been already initialized on this system.')
             os.system(f'cp -r * /etc/psc/')
-            print(self.language["instalation"])
-            sleep(3)
             os.system('clear')
+        self.language = self.idioma()
+        self.main()
+
+    def main(self):
         os.system('clear')
         while(True != False):
             print('---------------------------------------------------\n'+ self.language['main-page']['main-menu'])
@@ -58,19 +56,19 @@ class Software:
             system_interfaces = []
             interface = subprocess.run(["ip", "addr"], stdout=subprocess.PIPE, universal_newlines=True).stdout
             with open("appSettings.json", "r") as interface_names:
-                interfaces = interface_names['os-interfaces-names'].readlines()
+                interfaces = json.load(interface_names)['os-interfaces-names']
                 for network_interface in interfaces:
                     if network_interface in interface:
                         system_interfaces.append(network_interface)
                         log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
-            print(len(system_interfaces) == 1 if self.language['services-config']['interface']['main-text'] 
-                else self.language['services-config']['interface']['main-text2'])
+            print(self.language['services-config']['interface']['main-text'])
             for x in range((len(system_interfaces))):
-                for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
-                    configs.append(input(self.language['services']['interface']['data-insert'] + f' {dado} ->'))
-                ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4], 
-                            interface=configs[5], logger=log)
-                ip_config.ipConf()
+                if input(f'Deseja configurar a interface - {system_interfaces[x]}:\nY\\n').lower() == 'y':
+                    for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
+                        configs.append(input(self.language['services-config']['interface']['data-insert'] + f' {system_interfaces[x]} - {dado} ->'))
+                    ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4], 
+                                interface=configs[5], logger=log)
+                    ip_config.ipConf()
         elif opc == 2:
             os.system('clear')
             print(self.language['services-config']['dhcp']['main-text'])
@@ -225,7 +223,7 @@ class Software:
             log.debug(f'{os.getlogin()} - Fim do preparamento do Servidor')
 
     def idioma(self: object):
-        with open('./Protótipos/pythonFiles/appSettings.json', 'r') as data_confs:
+        with open('/etc/psc/appSettings.json', 'r') as data_confs:
             data_confs.seek(0)
             data = json.load(data_confs)
             if(data['actualLanguage'] == 'pt-BR'):
@@ -234,7 +232,6 @@ class Software:
                 return data['languages']['en']["server-side"]
             print('Please select your language\n1)Portuguese\n2)English')
             language_option = int(input('R:'))
-            
             with open('appSettings.json', 'w+', encoding='utf-8') as language_config:
                 if(language_option == 1):
                     data['actualLanguage'] = "pt-BR"
@@ -251,11 +248,11 @@ class Software:
                 return json.load(language_config)['languages'][('pt-BR' if language_option == 1 else 'en')]['server-side']
 
 if __name__ == '__main__':
-    log = Log(diretorio='logs', nome_arquivo='psc.log', modo_abertura='a')
-    log.debug(f'{os.getlogin()} - Aplicativo comecou')
     if not os.path.exists('/etc/psc'):
         os.system('clear')
         os.system('mkdir -p /etc/psc')
-    os.system('apt-get install --assume-yes python3-pip &> /dev/null')
+    log = Log(diretorio='/etc/psc/logs', nome_arquivo='psc.log', modo_abertura='a')
+    log.debug(f'{os.getlogin()} - Aplicativo comecou')
+    # os.system('apt-get install --assume-yes python3-pip &> /dev/null')
     app = Software()
     
