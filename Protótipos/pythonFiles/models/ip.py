@@ -2,16 +2,14 @@ from time import sleep
 import os
 import datetime
 import tqdm
-import logging
-
-log = logging.getLogger(__name__)
 
 
 class Ip:
 
-    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, sub_net_mask:str, interface: str) -> None:
+    def __init__(self:object, ipv4:str, gateway:str, dns1:str, dns2: str, sub_net_mask:str, interface: str, logger: object) -> None:
         self.__ipv4 = ipv4
         self.__gateway = gateway
+        self.log = logger
         self.__dns1 = dns1
         self.__dns2 = dns2
         self.__interface = interface
@@ -68,8 +66,7 @@ class Ip:
         
     @staticmethod
     def network_ip_setter(ipv4:str, sub_net_mask:str) -> str:
-        """
-        Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
+        """Esse método serve para settar o ip da rede de forma fácil, sem que seja necessário o técnico inserir o IP da rede.
         Ele vai funcionar mesmo se a máscara de sub rede usar VLSM.
         
         Ele separa a máscara de sub-rede para que vire uma lista com 4 indíces, para que assim cada indíce contenha uma string.
@@ -101,7 +98,7 @@ class Ip:
         Esse método devia ser usado '@final' nele, para que não possa ser extendido por mais nenhum outro, porém
         como é normal ver máquinas com Python 3.7 para baixo, ainda não coloquei os itens da nova versão.
         """
-        log.info(f"{os.getlogin()} - Iniciando configuração de interface")
+        self.log.info(f"{os.getlogin()} - Iniciando configuração de interface")
         with tqdm(total=10) as pbar:
             os.chdir('/etc/network')
             with open('interfaces', 'w') as interfaces:
@@ -109,7 +106,7 @@ class Ip:
                     f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
                     f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
                     f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-            log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
+            self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
             pbar.update(5)
             sleep(0.2)
             os.system('systemctl restart networking')
@@ -160,17 +157,7 @@ class Ip:
                         f'Subnet Mask:{self.sub_net_mask}\nDNS1:{self.dns1}\n|DNS2:{self.dns2}\nData da modificação:'\
                         f'{datetime.datetime.now()}\nUsuário que alterou a configuração: {os.getlogin()}\n\n')
                 
-    def __repr__(self):
-        print('Os métodos que são possíveis visualizar com as Docstrings:\nipConf\nnetwork_ip_setter\nsave_settings\n\n'\
-              'Em casos de dúvidas no uso do programa, consulte-as.')    
         
-        
-if not __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, 
-                                format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                                filename='psc.log',
-                                filemode='a',
-                                encoding='utf8')
-else:
+if __name__ == '__main__':
     raise NotImplementedError('\nErro de Inicialização. \nInicialize o arquivo principal para o funcionamento correto.')
     
