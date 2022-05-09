@@ -6,9 +6,9 @@ class Log():
 
     def __init__(self: object, *, diretorio: str,
                  nome_arquivo: str, modo_abertura: str):
-        if not os.path.exists(os.path.join(fr'{os.getcwd()}{diretorio}')):
-            os.mkdir(os.path.join(fr'{os.getcwd()}{diretorio}'))
-        self.__diretorio = os.path.join(fr'{os.getcwd()}{diretorio}')
+        if not os.path.exists(diretorio):
+            os.mkdir(diretorio)
+        self.__diretorio = diretorio
         self.nome_arquivo = nome_arquivo
         self.modo_abertura = modo_abertura
         self.__localizacao_arquivo = os.path.join(self.__diretorio, nome_arquivo)

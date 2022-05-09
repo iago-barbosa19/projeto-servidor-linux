@@ -6,12 +6,12 @@ import tqdm
 
 class Dns():
     
-    def __init__(self:object, ipv4:str, subNetMask:str, domain:str, serverName: str, logger: object) -> None:
+    def __init__(self:object, ipv4:str, sub_net_mask:str, domain:str, server_name: str, logger: object) -> None:
         self.__ipv4:str = ipv4
-        self.__sub_net_mask:str = subNetMask
+        self.__sub_net_mask:str = sub_net_mask
         self.log = logger
         self.__domain:str = domain
-        self.__name_server:str = serverName
+        self.__server_name:str = serverName
 
     def change_dns_bind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
@@ -126,7 +126,7 @@ class Dns():
             os.sleep(0.2)
             try:
                 with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
-                    apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
+                    apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__server_name}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                 self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
@@ -136,7 +136,7 @@ class Dns():
                 opc = input('y\n ->')
                 if opc == 'y':
                     with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
-                        apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__name_server}\n\n        ServerAlias www.{self.__domain}\n        "\
+                        apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__server_name}\n\n        ServerAlias www.{self.__domain}\n        "\
                                             f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                             " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
                         self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi sobreescrito com sucesso')

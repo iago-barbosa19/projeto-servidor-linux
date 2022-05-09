@@ -55,35 +55,68 @@ class Software:
             os.system('clear')
             system_interfaces = []
             interface = subprocess.run(["ip", "addr"], stdout=subprocess.PIPE, universal_newlines=True).stdout
+            print(self.language['services-config']['interface']['main-text'])
             with open("appSettings.json", "r") as interface_names:
                 interfaces = json.load(interface_names)['os-interfaces-names']
                 for network_interface in interfaces:
                     if network_interface in interface:
                         system_interfaces.append(network_interface)
                         log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
-            print(self.language['services-config']['interface']['main-text'])
             for x in range((len(system_interfaces))):
-                if input(f'Deseja configurar a interface - {system_interfaces[x]}:\nY\\n').lower() == 'y':
+                if input(f"{self.language['services-config']['interface']['option-text']} - {system_interfaces[x]}:\nY\\n\n->").lower() == 'y':
                     for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
-                        configs.append(input(self.language['services-config']['interface']['data-insert'] + f' {system_interfaces[x]} - {dado} ->'))
-                    ip_config = Ip(ipv4=configs[0], gateway=configs[1], subNetMask=configs[2], dns1=configs[3], dns2=configs[4], 
-                                interface=configs[5], logger=log)
+                        valor = input(f"{system_interfaces[x]} - {self.language['services-config']['interface']['data-insert']}  - {dado}\nDigite 0 para cancelar:\n->")
+                        if valor == 0:
+                            print('Operação cancelada.\nAperte Enter para continuar')
+                            return input()
+                        configs.append(valor)
+                    ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
+                                interface=system_interfaces[x], logger=log)
                     ip_config.ipConf()
         elif opc == 2:
             os.system('clear')
+            system_interfaces = []
+            interface = subprocess.run(["ip", "addr"], stdout=subprocess.PIPE, universal_newlines=True).stdout
             print(self.language['services-config']['dhcp']['main-text'])
-            for dado in ['ipv4', 'gateway', 'dns1', 'dns2', 'subnetMask', 'Pool Inicial do DHCP', 'Pool Final do DHCP']:
-                configs.append(input(self.language['services-config']['dhcp']['data-input'] + f' {dado} ->'))
+            with open("appSettings.json", "r") as interface_names:
+                interfaces = json.load(interface_names)['os-interfaces-names']
+                for network_interface in interfaces:
+                    if network_interface in interface:
+                        system_interfaces.append(network_interface)
+                        print(network_interface+"\n")
+                        log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
+            for dado in ['ipv4', 'gateway', 'dns1', 'dns2', 'subnetMask', 'Pool Inicial do DHCP', 'Pool Final do DHCP', 'Interface']:
+                if dado != 'Interface':
+                    valor = input(self.language['services-config']['dhcp']['data-input'] + f' {dado} ->')
+                else :
+                    for x in range(len(system_interfaces)):
+                        print(f'{(x + 1)} - {system_interfaces[x]}')
+                    indice = int(input("->"))
+                    try:
+                        valor = system_interfaces[(indice - 1)]
+                    except IndexError:
+                        print('Interface inexistente.\nOperação cancelada.\nAperte Enter para continuar')
+                        return input()
+                        
+                if valor == 0:
+                    print('Operação cancelada.\nAperte Enter para continuar')
+                    return input()
+                configs.append(valor)
             dhcp_config = Dhcp(ipv4=configs[0], gateway=configs[1],
-                            dns1=configs[2], dns2=configs[3], subNetMask=configs[4],
-                            dhcpPoolInicial=configs[5], dhcpPoolFinal=configs[6], logger=log)
+                            dns1=configs[2], dns2=configs[3], sub_net_mask=configs[4],
+                            dhcp_pool_inicial=configs[5], dhcp_pool_final=configs[6], interface=configs[7] logger=log)
             dhcp_config.dhcpConf()
         elif opc == 3:
             os.system('clear')
             print(self.language['services-config']['dns']['main-text'])
             for dado in ['ipv4', 'subnetMask', 'dominio', 'Nome do servidor']:
-                configs.append(input(self.language['services-config']['dns']['data-input'] + f'{dado} ->'))
-            dns_config = Dns(ipv4=configs[0], subNetMask=configs[1], domain=configs[2], serverName=configs[3], logger=log)
+                valor = input(self.language['services-config']['dns']['data-input'] + f'{dado} ->')
+                if valor == 0:
+                    print('Operação cancelada.\nAperte Enter para continuar')
+                    input()
+                    return
+                configs.append(valor)
+            dns_config = Dns(ipv4=configs[0], sub_net_mask=configs[1], domain=configs[2], server_name=configs[3], logger=log)
             dns_config.dnsConf()
         print(self.language['services-config']['final'])
 
