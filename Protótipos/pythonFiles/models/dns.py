@@ -29,57 +29,48 @@ class Dns():
 
         """
         self.log.info(f'{os.getlogin()} - Configuração do serviço Bind9 iniciada')
-        with tqdm(total=20) as pbar:
-            os.chdir('/etc/bind')
-            nome_arquivo = self.__domain.split('.')
-            try:
-                os.system(f'cp -p db.local db.{nome_arquivo[0]}')
-                self.log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
-            except FileExistsError:
-                self.log.warning(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} já existe no sistema. Backup enviado para /etc/bind/backup/')
-                if not os.path.exists('/etc/bind/backup/'):
-                    os.mkdir('./backup')
-                os.system(f"cp -p {nome_arquivo[0]} ./backup/{nome_arquivo[0]}")
-                os.system(f'rm db.{nome_arquivo[0]}')
-                os.system(f'cp -p db.local db.{nome_arquivo[0]}')
-                self.log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
-            pbar.update(5)
-            sleep(0.2)
-            with open(f'db.{nome_arquivo[0]}', 'w+') as db_admin_file:
-                db_admin_file.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
-                                f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
-                                f'                             2         ; Serial\n'\
-                                f'                        604800         ; Refresh\n'\
-                                f'                         86400         ; Retry\n'\
-                                f'                       2419200         ; Expire\n'\
-                                f'                        604800 )       ; Negative Cache TTL\n;\n'\
-                                f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
-                                f'www     IN      A       {self.__ipv4}\n'\
-                                f'ftp     IN      A       {self.__ipv4}\n\n')
-            pbar.update(5)
-            self.log.debug(f'{os.getlogin()} - db.{nome_arquivo[0]} configurado com sucesso')
-            sleep(0.2)
-            with open('named.conf.default-zones', 'r') as default_zones:
-                lines = 0
-                temporary_data = []
-                for data in default_zones.readlines():
-                    temporary_data.append(data)
-                pbar.update(5)
-                sleep(0.2)
-                for check_datas in temporary_data:
-                        if check_datas == f'// zona {self.__domain}\n':
-                            self.log.warning(f'{os.getlogin()} - A zona {self.__domain} já foi cadastrada')
-                            break
-                        elif lines == (len(temporary_data) - 1):
-                            with open('named.conf.default-zones', 'a') as default_zones1:
-                                default_zones1.write(f'// zona {self.__domain}\nzone "{self.__domain}" '\
-                                                '{\n        type master;\n        '\
-                                                f'file "/etc/bind/db.{nome_arquivo[0]}";\n'\
-                                                '};\n')
-                        lines += 1
-                pbar.update(5)
-                sleep(1.5)
-                os.system('clear')
+        os.chdir('/etc/bind')
+        nome_arquivo = self.__domain.split('.')
+        try:
+            os.system(f'cp -p db.local db.{nome_arquivo[0]}')
+            self.log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
+        except FileExistsError:
+            self.log.warning(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} já existe no sistema. Backup enviado para /etc/bind/backup/')
+            if not os.path.exists('/etc/bind/backup/'):
+                os.mkdir('./backup')
+            os.system(f"cp -p {nome_arquivo[0]} ./backup/{nome_arquivo[0]}")
+            os.system(f'rm db.{nome_arquivo[0]}')
+            os.system(f'cp -p db.local db.{nome_arquivo[0]}')
+            self.log.debug(f'{os.getlogin()} - Arquivo db.{nome_arquivo[0]} criado com sucesso.')
+        with open(f'db.{nome_arquivo[0]}', 'w+') as db_admin_file:
+            db_admin_file.write(f'\n;\n; BIND data file for local loopback interface\n;\n$TTL    604800\n'\
+                            f'@       IN      SOA     {self.__domain}. root.{self.__domain}. (\n'\
+                            f'                             2         ; Serial\n'\
+                            f'                        604800         ; Refresh\n'\
+                            f'                         86400         ; Retry\n'\
+                            f'                       2419200         ; Expire\n'\
+                            f'                        604800 )       ; Negative Cache TTL\n;\n'\
+                            f'@       IN      NS      {self.__domain}.\n@       IN      A       127.0.0.1\n'\
+                            f'www     IN      A       {self.__ipv4}\n'\
+                            f'ftp     IN      A       {self.__ipv4}\n\n')
+        self.log.debug(f'{os.getlogin()} - db.{nome_arquivo[0]} configurado com sucesso')
+        with open('named.conf.default-zones', 'r') as default_zones:
+            lines = 0
+            temporary_data = []
+            for data in default_zones.readlines():
+                temporary_data.append(data)
+            for check_datas in temporary_data:
+                    if check_datas == f'// zona {self.__domain}\n':
+                        self.log.warning(f'{os.getlogin()} - A zona {self.__domain} já foi cadastrada')
+                        break
+                    elif lines == (len(temporary_data) - 1):
+                        with open('named.conf.default-zones', 'a') as default_zones1:
+                            default_zones1.write(f'// zona {self.__domain}\nzone "{self.__domain}" '\
+                                            '{\n        type master;\n        '\
+                                            f'file "/etc/bind/db.{nome_arquivo[0]}";\n'\
+                                            '};\n')
+                    lines += 1
+            os.system('clear')
     
     def change_dns_apache2(self:object) -> None:
         """Configuração do serviço Apache2.
@@ -99,58 +90,47 @@ class Dns():
         Essa vai ser a página principal do DNS.
         """
         self.log.info(f'{os.getlogin()} - Iniciada a configuração do serviço Apache2')
-        with tqdm(total=20) as pbar:    
-            nome_arquivo = self.__domain.split('.')
-            os.chdir('/etc/apache2/sites-available')
-            try:
-                os.system(f'cp -p ./000-default.conf ./{nome_arquivo[0]}.conf')
-            except FileExistsError:
-                self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]} já existe. Ele será enviado para /etc/apache2/sites-available/backup')
-                if not os.path.exists('/etc/apache2/sites-available/backup/'):
-                    os.mkdir('./backup')
-                os.system(f'cp -p db.{nome_arquivo[0]} ./backup')
-            pbar.update(5)
-            sleep(0.2)
-            try:
-                os.mkdir('/var/www/sites')  # Pasta padrão. Como é para testes, vai continuar assim.
-                self.log.debug(f'{os.getlogin()} - Pasta para armazenar as páginas Web criada com sucesso')
-                # Talvez o usuário tenha opção de decidir a pasta mais para frente.
-            except FileExistsError:
-                pass
-            pbar.update(5)
-            os.sleep(0.2)
-            with open('/var/www/sites/index.html', 'w') as index:
-                index.write('<html>\n<meta charset="utf-8"><head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
-                            'margin: 500px; ">Página Principal funcionando</h1>\n</body>\n</html>')
-            pbar.update(5)
-            os.sleep(0.2)
-            try:
+        nome_arquivo = self.__domain.split('.')
+        os.chdir('/etc/apache2/sites-available')
+        try:
+            os.system(f'cp -p ./000-default.conf ./{nome_arquivo[0]}.conf')
+        except FileExistsError:
+            self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]} já existe. Ele será enviado para /etc/apache2/sites-available/backup')
+            if not os.path.exists('/etc/apache2/sites-available/backup/'):
+                os.mkdir('./backup')
+            os.system(f'cp -p db.{nome_arquivo[0]} ./backup')
+        try:
+            os.mkdir('/var/www/sites')  # Pasta padrão. Como é para testes, vai continuar assim.
+            self.log.debug(f'{os.getlogin()} - Pasta para armazenar as páginas Web criada com sucesso')
+            # Talvez o usuário tenha opção de decidir a pasta mais para frente.
+        except FileExistsError:
+            pass
+        with open('/var/www/sites/index.html', 'w') as index:
+            index.write('<html>\n<meta charset="utf-8"><head>\n<title>Index</title>\n</head>\n<body>\n<h1 style="color: #333; font-size:1.5rem;'\
+                        'margin: 500px; ">Página Principal funcionando</h1>\n</body>\n</html>')
+        try:
+            with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
+                apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__server_name}\n\n        ServerAlias www.{self.__domain}\n        "\
+                                    f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
+                                    " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+            self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
+        except FileExistsError:
+            self.log.warning(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf já existe no diretório /etc/apache2/sites-available')
+            print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
+            opc = input('y\n ->')
+            if opc == 'y':
                 with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
                     apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__server_name}\n\n        ServerAlias www.{self.__domain}\n        "\
                                         f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
                                         " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-                self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
-            except FileExistsError:
-                self.log.warning(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf já existe no diretório /etc/apache2/sites-available')
-                print(f'O arquivo já existe. Gostaria mesmo assim de sobrescreve-lo?\n')
-                opc = input('y\n ->')
-                if opc == 'y':
-                    with open(f'{nome_arquivo[0]}.conf', 'w+') as apache_arquivo:
-                        apache_arquivo.write(f"<VirtualHost *:80>\n        ServerName www.{self.__server_name}\n\n        ServerAlias www.{self.__domain}\n        "\
-                                            f"ServerAdmin webmaster@localhost\n        DocumentRoot /var/www/sites\n        ErrorLog"\
-                                            " ${APACHE_LOG_DIR}/error.log\n        CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-                        self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi sobreescrito com sucesso')
-                else:
-                    self.log.debug(f'{os.getlogin()} - Arquivo já existente mantido')
-                    pass
-            pbar.update(5)
-            os.sleep(0.2)
-            os.system(f'a2ensite {nome_arquivo[0]}.conf')
-            self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
-            pbar.update(5)
-            os.sleep(1.5)
-            # self.save_settings()
-            os.system('clear')
+                    self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi sobreescrito com sucesso')
+            else:
+                self.log.debug(f'{os.getlogin()} - Arquivo já existente mantido')
+                pass
+        os.system(f'a2ensite {nome_arquivo[0]}.conf')
+        self.log.debug(f'{os.getlogin()} - O arquivo {nome_arquivo[0]}.conf foi configurado com sucesso')
+        # self.save_settings()
+        os.system('clear')
             
     def dns_conf(self:object) -> None:
         """Função que inicializa as configurações do DNS. 

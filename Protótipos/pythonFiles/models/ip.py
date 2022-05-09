@@ -99,46 +99,33 @@ class Ip:
         como é normal ver máquinas com Python 3.7 para baixo, ainda não coloquei os itens da nova versão.
         """
         self.log.info(f"{os.getlogin()} - Iniciando configuração de interface")
-        with tqdm(total=10) as pbar:
+        os.chdir('/etc/network')
+        with open('interfaces', 'w') as interfaces:
+            interfaces.write('source /etc/network/interfaces.d/*\n'\
+                f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
+                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+        self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
+        os.system('systemctl restart networking')
+        if os.getlogin() != 'www-data':
+            self.save_settings()
+        os.system('clear')
+            
+        def ipConfAlt(self:object) -> None:
+            with open('/etc/apache2/sites-available/flask.conf', 'w') as flask_server:
+                flask_server.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
+                                "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
+                                "        AllowOverride None\n        Require all granted\n"\
+                                "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
+                                "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
             os.chdir('/etc/network')
             with open('interfaces', 'w') as interfaces:
                 interfaces.write('source /etc/network/interfaces.d/*\n'\
                     f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
                     f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
                     f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-            self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
-            pbar.update(5)
-            sleep(0.2)
-            os.system('systemctl restart networking')
             if os.getlogin() != 'www-data':
                 self.save_settings()
-            pbar.update(5)
-            sleep(0.2)
-            os.system('clear')
-            
-        def ipConfAlt(self:object) -> None:
-            with tqdm(total=15) as pbar:
-                with open('/etc/apache2/sites-available/flask.conf', 'w') as flask_server:
-                    flask_server.write(f"<VirtualHost *:80>\n    ServerName {self.ipv4}\n\n    "\
-                                    "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
-                                    "        AllowOverride None\n        Require all granted\n"\
-                                    "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
-                                    "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-                pbar.update(5)
-                sleep(0.2)
-                os.chdir('/etc/network')
-                with open('interfaces', 'w') as interfaces:
-                    interfaces.write('source /etc/network/interfaces.d/*\n'\
-                        f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
-                        f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
-                        f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-                pbar.update(5)
-                sleep(0.2)
-                if os.getlogin() != 'www-data':
-                    self.save_settings()
-                pbar.update(5)
-                sleep(0.2)
-                os.system('clear')
     
     def save_settings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.

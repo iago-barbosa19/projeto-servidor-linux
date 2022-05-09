@@ -61,6 +61,7 @@ class Software:
                 for network_interface in interfaces:
                     if network_interface in interface:
                         system_interfaces.append(network_interface)
+                        print(network_interface+'\n')
                         log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
             for x in range((len(system_interfaces))):
                 if input(f"{self.language['services-config']['interface']['option-text']} - {system_interfaces[x]}:\nY\\n\n->").lower() == 'y':
@@ -70,6 +71,7 @@ class Software:
                             print('Operação cancelada.\nAperte Enter para continuar')
                             return input()
                         configs.append(valor)
+                        os.system('clear')
                     ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
                                 interface=system_interfaces[x], logger=log)
                     ip_config.ipConf()
@@ -104,7 +106,7 @@ class Software:
                 configs.append(valor)
             dhcp_config = Dhcp(ipv4=configs[0], gateway=configs[1],
                             dns1=configs[2], dns2=configs[3], sub_net_mask=configs[4],
-                            dhcp_pool_inicial=configs[5], dhcp_pool_final=configs[6], interface=configs[7] logger=log)
+                            dhcp_pool_inicial=configs[5], dhcp_pool_final=configs[6], interface=configs[7], logger=log)
             dhcp_config.dhcpConf()
         elif opc == 3:
             os.system('clear')

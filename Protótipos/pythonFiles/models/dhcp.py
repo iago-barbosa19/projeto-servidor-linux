@@ -30,53 +30,44 @@ class Dhcp(Ip):
         """
         self.log.info(f"{os.getlogin()} - Iniciando configuração do serviço DHCP")
         error = Error()
-        with tqdm(total=20) as pbar:
-            os.chdir('/etc/dhcp')
-            if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):
-                with open('dhcpd.conf', 'a') as dhcpd:
-                    dhcpd.write('authoritative;\n')
-            pbar.update(5)
-            sleep(0.2)
-            with open('dhcpd.conf', 'r+') as dhcp_config:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
-                lines = 0
-                temporary_data = []
-                dhcp_config.seek(0)
-                for data in dhcp_config.readlines():
-                    temporary_data.append(data)
-                for data in temporary_data:
-                    if f'#DHCP Rede:{self.__network_ip}\n' == data:
-                        self.log.error(f"{os.getlogin()} - Falha na tentativa de cadastro. num: {error.NetworkRegistrationError}")
-                        # os.system(f'echo Erro {error.NetworkRegistrationError}. Rede já cadastrada')
-                        break
-                    elif lines == (len(temporary_data) - 1):
-                        with open('dhcpd.conf', 'a') as dhcpd:
-                            dhcpd.write(f'\n\n#DHCP Rede:{self.network_ip}. Placa de rede:{self.interface}\nsubnet {self.network_ipSetter(self.ipv4, self.sub_net_mask)} netmask {self.sub_net_mask}'\
-                                        ' {\n  range'\
-                                        f' {self.dhcp_pool_inicial} {self.dhcp_pool_final};\n  option routers {self.gateway};\n  '\
-                                        f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
-                                        '}')
-                        dhcp_config.seek(0)
-                        self.log.debug(f"{os.getlogin()} - Configuração de arquivo dhcpd.conf efetuada.")
-                    lines += 1
-                pbar.update(5)
-                sleep(0.2)
-            os.chdir('/etc/default')
-            with open('isc-dhcp-server', 'w+') as isc_dhcp_server:
-                server_interfaces = isc_dhcp_server.read()
-                if 'INTERFACESv4=""' in server_interfaces:
-                    isc_dhcp_server.write(f'INTERFACESv4="{self.interfaces}"\nINTERFACESv6=""')
-                else:
-                    server_interfaces = server_interfaces.split("\n")[0].split('"')[1]
-                    if "," in server_interfaces:
-                        isc_dhcp_server.write(f'INTERFACESv4="{server_interfaces}, {self.interfaces}"\nINTERFACESv6=""')
-            pbar.update(5)
-            self.log.debug(f"{os.getlogin()} - Cadastro de interface ao serviço DHCP efetuado")
-            sleep(0.2)
-            os.system('systemctl restart isc-dhcp-server')
-            # self.saveSettings()
-            pbar.update(5)
-            sleep(1.5)
-            os.system('clear')
+        os.chdir('/etc/dhcp')
+        if not os.path.exists('/etc/psc/saveConfigDHCP.txt'):
+            with open('dhcpd.conf', 'a') as dhcpd:
+                dhcpd.write('authoritative;\n')
+        with open('dhcpd.conf', 'r+') as dhcp_config:  # Configuração do Arquivo DHCPD.conf no diretório: /etc/dhcp
+            lines = 0
+            temporary_data = []
+            dhcp_config.seek(0)
+            for data in dhcp_config.readlines():
+                temporary_data.append(data)
+            for data in temporary_data:
+                if f'#DHCP Rede:{self.__network_ip}\n' == data:
+                    self.log.error(f"{os.getlogin()} - Falha na tentativa de cadastro. num: {error.NetworkRegistrationError}")
+                    # os.system(f'echo Erro {error.NetworkRegistrationError}. Rede já cadastrada')
+                    break
+                elif lines == (len(temporary_data) - 1):
+                    with open('dhcpd.conf', 'a') as dhcpd:
+                        dhcpd.write(f'\n\n#DHCP Rede:{self.network_ip}. Placa de rede:{self.interface}\nsubnet {self.network_ipSetter(self.ipv4, self.sub_net_mask)} netmask {self.sub_net_mask}'\
+                                    ' {\n  range'\
+                                    f' {self.dhcp_pool_inicial} {self.dhcp_pool_final};\n  option routers {self.gateway};\n  '\
+                                    f'option domain-name-servers {self.dns1}, {self.dns2};\n'\
+                                    '}')
+                    dhcp_config.seek(0)
+                    self.log.debug(f"{os.getlogin()} - Configuração de arquivo dhcpd.conf efetuada.")
+                lines += 1
+        os.chdir('/etc/default')
+        with open('isc-dhcp-server', 'w+') as isc_dhcp_server:
+            server_interfaces = isc_dhcp_server.read()
+            if 'INTERFACESv4=""' in server_interfaces:
+                isc_dhcp_server.write(f'INTERFACESv4="{self.interfaces}"\nINTERFACESv6=""')
+            else:
+                server_interfaces = server_interfaces.split("\n")[0].split('"')[1]
+                if "," in server_interfaces:
+                    isc_dhcp_server.write(f'INTERFACESv4="{server_interfaces}, {self.interfaces}"\nINTERFACESv6=""')
+        self.log.debug(f"{os.getlogin()} - Cadastro de interface ao serviço DHCP efetuado")
+        os.system('systemctl restart isc-dhcp-server')
+        # self.saveSettings()
+        os.system('clear')
         
     def saveSettings(self:object) -> None:
         """Método para salvar as configurações que foram feitas até então.
