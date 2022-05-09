@@ -100,11 +100,24 @@ class Ip:
         """
         self.log.info(f"{os.getlogin()} - Iniciando configuração de interface")
         os.chdir('/etc/network')
-        with open('interfaces', 'w') as interfaces:
-            interfaces.write('source /etc/network/interfaces.d/*\n'\
-                f'\nauto lo\niface lo inet loopback\n\nauto {self.interface}\niface {self.interface} inet static\n'\
-                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
-                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+        arquivo_configurado = []
+        with open('interfaces', 'r') as interfaces:
+            arquivo = interfaces.read()
+            if arquivo.contains('#PSC-CONFIG'):
+                interfaces.seek(0)
+                for linha in interfaces.readlines():
+                    arquivo_configurado.append(linha)
+        if len(arquivo_configurado) != 0:
+            with open('interfaces', 'a') as interfaces:
+                interfaces.write(f'\n\nauto {self.interface}\niface {self.interface} inet static\n'\
+                    f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                    f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+        else:
+            with open('interfaces', 'w') as interfaces:
+                interfaces.write('source /etc/network/interfaces.d/*\n'\
+                    f'\nauto lo\niface lo inet loopback\n\n#PSC-CONFIG\n\nauto {self.interface}\niface {self.interface} inet static\n'\
+                    f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                    f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
         self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
         os.system('systemctl restart networking')
         if os.getlogin() != 'www-data':

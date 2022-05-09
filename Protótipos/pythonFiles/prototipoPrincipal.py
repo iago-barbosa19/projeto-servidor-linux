@@ -64,14 +64,15 @@ class Software:
                         print(network_interface+'\n')
                         log.debug(f'{os.getlogin()} - Interface:{network_interface} encontrada. Qtd de Interfaces: {system_interfaces}')
             for x in range((len(system_interfaces))):
+                os.system('clear')
                 if input(f"{self.language['services-config']['interface']['option-text']} - {system_interfaces[x]}:\nY\\n\n->").lower() == 'y':
                     for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
+                        os.system('clear')
                         valor = input(f"{system_interfaces[x]} - {self.language['services-config']['interface']['data-insert']}  - {dado}\nDigite 0 para cancelar:\n->")
                         if valor == 0:
                             print('Operação cancelada.\nAperte Enter para continuar')
                             return input()
                         configs.append(valor)
-                        os.system('clear')
                     ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
                                 interface=system_interfaces[x], logger=log)
                     ip_config.ipConf()
