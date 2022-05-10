@@ -98,12 +98,14 @@ class Ip:
         Esse método devia ser usado '@final' nele, para que não possa ser extendido por mais nenhum outro, porém
         como é normal ver máquinas com Python 3.7 para baixo, ainda não coloquei os itens da nova versão.
         """
+        # Criar método de configuração de interface, que verifique se já tem uma "configuração" em DHCP.
+        # se essa configuração não existir ainda, ela seria criada, ou algo do tipo. Caso já exista, seria substituida.
         self.log.info(f"{os.getlogin()} - Iniciando configuração de interface")
         os.chdir('/etc/network')
         arquivo_configurado = []
         with open('interfaces', 'r') as interfaces:
             arquivo = interfaces.read()
-            if arquivo.contains('#PSC-CONFIG'):
+            if '#PSC-CONFIG' in arquivo:
                 interfaces.seek(0)
                 for linha in interfaces.readlines():
                     arquivo_configurado.append(linha)
@@ -120,7 +122,7 @@ class Ip:
                     f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
                 if len(network_interfaces) > 1:
                     for x in network_interfaces:
-                        interfaces.write(f'\n\nauto {self.x}\niface {self.x} inet dhcp\n')
+                        interfaces.write(f'\n\nauto {x}\niface {x} inet dhcp\n')
         self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
         os.system('systemctl restart networking')
         if os.getlogin() != 'www-data':
