@@ -11,7 +11,7 @@ class Dns():
         self.__sub_net_mask:str = sub_net_mask
         self.log = logger
         self.__domain:str = domain
-        self.__server_name:str = serverName
+        self.__server_name:str = server_name
 
     def change_dns_bind9(self:object) -> None:
         """Configuração do serviço Bind9. Por meio dele que é possível ser feito o NAT.
