@@ -1,7 +1,6 @@
 from time import sleep
 import os
 import datetime
-import tqdm
 
 
 class Ip:
@@ -103,33 +102,30 @@ class Ip:
         self.log.info(f"{os.getlogin()} - Iniciando configuração de interface")
         os.chdir('/etc/network')
         interfaces_configuradas = []
-        with open(r'C:\Users\Fadami\Projeto_ServerLinux\projeto-servidor-linux\Protótipos\teste\interfaces', 'r') as interfaces:
+        with open('interfaces', 'r') as interfaces:
             interfaces_configuradas = interfaces.read().split('#PSC-CONFIG')[1]
-            with open('interfaces', 'w') as interfaces:
-                interfaces.write('source /etc/network/interfaces.d/*\n'\
-                    f'\nauto lo\niface lo inet loopback\n\n')
-        configs = []
-        if "#interface configurada" in interfaces_configuradas:
-            configs.extend(list(interfaces_configuradas.split("#interface configurada")))
         with open('interfaces', 'w') as interfaces:
             interfaces.write('source /etc/network/interfaces.d/*\n'\
                             f'\nauto lo\niface lo inet loopback\n\n')
             configs = []
-            for dados in interfaces_configuradas:
-                if f"#interface configurada" in dados:
-                    configs.extend(list(dados.split("#interface configurada")))
-                    
-            interfaces.write(f'\n\n#{self.interface.toUpper()} - configurada\n\nauto {self.interface}\niface {self.interface} inet static\n'\
-                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
-                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-            # if()
-            interfaces.write('#{self.interface.toUpper()}-CONFIG\n\nauto {self.interface}\niface {self.interface} inet static\n'\
-                f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
-                f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
-        
-        if len(network_interfaces) > 1:
-            for x in network_interfaces:
-                interfaces.write(f'\n\nauto {x}\niface {x} inet dhcp\n')
+            if "#interface configurada" in interfaces_configuradas:
+                configs.extend(list(interfaces_configuradas.split("#interface configurada")))
+                interfaces.write('source /etc/network/interfaces.d/*\n'\
+                                f'\nauto lo\niface lo inet loopback\n\n')
+                configs = []
+                for dados in interfaces_configuradas:
+                    if f"#interface configurada" in dados:
+                        configs.extend(list(dados.split("#interface configurada")))
+                interfaces.write(f'\n\n#interface configurada\n\nauto {self.interface}\niface {self.interface} inet static\n'\
+                    f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                    f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+                interfaces.write(f'\n\n#interface configurada\n\nauto {self.interface}\niface {self.interface} inet static\n'\
+                    f'address {self.ipv4}\nnetmask {self.sub_net_mask}\n'\
+                    f'network {self.network_ip}\ngateway {self.gateway}\ndns-server {self.dns1} {self.dns2}')
+            
+            if len(network_interfaces) > 1:
+                for x in network_interfaces:
+                    interfaces.write(f'\n\nauto {x}\niface {x} inet dhcp\n')
         self.log.debug(f"{os.getlogin()} - Arquivo interfaces configurado")
         os.system('systemctl restart networking')
         if os.getlogin() != 'www-data':

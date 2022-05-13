@@ -3,7 +3,6 @@ from logger import Log
 from time import sleep
 import os
 import subprocess
-import tqdm
 import json
 
 
@@ -66,16 +65,21 @@ class Software:
             for x in range((len(system_interfaces))):
                 os.system('clear')
                 if input(f"{self.language['services-config']['interface']['option-text']} - {system_interfaces[x]}:\nY\\n\n->").lower() == 'y':
-                    for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
-                        os.system('clear')
-                        valor = input(f"{system_interfaces[x]} - {self.language['services-config']['interface']['data-insert']}  - {dado}\nDigite 0 para cancelar:\n->")
-                        if valor == 0:
-                            print('Operação cancelada.\nAperte Enter para continuar')
-                            return input()
-                        configs.append(valor)
-                    ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
-                                interface=system_interfaces[x], logger=log)
-                    ip_config.ipConf(network_interfaces=system_interfaces)
+                    if int(input(f"{self.language['services-config']['interface']['option-text']} - 1) Configuração manual\n2) DHCP")) == 1:
+                        for dado in ['ipv4', 'gateway', 'subnetMask', 'dns1', 'dns2']:
+                            os.system('clear')
+                            valor = input(f"{system_interfaces[x]} - {self.language['services-config']['interface']['data-insert']}  - {dado}\nDigite 0 para cancelar:\n->")
+                            if valor == 0:
+                                print(self.language['cancel-text'])
+                                return input()
+                            configs.append(valor)
+                        ip_config = Ip(ipv4=configs[0], gateway=configs[1], sub_net_mask=configs[2], dns1=configs[3], dns2=configs[4], 
+                                    interface=system_interfaces[x], logger=log)
+                        ip_config.ipConf(network_interfaces=system_interfaces)
+                        print(self.language['success-text'])
+                        return input()
+                    
+                    
         elif opc == 2:
             os.system('clear')
             system_interfaces = []
@@ -98,11 +102,11 @@ class Software:
                     try:
                         valor = system_interfaces[(indice - 1)]
                     except IndexError:
-                        print('Interface inexistente.\nOperação cancelada.\nAperte Enter para continuar')
+                        print(""+self.language['cancel-text'])
                         return input()
                         
                 if valor == 0:
-                    print('Operação cancelada.\nAperte Enter para continuar')
+                    print(self.language['cancel-text'])
                     return input()
                 configs.append(valor)
             dhcp_config = Dhcp(ipv4=configs[0], gateway=configs[1],
@@ -115,7 +119,7 @@ class Software:
             for dado in ['ipv4', 'subnetMask', 'dominio', 'Nome do servidor']:
                 valor = input(self.language['services-config']['dns']['data-input'] + f'{dado} ->')
                 if valor == 0:
-                    print('Operação cancelada.\nAperte Enter para continuar')
+                    print(self.language['cancel-text'])
                     input()
                     return
                 configs.append(valor)
@@ -146,117 +150,90 @@ class Software:
             self.language['main-text'])
         opc = int(input(self.language['data-input']))
         if opc == 1:
-            with tqdm(total=40) as pbar:
-                os.system('apt-get install --assume-yes apache2 &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('apt-get install --assume-yes bind9 &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/apache2/sites-available/ &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/apache2/sites-enabled/ &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/bind &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('mkdir -p /var/www/sites &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /var/www/sites &>')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/bind/named.conf.default-zones &> /dev/null')
-                pbar.update(5)
-                sleep(0.5)
+            os.system('apt-get install --assume-yes apache2 &> /dev/null')
+            sleep(0.1)
+            os.system('apt-get install --assume-yes bind9 &> /dev/null')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/apache2/sites-available/ &> /dev/null')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/apache2/sites-enabled/ &> /dev/null')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/bind &> /dev/null')
+            sleep(0.1)
+            os.system('mkdir -p /var/www/sites &> /dev/null')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /var/www/sites &>')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/bind/named.conf.default-zones &> /dev/null')
+            sleep(0.5)
         elif opc == 2:
             os.system('apt-get install --assume-yes isc-dhcp-server')
-            with tqdm(total=15) as pbar:
-                with open('/etc/dhcp/dhcpd.conf', 'a') as dhcpd:
-                    dhcpd.write('\nauthoritative;\n')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/dhcp/dhcpd.conf &> /dev/null')
-                pbar.update(5)
-                sleep(0.1)
-                os.system('chown -R www-data:www-data /etc/default/isc-dhcp-server &> /dev/null')
-                pbar.update(5)
-                sleep(0.5)
+            with open('/etc/dhcp/dhcpd.conf', 'a') as dhcpd:
+                dhcpd.write('\nauthoritative;\n')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/dhcp/dhcpd.conf &> /dev/null')
+            sleep(0.1)
+            os.system('chown -R www-data:www-data /etc/default/isc-dhcp-server &> /dev/null')
+            sleep(0.5)
         print(self.language['final'])
 
     def preparacaoServidor(self: object):
-        with tqdm(total=50) as pbar:
-            log.info(f'{os.getlogin()} - Preparamento do Servidor começou')
-            self.language = self.language['server-preparation']
-            print(self.language['main-text'])
-            sleep(1)
-            ipv4=None
-            contador = 0
-            os.system('apt-get install --assume-yes apache2 &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('apt-get install --assume-yes python-setuptools &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('apt-get install --assume-yes python3-pip &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('pip3 install flask')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('apt-get install --assume-yes libapache2-mod-wsgi-py3 &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            log.debug(f'{os.getlogin()} - Serviços "instalados".')
-            if not os.path.exists('/etc/psc/configs/saveConfigDHCP.txt'):
-                os.mknod('/etc/psc/configs/saveConfigDHCP.txt')
-            if not os.path.exists('/etc/psc/configs/saveConfigDNS.txt'):
-                os.mknod('/etc/psc/configs/saveConfigDNS.txt')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('chown -R www-data:www-data /etc/network/interfaces &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDHCP.txt &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDNS.txt &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigIp.txt &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            with open('/etc/psc/configs/saveConfigIp.txt', 'r') as config:
-                configTamanho = len(tuple(config.readlines()))
-                config.seek(0)
-                for dado in config.readlines():
-                    if 'IPV4:' in dado:
-                        ipv4= dado.split(':')
-                    contador +=1
-                    if contador == configTamanho and 'IPV4:' in dado:
-                        print(self.language['ipv4-config-error'])
-                        return
-            pbar.update(5)
-            sleep(0.1)
-            os.system('cp -p /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/flask.conf &> /dev/null')
-            pbar.update(5)
-            sleep(0.1)
-            with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:         # modify the below line. 
-                flaskServer.write(f"<VirtualHost *:80>\n    ServerName {ipv4[1]}\n\n    "\
-                                "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
-                                "        AllowOverride None\n        Require all granted\n"\
-                                "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
-                                "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
-            pbar.update(5)
-            sleep(0.1)
-            log.debug(f'{os.getlogin()} - Arquivo Flask de host virtual criado')
-            os.chdir('/etc/apache2/sites-available/')
-            os.system('a2ensite flask')
-            os.system('chown -R www-data:www-data /etc/apache2/sites-available/flask.conf &> /dev/null')
-            os.system('systemctl restart apache2')
-            log.debug(f'{os.getlogin()} - Fim do preparamento do Servidor')
+        log.info(f'{os.getlogin()} - Preparamento do Servidor começou')
+        self.language = self.language['server-preparation']
+        print(self.language['main-text'])
+        sleep(1)
+        ipv4=None
+        contador = 0
+        os.system('apt-get install --assume-yes apache2 &> /dev/null')
+        sleep(0.1)
+        os.system('apt-get install --assume-yes python-setuptools &> /dev/null')
+        sleep(0.1)
+        os.system('apt-get install --assume-yes python3-pip &> /dev/null')
+        sleep(0.1)
+        os.system('pip3 install flask')
+        sleep(0.1)
+        os.system('apt-get install --assume-yes libapache2-mod-wsgi-py3 &> /dev/null')
+        sleep(0.1)
+        log.debug(f'{os.getlogin()} - Serviços "instalados".')
+        if not os.path.exists('/etc/psc/configs/saveConfigDHCP.txt'):
+            os.mknod('/etc/psc/configs/saveConfigDHCP.txt')
+        if not os.path.exists('/etc/psc/configs/saveConfigDNS.txt'):
+            os.mknod('/etc/psc/configs/saveConfigDNS.txt')
+        sleep(0.1)
+        os.system('chown -R www-data:www-data /etc/network/interfaces &> /dev/null')
+        sleep(0.1)
+        os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDHCP.txt &> /dev/null')
+        sleep(0.1)
+        os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigDNS.txt &> /dev/null')
+        sleep(0.1)
+        os.system('chown -R www-data:www-data /etc/psc/configs/saveConfigIp.txt &> /dev/null')
+        sleep(0.1)
+        with open('/etc/psc/configs/saveConfigIp.txt', 'r') as config:
+            configTamanho = len(tuple(config.readlines()))
+            config.seek(0)
+            for dado in config.readlines():
+                if 'IPV4:' in dado:
+                    ipv4= dado.split(':')
+                contador +=1
+                if contador == configTamanho and 'IPV4:' in dado:
+                    print(self.language['ipv4-config-error'])
+                    return
+        sleep(0.1)
+        os.system('cp -p /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/flask.conf &> /dev/null')
+        sleep(0.1)
+        with open('/etc/apache2/sites-available/flask.conf', 'w') as flaskServer:         # modify the below line. 
+            flaskServer.write(f"<VirtualHost *:80>\n    ServerName {ipv4[1]}\n\n    "\
+                            "WSGIScriptAlias /psc /etc/psc/prototipoFlask.wsgi\n    <Directory /etc/psc>\n        Options FollowSymLinks\n"\
+                            "        AllowOverride None\n        Require all granted\n"\
+                            "    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    LogLevel warn"\
+                            "\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>")
+        sleep(0.1)
+        log.debug(f'{os.getlogin()} - Arquivo Flask de host virtual criado')
+        os.chdir('/etc/apache2/sites-available/')
+        os.system('a2ensite flask')
+        os.system('chown -R www-data:www-data /etc/apache2/sites-available/flask.conf &> /dev/null')
+        os.system('systemctl restart apache2')
+        log.debug(f'{os.getlogin()} - Fim do preparamento do Servidor')
 
     def idioma(self: object):
         with open('/etc/psc/appSettings.json', 'r') as data_confs:
