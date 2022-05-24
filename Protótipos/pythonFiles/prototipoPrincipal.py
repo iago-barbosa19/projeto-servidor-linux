@@ -96,6 +96,7 @@ class Software:
                 if dado != 'Interface':
                     valor = input(self.language['services-config']['dhcp']['data-input'] + f' {dado} ->')
                 else :
+                    print('Escolha uma interface para qual o serviço DHCP deva ser direcionado:\n')
                     for x in range(len(system_interfaces)):
                         print(f'{(x + 1)} - {system_interfaces[x]}')
                     indice = int(input("->"))

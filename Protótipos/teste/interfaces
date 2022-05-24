@@ -20,3 +20,12 @@ netmask 255.255.255.0
 network 200.10.10.0
 gateway 200.10.10.1
 dns-server 200.10.10.100 8.8.8.8
+
+#interface configurada
+auto enp0s10
+iface enp0s10 inet static
+address 200.10.10.100
+netmask 255.255.255.0
+network 200.10.10.0
+gateway 200.10.10.1
+dns-server 200.10.10.100 8.8.8.8

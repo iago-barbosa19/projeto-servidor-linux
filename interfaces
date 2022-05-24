@@ -2,4 +2,32 @@ source /etc/network/interfaces.d/*
 
 auto lo
 iface lo inet loopback
+#PSC-CONFIG
 
+#interface configurada
+auto enp0s3
+iface enp0s3 inet static
+address 192.168.1.101
+netmask 255.255.255.0
+network 192.168.1.0
+gateway 192.168.1.1
+dns-server 192.168.1.100 8.8.8.8
+
+#interface configurada
+auto enp0s8
+iface enp0s8 inet static
+address 200.10.10.100
+netmask 255.255.255.0
+network 200.10.10.0
+gateway 200.10.10.1
+dns-server 200.10.10.100 8.8.8.8
+
+
+#interface configurada
+auto enp0s10
+iface enp0s10 inet static
+address 200.10.10.100
+netmask 255.255.255.0
+network 200.10.10.0
+gateway 200.10.10.1
+dns-server 200.10.10.100 8.8.8.8
